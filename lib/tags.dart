@@ -31,31 +31,34 @@ class _TagsState extends State<Tags> {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      itemCount: uniqueSubtitles.length,
-      itemBuilder: (context, index) {
-        count = 0;
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: GridView.builder(
+        shrinkWrap: true,
+        itemCount: uniqueSubtitles.length,
+        itemBuilder: (context, index) {
+          count = 0;
 
-        for (int i = 0; i < tasks.length; i++) {
-          if (tasks[i].subtitle == uniqueSubtitles[index]) {
-            count++;
+          for (int i = 0; i < tasks.length; i++) {
+            if (tasks[i].subtitle == uniqueSubtitles[index]) {
+              count++;
+            }
           }
-        }
 
-        return TextButton(
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Color((Random().nextDouble() * 0xFFFFFF) ~/ 4)
-                  .withOpacity(0.7),
-            ),
-            onPressed: () {},
-            child:
-                Text(uniqueSubtitles[index] + " (" + count.toString() + ")"));
-      },
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        mainAxisExtent: 70,
+          return TextButton(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Color((Random().nextDouble() * 0xFFFFFF) ~/ 4)
+                    .withOpacity(0.7),
+              ),
+              onPressed: () {},
+              child:
+                  Text(uniqueSubtitles[index] + " (" + count.toString() + ")"));
+        },
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          mainAxisExtent: 70,
+        ),
       ),
     );
   }

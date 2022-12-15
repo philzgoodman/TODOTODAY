@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:todotoday/MessageBox.dart';
 import 'package:todotoday/QuantityBadge.dart';
+import 'package:todotoday/TileColors.dart';
+import 'package:todotoday/UserBackground.dart';
 import 'package:todotoday/all.dart';
 import 'package:todotoday/global.dart';
 import 'package:todotoday/tags.dart';
@@ -44,72 +48,82 @@ class MyHomePage extends StatelessWidget {
       length: 3,
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: Scaffold(
-          resizeToAvoidBottomInset: true,
-          appBar: AppBar(
-            bottom: TabBar(
-              tabs: [
-                Stack(
-                  children: [
-                    Tab(icon: Icon(Icons.all_inbox)),
-                    QuantityBadge(getAllCount()),
+        child: Stack(
+          children: [
+            userBG,
+            Scaffold(
+              backgroundColor: Colors.black26,
+              resizeToAvoidBottomInset: true,
+              appBar: AppBar(
+                shadowColor: Colors.black87,
+                elevation: 6,
+                bottom: TabBar(
+
+                    enableFeedback: true,
+                  tabs: [
+                    Stack(
+                      children: [
+                        Tab(icon: Icon(Icons.all_inbox)),
+                        QuantityBadge(getAllCount()),
+                      ],
+                    ),
+                    Stack(
+                      children: [
+                        Tab(icon: Icon(Icons.sunny)),
+                        QuantityBadge(getTodayCount()),
+                      ],
+                    ),
+                    Stack(
+                      children: [
+                        Tab(icon: Icon(Icons.tag)),
+                      ],
+                    ),
                   ],
                 ),
-                Stack(
-                  children: [
-                    Tab(icon: Icon(Icons.sunny)),
-                    QuantityBadge(getTodayCount()),
-                  ],
-                ),
-                Stack(
-                  children: [
-                    Tab(icon: Icon(Icons.tag)),
-                  ],
-                ),
-              ],
-            ),
-            toolbarHeight: 0,
-          ),
-          body: Stack(
-            children: [
-              Stack(
+                toolbarHeight: 0,
+              ),
+              body: Stack(
                 children: [
-                  TabBarView(
+                  Stack(
                     children: [
-                      All(
-                        key: UniqueKey(),
-                        title: '',
-                      ),
-                      Today(
-                        key: UniqueKey(),
-                        title: '',
-                      ),
-                      Tags(
-                        key: UniqueKey(),
-                        title: '',
+                      TabBarView(
+                        children: [
+                          All(
+                            key: UniqueKey(),
+                            title: '',
+                          ),
+                          Today(
+                            key: UniqueKey(),
+                            title: '',
+                          ),
+                          Tags(
+                            key: UniqueKey(),
+                            title: '',
+                          ),
+                        ],
                       ),
                     ],
                   ),
+                  MessageBox(),
+                  Positioned(
+                    bottom: 70,
+                    right: 6,
+                    child: Transform.scale(
+                      scale: .6,
+                      child: FloatingActionButton(
+                        backgroundColor: Colors.grey,
+                        onPressed: () {
+                          _showDialog(context);
+                        },
+                        tooltip: 'Add',
+                        child: const Icon(Icons.settings),
+                      ),
+                    ),
+                  ),
                 ],
               ),
-              MessageBox(),
-              Positioned(
-                bottom: 70,
-                right: 6,
-                child: Transform.scale(
-                  scale: .6,
-                  child: FloatingActionButton(
-                    backgroundColor: Colors.grey,
-                    onPressed: () {
-                      _showDialog(context);
-                    },
-                    tooltip: 'Add',
-                    child: const Icon(Icons.settings),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -134,39 +148,63 @@ class MyHomePage extends StatelessWidget {
     }
     return n;
   }
-}
 
-void _showDialog(BuildContext context) {
-  // flutter defined function
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      // return object of type Dialog
-      return AlertDialog(
-        title: new TextButton(
-          onPressed: () {
-            tasks.clear();
-            runApp(MyApp());
-          },
-          child: const Text(
-            "Clear All Tasks",
-            style: TextStyle(
-              color: Colors.blue,
-              fontSize: 20,
+  void _showDialog(BuildContext context) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+            backgroundColor: Color(0xE8231216),
+          title: new TextButton(
+            onPressed: () {
+              tasks.clear();
+              runApp(MyApp());
+            },
+            child: const Text(
+              "Clear All Tasks",
+              style: TextStyle(
+                color: Colors.blue,
+                fontSize: 15,
+              ),
             ),
           ),
-        ),
-        actions: <Widget>[
-          // usually buttons at the bottom of the dialog
-          new TextButton(
-              child: new Text("Close"),
-              onPressed: () {
-                Navigator.of(context).pop();
+          content: TextButton(
+            onPressed: () {
+              userBG.userColorList.clear();
+              userBG = UserBackground([
+                TileColors.TILECOLORS
+                    .elementAt(Random().nextInt(TileColors.TILECOLORS.length)),
+                TileColors.TILECOLORS
+                    .elementAt(Random().nextInt(TileColors.TILECOLORS.length)),
+                TileColors.TILECOLORS
+                    .elementAt(Random().nextInt(TileColors.TILECOLORS.length))
+              ]);
+              Navigator.of(context).pop();
+              runApp(MyApp());
+            },
+            child: const Text(
+              textAlign: TextAlign.center,
+              "Shuffle Background Colors",
+              style: TextStyle(
+                color: Colors.blue,
+                fontSize: 15,
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new TextButton(
+                child: new Text("Close"),
+                onPressed: () {
+                  Navigator.of(context).pop();
 
-                FocusManager.instance.primaryFocus?.unfocus();
-              }),
-        ],
-      );
-    },
-  );
+                  FocusManager.instance.primaryFocus?.unfocus();
+                }),
+          ],
+        );
+      },
+    );
+  }
 }

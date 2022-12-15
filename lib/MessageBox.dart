@@ -19,20 +19,13 @@ class _MessageBoxState extends State<MessageBox> {
   void updateText() {
     setState(() {
       tasks.add(TodoTask(txt.text, txt.text, false, false,
-          darken(TileColors.TILECOLORS.elementAt(tasks.length), 25)));
+          TileColors.TILECOLORS.elementAt(tasks.length)));
       txt.clear();
       for (var i = 0; i < tasks.length; i++) {
         getSubtitle(i);
       }
     });
     txt.clear();
-  }
-
-  Color darken(Color c, [int percent = 10]) {
-    assert(1 <= percent && percent <= 100);
-    var f = 1 - percent / 100;
-    return Color.fromARGB(c.alpha, (c.red * f).round(), (c.green * f).round(),
-        (c.blue * f).round());
   }
 
   @override
@@ -45,12 +38,22 @@ class _MessageBoxState extends State<MessageBox> {
           width: 360,
           child: Material(
             borderRadius: BorderRadius.circular(5),
-            color: Colors.black26,
+            color: Colors.black87,
             shadowColor: Colors.black,
             elevation: 15,
             child: Padding(
-              padding: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(5.0),
               child: TextField(
+                  toolbarOptions: const ToolbarOptions(
+                    copy: true,
+                    cut: true,
+                    paste: true,
+                    selectAll: true,
+                  ),
+                cursorColor: Colors.deepOrangeAccent,
+                  style: const TextStyle(
+                    color: Colors.white,fontSize:14
+                  ),
                   focusNode: myFocusNode,
                   keyboardAppearance: Brightness.dark,
                   onSubmitted: (value) {
@@ -68,6 +71,7 @@ class _MessageBoxState extends State<MessageBox> {
                   textInputAction: TextInputAction.search,
                   controller: txt,
                   decoration: InputDecoration(
+
                     hintText: 'Enter a task',
                     suffixIcon: IconButton(
                       icon: Icon(Icons.send),

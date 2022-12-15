@@ -36,16 +36,21 @@ class TodoTaskState extends State<TodoTask> {
       return Colors.red;
     }
 
-    return Material(
-      borderRadius: BorderRadius.circular(5),
-      surfaceTintColor: Colors.red,
-      elevation: 10,
-      shadowColor: Colors.black26,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(14, 4, 14, 4),
+    return Padding(
+      padding: const EdgeInsets.all(3.0),
+      child: Card(
+        surfaceTintColor: Colors.black26,
+        elevation: 5,
+        shadowColor: Color(0xFF000008E),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.0),
+        ),
         child: ListTile(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
           contentPadding: const EdgeInsets.fromLTRB(10, 0, 6, 7),
-          tileColor: widget.toDoColor,
+          tileColor: darken(widget.toDoColor, 6),
           visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
           dense: true,
           minVerticalPadding: 0,
@@ -107,4 +112,11 @@ class TodoTaskState extends State<TodoTask> {
       ),
     );
   }
+}
+
+Color darken(Color c, [int percent = 10]) {
+  assert(1 <= percent && percent <= 100);
+  var f = 1 - percent / 100;
+  return Color.fromARGB(c.alpha, (c.red * f).round(), (c.green * f).round(),
+      (c.blue * f).round());
 }

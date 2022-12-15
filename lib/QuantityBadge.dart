@@ -14,19 +14,19 @@ class _QuantityBadgeState extends State<QuantityBadge> {
   @override
   Widget build(BuildContext context) {
     return Transform.translate(
-      offset: const Offset(15, 20),
+      offset: const Offset(17, 23),
       child: Container(
         width: 20,
         height: 20,
         decoration: BoxDecoration(
-          color: Colors.black87,
+          color: Colors.black,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Center(
           child: Text(
             widget.quantity.toString(),
             style: TextStyle(
-              color: Colors.white,
+              color: Color(0xFFFFBD64),
               fontSize: 10,
             ),
           ),
