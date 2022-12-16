@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/animate.dart';
-import 'package:flutter_animate/effects/fade_effect.dart';
-import 'package:flutter_animate/effects/scale_effect.dart';
+
+import 'package:todotoday/LoginPage.dart';
+
 import 'package:todotoday/MessageBox.dart';
 import 'package:todotoday/QuantityBadge.dart';
 import 'package:todotoday/TileColors.dart';
@@ -13,9 +13,11 @@ import 'package:todotoday/global.dart';
 import 'package:todotoday/tags.dart';
 import 'package:todotoday/today.dart';
 
+
 void main() {
   runApp(MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
@@ -50,10 +52,10 @@ class MyHomePage extends StatelessWidget {
     return DefaultTabController(
       length: 3,
       child: GestureDetector(
-        onTap: () { FocusManager.instance.primaryFocus?.unfocus();
-        isEditing = false;
-
-          },
+        onTap: () {
+          FocusManager.instance.primaryFocus?.unfocus();
+          isEditing = false;
+        },
         child: Stack(
           children: [
             userBG,
@@ -64,8 +66,7 @@ class MyHomePage extends StatelessWidget {
                 shadowColor: Colors.black87,
                 elevation: 6,
                 bottom: TabBar(
-
-                    enableFeedback: true,
+                  enableFeedback: true,
                   tabs: [
                     Stack(
                       children: [
@@ -96,14 +97,20 @@ class MyHomePage extends StatelessWidget {
                       TabBarView(
                         children: [
                           All(
-                            key: UniqueKey(),
+                            key: ValueKey<String>(tasks.toString()),
                             title: '',
                           ),
                           Today(
                             key: UniqueKey(),
                             title: '',
                           ),
-                          tag
+                          Tags(
+                            key: UniqueKey(),
+                            title: '',
+                          ),
+                          LoginPage(
+                            key: UniqueKey(),
+                          ),
                         ],
                       ),
                     ],
@@ -160,9 +167,7 @@ class MyHomePage extends StatelessWidget {
 
     uniqueSubtitles = subtitles.toSet().toList();
 
-
     return uniqueSubtitles.length;
-
   }
 
   void _showDialog(BuildContext context) {
@@ -172,7 +177,7 @@ class MyHomePage extends StatelessWidget {
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-            backgroundColor: Color(0xE8231216),
+          backgroundColor: Color(0xE8231216),
           title: new TextButton(
             onPressed: () {
               tasks.clear();
@@ -200,13 +205,36 @@ class MyHomePage extends StatelessWidget {
               Navigator.of(context).pop();
               runApp(MyApp());
             },
-            child: const Text(
-              textAlign: TextAlign.center,
-              "Shuffle Background Colors",
-              style: TextStyle(
-                color: Colors.blue,
-                fontSize: 15,
-              ),
+            child: Column(
+              children: [
+                const Text(
+                  textAlign: TextAlign.center,
+                  "Shuffle Background Colors",
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 15,
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 10),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32.0),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                    child: Text('Login'),
+                  ),
+                ),
+              ],
             ),
           ),
           actions: <Widget>[
@@ -224,3 +252,7 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
+
+
+
+

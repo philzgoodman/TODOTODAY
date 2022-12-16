@@ -13,10 +13,7 @@ class Done extends StatefulWidget {
 class _DoneState extends State<Done> {
   @override
   Widget build(BuildContext context) {
-    return
-
-
-      Stack(
+    return Stack(
       children: [
         Column(children: [
           SizedBox(
@@ -65,6 +62,4 @@ class _DoneState extends State<Done> {
     }
     return n;
   }
-
-
 }

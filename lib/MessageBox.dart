@@ -127,7 +127,6 @@ class _MessageBoxState extends State<MessageBox> {
                                 padding: const EdgeInsets.all(5.0),
                                 child: Text(
                                     textAlign: TextAlign.center,
-
                                     '(Editing task)')))),
                   ))),
         ),

@@ -11,10 +11,9 @@ class HeaderLabel extends StatelessWidget {
     return Opacity(
       opacity: 0.6,
       child: Material(
-
         surfaceTintColor: Colors.blue,
         elevation: 5,
-          shadowColor: Colors.black45,
+        shadowColor: Colors.black45,
         child: ListTile(
           visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
           textColor: Colors.white,
@@ -27,7 +26,7 @@ class HeaderLabel extends StatelessWidget {
                   width: 50,
                   child: Opacity(
                     opacity: 1,
-                    child:Text(
+                    child: Text(
                         style: TextStyle(color: Colors.white, fontSize: 14),
                         textAlign: TextAlign.center,
                         "DONE"),
