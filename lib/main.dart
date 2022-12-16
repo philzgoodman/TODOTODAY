@@ -1,6 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/animate.dart';
+import 'package:flutter_animate/effects/fade_effect.dart';
+import 'package:flutter_animate/effects/scale_effect.dart';
 import 'package:todotoday/MessageBox.dart';
 import 'package:todotoday/QuantityBadge.dart';
 import 'package:todotoday/TileColors.dart';
@@ -47,7 +50,10 @@ class MyHomePage extends StatelessWidget {
     return DefaultTabController(
       length: 3,
       child: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        onTap: () { FocusManager.instance.primaryFocus?.unfocus();
+        isEditing = false;
+
+          },
         child: Stack(
           children: [
             userBG,
@@ -76,6 +82,7 @@ class MyHomePage extends StatelessWidget {
                     Stack(
                       children: [
                         Tab(icon: Icon(Icons.tag)),
+                        QuantityBadge(getTagCount()),
                       ],
                     ),
                   ],
@@ -96,10 +103,7 @@ class MyHomePage extends StatelessWidget {
                             key: UniqueKey(),
                             title: '',
                           ),
-                          Tags(
-                            key: UniqueKey(),
-                            title: '',
-                          ),
+                          tag
                         ],
                       ),
                     ],
@@ -147,6 +151,18 @@ class MyHomePage extends StatelessWidget {
       }
     }
     return n;
+  }
+
+  int getTagCount() {
+    for (var i = 0; i < tasks.length; i++) {
+      subtitles.add(tasks[i].subtitle);
+    }
+
+    uniqueSubtitles = subtitles.toSet().toList();
+
+
+    return uniqueSubtitles.length;
+
   }
 
   void _showDialog(BuildContext context) {

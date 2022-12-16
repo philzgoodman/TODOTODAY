@@ -14,28 +14,38 @@ class Today extends StatefulWidget {
 class _TodayState extends State<Today> {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        Column(children: [
-          const HeaderLabel(),
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: tasks.length,
-            itemBuilder: (context, index) {
-              if (tasks[index].isToday) {
-                return tasks[index];
-              } else {
-                return const SizedBox(
-                  height: 0,
-                );
-              }
-            },
+        SingleChildScrollView(
+          reverse: true,
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Column(
+            children: [
+              const HeaderLabel(),
+              ListView.builder(
+                scrollDirection: Axis.vertical,
+                addAutomaticKeepAlives: false,
+                reverse: false,
+                physics: ClampingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: tasks.length,
+                itemBuilder: (context, index) {
+                  if (tasks[index].isToday) {
+                    return tasks[index];
+                  } else {
+                    return const SizedBox(
+                      height: 0,
+                    );
+                  }
+                },
+              ),
+              SizedBox(
+                height: 110,
+              ),
+              Done(),
+            ],
           ),
-        ]),
-        SizedBox(
-          height: 110,
         ),
-        Done(),
       ],
     );
   }

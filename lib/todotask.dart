@@ -2,6 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/animate.dart';
+import 'package:flutter_animate/effects/custom_effect.dart';
+import 'package:flutter_animate/effects/fade_effect.dart';
+import 'package:flutter_animate/effects/scale_effect.dart';
+import 'package:flutter_animate/extensions/extensions.dart';
 import 'package:todotoday/global.dart';
 import 'package:todotoday/main.dart';
 
@@ -65,6 +70,16 @@ class TodoTaskState extends State<TodoTask> {
             controller: TextEditingController(text: widget.name),
             onChanged: (text) {
               widget.name = text;
+            },
+            onTap: () {
+              setState(() {
+                isEditing = true;
+              });
+            },
+            onEditingComplete: () {
+              setState(() {
+                isEditing = false;
+              });
             },
           ),
           subtitle: GestureDetector(

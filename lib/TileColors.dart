@@ -2,11 +2,11 @@ import 'dart:ui';
 
 class TileColors {
   static const List<Color> TILECOLORS = [
-    Color(0xFFA13131),
-    Color(0xFF9B2F54),
-    Color(0xFF5D1969),
+    Color(0xFF8C3D3D),
+    Color(0xFF7C354D),
+    Color(0xFF5A3964),
     Color(0xFF341964),
-    Color(0xFF273377),
+    Color(0xFF323A67),
     Color(0xFF194B73),
     Color(0xFF215A73),
     Color(0xFF176670),
@@ -23,7 +23,7 @@ class TileColors {
     Color(0xFF440D4D),
     Color(0xFF301364),
     Color(0xFF080E2A),
-    Color(0xFF15476E),
+    Color(0xFF2D4154),
     Color(0xFF124156),
     Color(0xFF113B41),
     Color(0xFF135B54),

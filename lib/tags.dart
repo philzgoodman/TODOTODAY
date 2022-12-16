@@ -3,19 +3,20 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todotoday/global.dart';
-import 'package:todotoday/main.dart';
-import 'todotask.dart';
+
 
 class Tags extends StatefulWidget {
-  const Tags({Key? key, required String title}) : super(key: key);
+  int quantity = 1;
+
+  Tags(this.quantity, {super.key});
 
   @override
   State<Tags> createState() => _TagsState();
 }
 
 class _TagsState extends State<Tags> {
-  var subtitles = [];
-  List uniqueSubtitles = [];
+
+
   int count = 0;
 
   @override
@@ -42,7 +43,14 @@ class _TagsState extends State<Tags> {
           for (int i = 0; i < tasks.length; i++) {
             if (tasks[i].subtitle == uniqueSubtitles[index]) {
               count++;
+
+
+
+
             }
+
+            widget.quantity = uniqueSubtitles.length;
+
           }
 
           return TextButton(

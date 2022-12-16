@@ -13,15 +13,24 @@ class Done extends StatefulWidget {
 class _DoneState extends State<Done> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return
+
+
+      Stack(
       children: [
         Column(children: [
           SizedBox(
             height: 110,
           ),
-          Text(
-            'DONE ↓',
-            style: TextStyle(color: Colors.white, fontSize: 15),
+          Visibility(
+            visible: getDoneCount() > 0,
+            child: Opacity(
+              opacity: 0.7,
+              child: Text(
+                'DONE ↓',
+                style: TextStyle(color: Colors.grey, fontSize: 14),
+              ),
+            ),
           ),
           Transform.scale(
             scale: 0.85,
@@ -46,4 +55,16 @@ class _DoneState extends State<Done> {
       ],
     );
   }
+
+  int getDoneCount() {
+    int n = 0;
+    for (var i = 0; i < tasks.length; i++) {
+      if (tasks[i].isChecked) {
+        n++;
+      }
+    }
+    return n;
+  }
+
+
 }

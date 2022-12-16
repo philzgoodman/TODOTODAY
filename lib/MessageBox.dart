@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/animate.dart';
+import 'package:flutter_animate/effects/effects.dart';
 import 'package:todotoday/TileColors.dart';
 import 'package:todotoday/global.dart';
 import 'package:todotoday/main.dart';
@@ -15,11 +17,18 @@ class MessageBox extends StatefulWidget {
 
 class _MessageBoxState extends State<MessageBox> {
   FocusNode myFocusNode = FocusNode();
+  bool onTodayScreen = false;
 
   void updateText() {
     setState(() {
-      tasks.add(TodoTask(txt.text, txt.text, false, false,
-          TileColors.TILECOLORS.elementAt(tasks.length)));
+      if (DefaultTabController.of(context)?.index == 1) {
+        tasks.add(TodoTask(txt.text, txt.text, false, true,
+            TileColors.TILECOLORS.elementAt(tasks.length)));
+      } else {
+        tasks.add(TodoTask(txt.text, txt.text, false, false,
+            TileColors.TILECOLORS.elementAt(tasks.length)));
+      }
+
       txt.clear();
       for (var i = 0; i < tasks.length; i++) {
         getSubtitle(i);
@@ -30,69 +39,99 @@ class _MessageBoxState extends State<MessageBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-        child: SizedBox(
-          width: 360,
-          child: Material(
-            borderRadius: BorderRadius.circular(5),
-            color: Colors.black87,
-            shadowColor: Colors.black,
-            elevation: 15,
+    return Stack(
+      children: [
+        Visibility(
+          visible: !isEditing,
+          child: Container(
+            alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: TextField(
-                  toolbarOptions: const ToolbarOptions(
-                    copy: true,
-                    cut: true,
-                    paste: true,
-                    selectAll: true,
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+              child: SizedBox(
+                width: 360,
+                child: Material(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.black87,
+                  shadowColor: Colors.black,
+                  elevation: 15,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: TextField(
+                        toolbarOptions: const ToolbarOptions(
+                          copy: true,
+                          cut: true,
+                          paste: true,
+                          selectAll: true,
+                        ),
+                        cursorColor: Colors.deepOrangeAccent,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 14),
+                        focusNode: myFocusNode,
+                        keyboardAppearance: Brightness.dark,
+                        onSubmitted: (value) {
+                          setState(() {
+                            updateText();
+                            FocusScopeNode currentFocus =
+                                FocusScope.of(context);
+                            if (!currentFocus.hasPrimaryFocus) {
+                              currentFocus.unfocus();
+                            }
+                          });
+                          setState(() {
+                            runApp(MyApp());
+                          });
+                        },
+                        textInputAction: TextInputAction.search,
+                        controller: txt,
+                        decoration: InputDecoration(
+                          hintText: 'Enter a task',
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.send),
+                            onPressed: () {
+                              setState(() {
+                                updateText();
+                                FocusScopeNode currentFocus =
+                                    FocusScope.of(context);
+                                if (!currentFocus.hasPrimaryFocus) {
+                                  currentFocus.unfocus();
+                                }
+                              });
+                              setState(() {
+                                runApp(MyApp());
+                              });
+                            },
+                          ),
+                        )),
                   ),
-                cursorColor: Colors.deepOrangeAccent,
-                  style: const TextStyle(
-                    color: Colors.white,fontSize:14
-                  ),
-                  focusNode: myFocusNode,
-                  keyboardAppearance: Brightness.dark,
-                  onSubmitted: (value) {
-                    setState(() {
-                      updateText();
-                      FocusScopeNode currentFocus = FocusScope.of(context);
-                      if (!currentFocus.hasPrimaryFocus) {
-                        currentFocus.unfocus();
-                      }
-                    });
-                    setState(() {
-                      runApp(MyApp());
-                    });
-                  },
-                  textInputAction: TextInputAction.search,
-                  controller: txt,
-                  decoration: InputDecoration(
-
-                    hintText: 'Enter a task',
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.send),
-                      onPressed: () {
-                        setState(() {
-                          updateText();
-                          FocusScopeNode currentFocus = FocusScope.of(context);
-                          if (!currentFocus.hasPrimaryFocus) {
-                            currentFocus.unfocus();
-                          }
-                        });
-                        setState(() {
-                          runApp(MyApp());
-                        });
-                      },
-                    ),
-                  )),
+                ),
+              ),
             ),
           ),
         ),
-      ),
+        Animate(
+          effects: [FadeEffect()],
+          child: Visibility(
+              visible: isEditing,
+              child: Container(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+                    child: SizedBox(
+                        width: 360,
+                        child: Material(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.black87,
+                            shadowColor: Colors.black,
+                            elevation: 15,
+                            child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Text(
+                                    textAlign: TextAlign.center,
+
+                                    '(Editing task)')))),
+                  ))),
+        ),
+      ],
     );
   }
 }

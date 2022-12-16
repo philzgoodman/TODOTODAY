@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/animate.dart';
+import 'package:flutter_animate/effects/fade_effect.dart';
 import 'package:todotoday/HeaderLabel.dart';
+import 'package:todotoday/done.dart';
 import 'package:todotoday/global.dart';
 
 class All extends StatefulWidget {
@@ -17,6 +20,7 @@ class _AllState extends State<All> {
       clipBehavior: Clip.none,
       children: [
         SingleChildScrollView(
+          reverse: true,
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             children: [
@@ -24,12 +28,18 @@ class _AllState extends State<All> {
               ListView.builder(
                 scrollDirection: Axis.vertical,
                 addAutomaticKeepAlives: false,
-                reverse: true,
+                reverse: false,
                 physics: ClampingScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {
-                  if (!tasks[index].isChecked && !tasks[index].isToday) {
+                  if (index == tasks.length - 1 &&
+                      !tasks[index].isChecked &&
+                      !tasks[index].isToday) {
+                    return Animate(effects: [
+                      FadeEffect(),
+                    ], child: tasks[index]);
+                  } else if (!tasks[index].isChecked && !tasks[index].isToday) {
                     return tasks[index];
                   } else {
                     return const SizedBox(
@@ -41,6 +51,7 @@ class _AllState extends State<All> {
               SizedBox(
                 height: 110,
               ),
+              Done(),
             ],
           ),
         ),
@@ -48,4 +59,3 @@ class _AllState extends State<All> {
     );
   }
 }
-
