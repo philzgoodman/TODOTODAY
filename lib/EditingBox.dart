@@ -4,7 +4,6 @@ import 'package:todotoday/TileColors.dart';
 import 'package:todotoday/global.dart';
 import 'package:todotoday/main.dart';
 import 'package:todotoday/todotask.dart';
-import 'TileColors.dart' as constants;
 
 class EditingBox extends StatefulWidget {
   EditingBox({super.key});

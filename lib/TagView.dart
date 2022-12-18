@@ -1,14 +1,11 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:todotoday/HeaderLabel.dart';
 import 'package:todotoday/global.dart';
 
 class TagView extends StatefulWidget {
-
   String hashtag = '';
+
   TagView(this.hashtag, {super.key});
-
-
 
   @override
   State<TagView> createState() => _TagViewState();
@@ -43,13 +40,10 @@ class _TagViewState extends State<TagView> {
               SizedBox(
                 height: 110,
               ),
-
             ],
           ),
         ),
       ],
     );
   }
-
-
 }

@@ -2,7 +2,6 @@ library global;
 
 import 'package:flutter/cupertino.dart';
 import 'package:todotoday/UserBackground.dart';
-import 'package:todotoday/tags.dart';
 import 'package:todotoday/todotask.dart';
 
 var subtitles = [];

@@ -1,29 +1,45 @@
 import 'dart:math';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
-
 import 'package:todotoday/LoginPage.dart';
-
 import 'package:todotoday/MessageBox.dart';
 import 'package:todotoday/QuantityBadge.dart';
 import 'package:todotoday/TileColors.dart';
 import 'package:todotoday/UserBackground.dart';
 import 'package:todotoday/all.dart';
+import 'package:todotoday/firebase_options.dart';
 import 'package:todotoday/global.dart';
 import 'package:todotoday/tags.dart';
 import 'package:todotoday/today.dart';
 
 
-void main() {
+
+Future<void> main()  async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseUIAuth.configureProviders([
+    GoogleProvider(clientId: 'clientId'),
+  ]);
+
   runApp(MyApp());
+
 }
 
-
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+
+
+
+
     return MaterialApp(
       title: 'TODOTODAY',
       theme: ThemeData(
@@ -49,6 +65,9 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
+
     return DefaultTabController(
       length: 3,
       child: GestureDetector(
@@ -58,7 +77,11 @@ class MyHomePage extends StatelessWidget {
         },
         child: Stack(
           children: [
-            userBG,
+
+
+
+
+        userBG,
             Scaffold(
               backgroundColor: Colors.black26,
               resizeToAvoidBottomInset: true,
@@ -70,19 +93,30 @@ class MyHomePage extends StatelessWidget {
                   tabs: [
                     Stack(
                       children: [
-                        Tab(icon: Icon(Icons.all_inbox)),
+
+                        GoogleSignInButton(
+                            clientId: 'clientId',
+                            loadingIndicator: CircularProgressIndicator(),
+                            onSignedIn: (UserCredential credential) {
+                              runApp(MyApp());
+                            }
+                        ),
+                        Tab(icon: Icon(Icons.all_inbox
+                        , color: Colors.redAccent)),
                         QuantityBadge(getAllCount()),
                       ],
                     ),
                     Stack(
                       children: [
-                        Tab(icon: Icon(Icons.sunny)),
+                        Tab(icon: Icon(Icons.sunny, color: Color(0xFFFFBD64))),
+
                         QuantityBadge(getTodayCount()),
                       ],
                     ),
                     Stack(
                       children: [
-                        Tab(icon: Icon(Icons.tag)),
+                        Tab(icon: Icon(Icons.tag,
+                            color: Colors.blue)),
                         QuantityBadge(getTagCount()),
                       ],
                     ),
@@ -94,7 +128,9 @@ class MyHomePage extends StatelessWidget {
                 children: [
                   Stack(
                     children: [
-                      TabBarView(
+
+
+                TabBarView(
                         children: [
                           All(
                             key: ValueKey<String>(tasks.toString()),
@@ -108,9 +144,7 @@ class MyHomePage extends StatelessWidget {
                             key: UniqueKey(),
                             title: '',
                           ),
-                          LoginPage(
-                            key: UniqueKey(),
-                          ),
+
                         ],
                       ),
                     ],
@@ -252,7 +286,3 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
-
-
-
-

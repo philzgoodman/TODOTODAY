@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/animate.dart';
 import 'package:flutter_animate/effects/fade_effect.dart';
 import 'package:todotoday/HeaderLabel.dart';
+import 'package:todotoday/addUser.dart';
 import 'package:todotoday/done.dart';
 import 'package:todotoday/global.dart';
 
@@ -24,6 +25,8 @@ class _AllState extends State<All> {
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             children: [
+              AddUser(  'John Doe', 'Stokes and Sons', 42),
+
               const HeaderLabel(),
               ListView.builder(
                 scrollDirection: Axis.vertical,
@@ -33,9 +36,7 @@ class _AllState extends State<All> {
                 shrinkWrap: true,
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {
-                  if (index == tasks.length - 1 &&
-                      !tasks[index].isChecked &&
-                      !tasks[index].isToday) {
+                  if (index == 0 && tasks[index].isChecked == false && tasks[index].isToday == false) {
                     return Animate(effects: [
                       FadeEffect(),
                     ], child: tasks[index]);

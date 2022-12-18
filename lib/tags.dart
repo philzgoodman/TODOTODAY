@@ -1,17 +1,13 @@
 import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:todotoday/HeaderLabel.dart';
 import 'package:todotoday/TagView.dart';
 import 'package:todotoday/global.dart';
-import 'package:todotoday/tags.dart';
 
 class Tags extends StatefulWidget {
   int quantity = 1;
   String hashtag = '';
   String sendTag = '';
-
 
   Tags({Key? key, required String title}) : super(key: key);
 
@@ -34,15 +30,11 @@ class _TagsState extends State<Tags> {
 
     super.initState();
 
-
-    expandedTag = TagView(
-      "default");
-
+    expandedTag = TagView("default");
   }
 
   @override
   Widget build(BuildContext context) {
-
     bool isExpanded = true;
 
     return Column(
@@ -61,30 +53,29 @@ class _TagsState extends State<Tags> {
               widget.quantity = uniqueSubtitles.length;
             }
 
-            return
-
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Material(
-                    elevation: 5,
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Color((Random().nextDouble() * 0xFFFFFF) ~/ 4)
+            return Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Material(
+                elevation: 5,
+                child: TextButton(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.white,
+                      backgroundColor:
+                          Color((Random().nextDouble() * 0xFFFFFF) ~/ 4)
                               .withOpacity(0.7),
-                        ),
-                        onPressed: () {
-
-                          setState(() {
-                            expandedTag = TagView(uniqueSubtitles[index]);
-                            _showDialog(context);
-
-                          });
-                        },
-                        child:
-                            Text(uniqueSubtitles[index] + " (" + count.toString() + ")")),
-                  ),
-                );
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        expandedTag = TagView(uniqueSubtitles[index]);
+                        _showDialog(context);
+                      });
+                    },
+                    child: Text(uniqueSubtitles[index] +
+                        " (" +
+                        count.toString() +
+                        ")")),
+              ),
+            );
           },
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
@@ -96,8 +87,6 @@ class _TagsState extends State<Tags> {
   }
 
   void _showDialog(BuildContext context) {
-
-
     // flutter defined function
     showDialog(
       context: context,
@@ -107,13 +96,8 @@ class _TagsState extends State<Tags> {
           backgroundColor: Colors.transparent,
           elevation: 2,
           content: expandedTag,
-
-
-          );
-
-
+        );
       },
     );
   }
 }
-

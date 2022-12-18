@@ -6,7 +6,6 @@ import 'package:todotoday/TileColors.dart';
 import 'package:todotoday/global.dart';
 import 'package:todotoday/main.dart';
 import 'package:todotoday/todotask.dart';
-import 'TileColors.dart' as constants;
 
 class MessageBox extends StatefulWidget {
   MessageBox({super.key});
