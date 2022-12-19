@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/animate.dart';
 import 'package:flutter_animate/effects/effects.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todotoday/TileColors.dart';
 import 'package:todotoday/global.dart';
 import 'package:todotoday/main.dart';
@@ -37,6 +38,13 @@ class _MessageBoxState extends State<MessageBox> {
       }
     });
     txt.clear();
+
+
+
+      saveToShared();
+
+
+
   }
 
   @override
@@ -154,4 +162,17 @@ String getSubtitle2(int i) {
   } else {
     return tasks[i].subtitle;
   }
+}
+
+Future<void> saveToShared() async {
+
+  SharedPreferences sharedToday = await SharedPreferences.getInstance();
+
+    sharedToday.setStringList("taskList", tasks.map((e) => e.name).toList());
+    sharedToday.setStringList("subtitleList", tasks.map((e) => e.subtitle).toList());
+    sharedToday.setStringList("isCheckedList", tasks.map((e) => e.isChecked.toString()).toList());
+    sharedToday.setStringList("isTodayList", tasks.map((e) => e.isToday.toString()).toList());
+    sharedToday.setInt("taskListLength", tasks.length);
+
+    print("Saved to shared preferences");
 }

@@ -5,11 +5,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todotoday/UserBackground.dart';
 import 'package:todotoday/todotask.dart';
 
+
 var subtitles = [];
 int currentIndex = 0;
 TextEditingController txt = TextEditingController();
 bool isEditing = false;
 List<TodoTask> tasks = [];
+List<String?> savedList = [];
 int todayCount = 0;
 int allCount = 0;
 int doneCount = 0;

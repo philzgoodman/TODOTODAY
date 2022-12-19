@@ -7,11 +7,8 @@
 #include "generated_plugin_registrant.h"
 
 #include <desktop_webview_auth/desktop_webview_auth_plugin.h>
-#include <realm/realm_plugin.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
   DesktopWebviewAuthPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("DesktopWebviewAuthPlugin"));
-  RealmPluginRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("RealmPlugin"));
 }

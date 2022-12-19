@@ -17,7 +17,6 @@ import 'package:todotoday/tags.dart';
 import 'package:todotoday/today.dart';
 import 'package:todotoday/todotask.dart';
 
-import 'SharedPref.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +34,7 @@ Future<void> main() async {
     }
   });
 
-  SharedPref sharedPref = SharedPref();
+  await getSavedPrefsToTasks();
 
   runApp(MyApp());
 }
@@ -70,7 +69,7 @@ class MyHomePage extends StatefulWidget {
 
   final String title;
 
-  initState() {
+  initState() async {
     FirebaseAuth.instance.userChanges().listen((User? user) {
       if (user == null) {
         print('User is currently signed out!');
@@ -78,23 +77,16 @@ class MyHomePage extends StatefulWidget {
         print('User is signed in!');
       }
     });
+
+
+
+
+    }
+
   }
-}
 
 class _MyHomePageState extends State<MyHomePage> {
-  SharedPref sharedPref = SharedPref();
 
-  loadSharedPrefs() async {
-    try {
-      TodoTask savedTasks = TodoTask.fromJSON(await sharedPref.read("user"));
-
-      setState(() {
-        tasks = savedTasks as List<TodoTask>;
-      });
-    } catch (Excepetion) {
-      print(Excepetion);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -188,6 +180,54 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+Future<void> getSavedPrefsToTasks() async {
+  SharedPreferences sharedToday = await SharedPreferences.getInstance();
+
+  List<String>? taskList = [];
+  List<String>? subtitleList = [];
+  List<String>? isCheckedList = [];
+  List<String>? isTodayList = [];
+
+  if (sharedToday != null) {
+    if (sharedToday.containsKey("taskListLength")) {
+      int? nTask = sharedToday.getInt('taskListLength');
+
+      if (sharedToday.containsKey("taskList")) {
+        taskList = sharedToday.getStringList('taskList');
+      }
+      if (sharedToday.containsKey("subtitleList")) {
+        subtitleList = sharedToday.getStringList('subtitleList');
+      }
+      if (sharedToday.containsKey("isCheckedList")) {
+        isCheckedList = sharedToday.getStringList('isCheckedList');
+      }
+      if (sharedToday.containsKey("isTodayList")) {
+        isTodayList = sharedToday.getStringList('isTodayList');
+      }
+
+      for (int i = 0; i < nTask!; i++) {
+        bool isChecked = false;
+        bool isToday = false;
+
+        if (isCheckedList![i] == "true") {
+          isChecked = true;
+        }
+
+        if (isTodayList![i] == "true") {
+          isToday = true;
+        }
+          tasks.add(TodoTask(taskList![i], subtitleList![i], isChecked, isToday, TileColors.TILECOLORS.elementAt(tasks.length)));
+
+
+      }
+    }
+  }
+
+  print("Loaded SharedPrefs");
+
+}
+
 
 int getTodayCount() {
   int n = 0;
@@ -299,4 +339,8 @@ void _showDialog(BuildContext context) {
       );
     },
   );
+
+
+
+
 }
