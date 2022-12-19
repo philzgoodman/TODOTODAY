@@ -23,6 +23,9 @@ class _MessageBoxState extends State<MessageBox> {
       if (DefaultTabController.of(context)?.index == 1) {
         tasks.add(TodoTask(txt.text, txt.text, false, true,
             TileColors.TILECOLORS.elementAt(tasks.length)));
+
+
+
       } else {
         tasks.add(TodoTask(txt.text, txt.text, false, false,
             TileColors.TILECOLORS.elementAt(tasks.length)));

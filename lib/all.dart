@@ -25,7 +25,6 @@ class _AllState extends State<All> {
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             children: [
-              AddUser(  'John Doe', 'Stokes and Sons', 42),
 
               const HeaderLabel(),
               ListView.builder(

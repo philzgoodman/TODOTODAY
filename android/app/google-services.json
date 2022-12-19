@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:813286173539:android:62530e79df0273361f8156",
+        "mobilesdk_app_id": "1:813286173539:android:8f473521a528ea031f8156",
         "android_client_info": {
-          "package_name": "com.example.todotoday"
+          "package_name": "io.todotoday"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "813286173539-2biqh3ud42tj14sumc4utiu7tomi316p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.todotoday",
+            "certificate_hash": "3b88dcb8daab3d31d05e2ba6f07670886723ec9e"
+          }
+        },
         {
           "client_id": "813286173539-p2lvk19bdjdbjdp8udptu0n1slusff6h.apps.googleusercontent.com",
           "client_type": 3

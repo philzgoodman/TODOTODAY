@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todotoday/LoginPage.dart';
 import 'package:todotoday/MessageBox.dart';
 import 'package:todotoday/QuantityBadge.dart';
@@ -14,10 +15,11 @@ import 'package:todotoday/firebase_options.dart';
 import 'package:todotoday/global.dart';
 import 'package:todotoday/tags.dart';
 import 'package:todotoday/today.dart';
+import 'package:todotoday/todotask.dart';
 
+import 'SharedPref.dart';
 
-
-Future<void> main()  async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -25,9 +27,17 @@ Future<void> main()  async {
   FirebaseUIAuth.configureProviders([
     GoogleProvider(clientId: 'clientId'),
   ]);
+  FirebaseAuth.instance.userChanges().listen((User? user) {
+    if (user == null) {
+      print('User is currently signed out!');
+    } else {
+      print('User is signed in!');
+    }
+  });
+
+  SharedPref sharedPref = SharedPref();
 
   runApp(MyApp());
-
 }
 
 class MyApp extends StatelessWidget {
@@ -35,11 +45,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
-
-
-
     return MaterialApp(
       title: 'TODOTODAY',
       theme: ThemeData(
@@ -58,16 +63,41 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   MyHomePage({super.key, required this.title});
+
+  State<MyHomePage> createState() => _MyHomePageState();
 
   final String title;
 
+  initState() {
+    FirebaseAuth.instance.userChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+      } else {
+        print('User is signed in!');
+      }
+    });
+  }
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  SharedPref sharedPref = SharedPref();
+
+  loadSharedPrefs() async {
+    try {
+      TodoTask savedTasks = TodoTask.fromJSON(await sharedPref.read("user"));
+
+      setState(() {
+        tasks = savedTasks as List<TodoTask>;
+      });
+    } catch (Excepetion) {
+      print(Excepetion);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
-
-
     return DefaultTabController(
       length: 3,
       child: GestureDetector(
@@ -77,11 +107,7 @@ class MyHomePage extends StatelessWidget {
         },
         child: Stack(
           children: [
-
-
-
-
-        userBG,
+            userBG,
             Scaffold(
               backgroundColor: Colors.black26,
               resizeToAvoidBottomInset: true,
@@ -93,30 +119,21 @@ class MyHomePage extends StatelessWidget {
                   tabs: [
                     Stack(
                       children: [
-
-                        GoogleSignInButton(
-                            clientId: 'clientId',
-                            loadingIndicator: CircularProgressIndicator(),
-                            onSignedIn: (UserCredential credential) {
-                              runApp(MyApp());
-                            }
-                        ),
-                        Tab(icon: Icon(Icons.all_inbox
-                        , color: Colors.redAccent)),
+                        Tab(
+                            icon:
+                                Icon(Icons.all_inbox, color: Colors.redAccent)),
                         QuantityBadge(getAllCount()),
                       ],
                     ),
                     Stack(
                       children: [
                         Tab(icon: Icon(Icons.sunny, color: Color(0xFFFFBD64))),
-
                         QuantityBadge(getTodayCount()),
                       ],
                     ),
                     Stack(
                       children: [
-                        Tab(icon: Icon(Icons.tag,
-                            color: Colors.blue)),
+                        Tab(icon: Icon(Icons.tag, color: Colors.blue)),
                         QuantityBadge(getTagCount()),
                       ],
                     ),
@@ -128,9 +145,7 @@ class MyHomePage extends StatelessWidget {
                 children: [
                   Stack(
                     children: [
-
-
-                TabBarView(
+                      TabBarView(
                         children: [
                           All(
                             key: ValueKey<String>(tasks.toString()),
@@ -144,7 +159,6 @@ class MyHomePage extends StatelessWidget {
                             key: UniqueKey(),
                             title: '',
                           ),
-
                         ],
                       ),
                     ],
@@ -173,116 +187,116 @@ class MyHomePage extends StatelessWidget {
       ),
     );
   }
+}
 
-  int getTodayCount() {
-    int n = 0;
-    for (var i = 0; i < tasks.length; i++) {
-      if (tasks[i].isToday) {
-        n++;
-      }
+int getTodayCount() {
+  int n = 0;
+  for (var i = 0; i < tasks.length; i++) {
+    if (tasks[i].isToday) {
+      n++;
     }
-    return n;
+  }
+  return n;
+}
+
+int getAllCount() {
+  int n = 0;
+  for (var i = 0; i < tasks.length; i++) {
+    if (!tasks[i].isChecked && !tasks[i].isToday) {
+      n++;
+    }
+  }
+  return n;
+}
+
+int getTagCount() {
+  for (var i = 0; i < tasks.length; i++) {
+    subtitles.add(tasks[i].subtitle);
   }
 
-  int getAllCount() {
-    int n = 0;
-    for (var i = 0; i < tasks.length; i++) {
-      if (!tasks[i].isChecked && !tasks[i].isToday) {
-        n++;
-      }
-    }
-    return n;
-  }
+  uniqueSubtitles = subtitles.toSet().toList();
 
-  int getTagCount() {
-    for (var i = 0; i < tasks.length; i++) {
-      subtitles.add(tasks[i].subtitle);
-    }
+  return uniqueSubtitles.length;
+}
 
-    uniqueSubtitles = subtitles.toSet().toList();
-
-    return uniqueSubtitles.length;
-  }
-
-  void _showDialog(BuildContext context) {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          backgroundColor: Color(0xE8231216),
-          title: new TextButton(
-            onPressed: () {
-              tasks.clear();
-              runApp(MyApp());
-            },
-            child: const Text(
-              "Clear All Tasks",
-              style: TextStyle(
-                color: Colors.blue,
-                fontSize: 15,
+void _showDialog(BuildContext context) {
+  // flutter defined function
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return AlertDialog(
+        backgroundColor: Color(0xE8231216),
+        title: new TextButton(
+          onPressed: () {
+            tasks.clear();
+            runApp(MyApp());
+          },
+          child: const Text(
+            "Clear All Tasks",
+            style: TextStyle(
+              color: Colors.blue,
+              fontSize: 15,
+            ),
+          ),
+        ),
+        content: TextButton(
+          onPressed: () {
+            userBG.userColorList.clear();
+            userBG = UserBackground([
+              TileColors.TILECOLORS
+                  .elementAt(Random().nextInt(TileColors.TILECOLORS.length)),
+              TileColors.TILECOLORS
+                  .elementAt(Random().nextInt(TileColors.TILECOLORS.length)),
+              TileColors.TILECOLORS
+                  .elementAt(Random().nextInt(TileColors.TILECOLORS.length))
+            ]);
+            Navigator.of(context).pop();
+            runApp(MyApp());
+          },
+          child: Column(
+            children: [
+              const Text(
+                textAlign: TextAlign.center,
+                "Shuffle Background Colors",
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 15,
+                ),
               ),
-            ),
-          ),
-          content: TextButton(
-            onPressed: () {
-              userBG.userColorList.clear();
-              userBG = UserBackground([
-                TileColors.TILECOLORS
-                    .elementAt(Random().nextInt(TileColors.TILECOLORS.length)),
-                TileColors.TILECOLORS
-                    .elementAt(Random().nextInt(TileColors.TILECOLORS.length)),
-                TileColors.TILECOLORS
-                    .elementAt(Random().nextInt(TileColors.TILECOLORS.length))
-              ]);
-              Navigator.of(context).pop();
-              runApp(MyApp());
-            },
-            child: Column(
-              children: [
-                const Text(
-                  textAlign: TextAlign.center,
-                  "Shuffle Background Colors",
-                  style: TextStyle(
-                    color: Colors.blue,
-                    fontSize: 15,
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.blue,
-                      onPrimary: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32.0),
-                      ),
+              Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blue,
+                    onPrimary: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(32.0),
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    },
-                    child: Text('Login'),
                   ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  },
+                  child: Text('Login'),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new TextButton(
-                child: new Text("Close"),
-                onPressed: () {
-                  Navigator.of(context).pop();
+        ),
+        actions: <Widget>[
+          // usually buttons at the bottom of the dialog
+          new TextButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
 
-                  FocusManager.instance.primaryFocus?.unfocus();
-                }),
-          ],
-        );
-      },
-    );
-  }
+                FocusManager.instance.primaryFocus?.unfocus();
+              }),
+        ],
+      );
+    },
+  );
 }

@@ -17,11 +17,29 @@ class TodoTask extends StatefulWidget {
       this.name, this.subtitle, this.isChecked, this.isToday, this.toDoColor,
       {super.key});
 
+  TodoTask.fromJSON(Map<String, dynamic> json)
+      : name = json['name'],
+        subtitle = json['subtitle'],
+        isChecked = json['isChecked'],
+        isToday = json['isToday'],
+        toDoColor = json['toDoColor'];
+
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'subtitle': subtitle,
+    'isChecked': isChecked.toString(),
+    'isToday': isToday.toString(),
+  };
+
   @override
   State<TodoTask> createState() => TodoTaskState();
 }
 
 class TodoTaskState extends State<TodoTask> {
+
+
+
+
   @override
   Widget build(BuildContext context) {
     Color getColor(Set<MaterialState> states) {
