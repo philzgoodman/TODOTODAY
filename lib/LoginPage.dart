@@ -1,13 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-
 import 'package:todotoday/main.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:todotoday/todotask.dart';
+
+import 'TileColors.dart';
+import 'global.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -17,8 +17,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
-
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -30,35 +28,73 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
 //https://github.com/firebase/flutterfire/blob/master/packages/firebase_ui_auth/doc/providers/email.md
-    return GoogleSignInButton(
-        clientId: 'clientId',
-        loadingIndicator: CircularProgressIndicator(),
-        onSignedIn: (UserCredential credential) async {
+    return Scaffold(
+      body: AuthFlowBuilder<EmailAuthController>(
+        builder: (context, state, ctrl, child) {
+          if (state is AwaitingEmailAndPassword) {
+            return SignInScreen(
+              actions: [
+                AuthStateChangeAction<SignedIn>((context, state) {
+                  Navigator.of(context).pop();
+                  runApp(MyApp());
 
-          await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+                  final userEmail = FirebaseAuth.instance.currentUser?.email;
+                  if (userEmail != null) {
+                    CollectionReference users =
+                        FirebaseFirestore.instance.collection('users');
 
-
-
-          final user = FirebaseAuth.instance.currentUser;
-          if (user != null) {
-            // Name, email address, and profile photo URL
-            final name = user.displayName;
-            final email = user.email;
-            final photoUrl = user.photoURL;
-
-            // Check if user's email is verified
-            final emailVerified = user.emailVerified;
-
-            // The user's ID, unique to the Firebase project. Do NOT use this value to
-            // authenticate with your backend server, if you have one. Use
-            // User.getIdToken() instead.
-            final uid = user.uid;
+                    if (users.where('email', isEqualTo: userEmail).get() ==
+                        null) {
+                      users
+                          .add({
+                            'email': userEmail.toString(),
+                            'taskList':
+                                tasks.map((e) => e.name.toString()).toList(),
+                            'subtitleList':
+                                tasks.map((e) => e.subtitle).toList(),
+                            'isCheckedList': tasks
+                                .map((e) => e.isChecked.toString())
+                                .toList(),
+                            'isTodayList':
+                                tasks.map((e) => e.isToday.toString()).toList(),
+                            'taskListLength': tasks.length,
+                          })
+                          .then((value) => {
+                                print("User Added"),
+                              })
+                          .catchError(
+                              (error) => print("Failed to add user: $error"));
+                    } else {
+                      users
+                          .where('email', isEqualTo: userEmail)
+                          .get()
+                          .then((value) {
+                        tasks.clear();
+                        for (int i = 0;
+                            i < value.docs[0]['taskListLength'];
+                            i++) {
+                          tasks.add(TodoTask(
+                              value.docs[0]['taskList'][i],
+                              value.docs[0]['subtitleList'][i],
+                              value.docs[0]['isCheckedList'][i] == 'true',
+                              value.docs[0]['isTodayList'][i] == 'true',
+                              TileColors.TILECOLORS.elementAt(tasks.length)));
+                        }
+                      });
+                    }
+                  }
+                }),
+              ],
+            );
+          } else if (state is SigningIn) {
+            return CircularProgressIndicator();
+          } else if (state is AuthFailed) {
+            return ErrorText(exception: state.exception);
+          } else {
+            return Text('Unknown state $state');
           }
-
-
-
-
-        }
+        },
+      ),
     );
   }
 }

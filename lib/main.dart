@@ -1,8 +1,8 @@
 import 'dart:math';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:todotoday/firebase_options.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todotoday/LoginPage.dart';
@@ -11,12 +11,10 @@ import 'package:todotoday/QuantityBadge.dart';
 import 'package:todotoday/TileColors.dart';
 import 'package:todotoday/UserBackground.dart';
 import 'package:todotoday/all.dart';
-import 'package:todotoday/firebase_options.dart';
 import 'package:todotoday/global.dart';
 import 'package:todotoday/tags.dart';
 import 'package:todotoday/today.dart';
 import 'package:todotoday/todotask.dart';
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,16 +22,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FirebaseUIAuth.configureProviders([
-    GoogleProvider(clientId: 'clientId'),
+    EmailAuthProvider(),
   ]);
-  FirebaseAuth.instance.userChanges().listen((User? user) {
-    if (user == null) {
-      print('User is currently signed out!');
-    } else {
-      print('User is signed in!');
-    }
-  });
-
   await getSavedPrefsToTasks();
 
   runApp(MyApp());
@@ -68,26 +58,9 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 
   final String title;
-
-  initState() async {
-    FirebaseAuth.instance.userChanges().listen((User? user) {
-      if (user == null) {
-        print('User is currently signed out!');
-      } else {
-        print('User is signed in!');
-      }
-    });
-
-
-
-
-    }
-
-  }
+}
 
 class _MyHomePageState extends State<MyHomePage> {
-
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -217,17 +190,13 @@ Future<void> getSavedPrefsToTasks() async {
         if (isTodayList![i] == "true") {
           isToday = true;
         }
-          tasks.add(TodoTask(taskList![i], subtitleList![i], isChecked, isToday, TileColors.TILECOLORS.elementAt(tasks.length)));
-
-
+        tasks.add(TodoTask(taskList![i], subtitleList![i], isChecked, isToday,
+            TileColors.TILECOLORS.elementAt(tasks.length)));
       }
     }
   }
-
   print("Loaded SharedPrefs");
-
 }
-
 
 int getTodayCount() {
   int n = 0;
@@ -270,6 +239,7 @@ void _showDialog(BuildContext context) {
         title: new TextButton(
           onPressed: () {
             tasks.clear();
+            clearSharedPrefs();
             runApp(MyApp());
           },
           child: const Text(
@@ -294,36 +264,40 @@ void _showDialog(BuildContext context) {
             Navigator.of(context).pop();
             runApp(MyApp());
           },
-          child: Column(
-            children: [
-              const Text(
-                textAlign: TextAlign.center,
-                "Shuffle Background Colors",
-                style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 15,
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 10),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.blue,
-                    onPrimary: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(32.0),
-                    ),
+          child: SizedBox(
+            width: 300,
+            height: 400,
+            child: Column(
+              children: [
+                const Text(
+                  textAlign: TextAlign.center,
+                  "Shuffle Background Colors",
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 15,
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
-                    );
-                  },
-                  child: Text('Login'),
                 ),
-              ),
-            ],
+                Container(
+                  margin: const EdgeInsets.only(top: 10),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue,
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(32.0),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                    child: Text('Login'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         actions: <Widget>[
@@ -339,8 +313,10 @@ void _showDialog(BuildContext context) {
       );
     },
   );
+}
 
-
-
-
+void clearSharedPrefs() {
+  SharedPreferences.getInstance().then((prefs) {
+    prefs.clear();
+  });
 }

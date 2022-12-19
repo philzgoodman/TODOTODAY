@@ -5,6 +5,8 @@ import 'package:flutter_animate/effects/fade_effect.dart';
 import 'package:todotoday/global.dart';
 import 'package:todotoday/main.dart';
 
+import 'MessageBox.dart';
+
 class TodoTask extends StatefulWidget {
   String name;
   String subtitle = "#default";
@@ -133,6 +135,7 @@ void slideSwitch() {
     widget.isToday = !widget.isToday;
 
     Future.delayed(const Duration(milliseconds: 300), () {
+      saveToShared();
       runApp(MyApp());
     });
 
@@ -141,8 +144,16 @@ void slideSwitch() {
   void checked() {
     setState(() {
       widget.isChecked = !widget.isChecked;
+
+
+
       Future.delayed(const Duration(milliseconds: 300), () {
+
+        saveToShared();
         runApp(MyApp());
+
+
+
       });
     });
   }
