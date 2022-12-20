@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todotoday/main.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:todotoday/todotask.dart';
+import 'MessageBox.dart';
+import 'TileColors.dart';
+import 'global.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -32,39 +36,59 @@ class _LoginPageState extends State<LoginPage> {
             return SignInScreen(
               actions: [
                 AuthStateChangeAction<SignedIn>((context, state) async {
-                  Navigator.of(context).pop();
-                  runApp(MyApp());
-
                   final userEmail = FirebaseAuth.instance.currentUser?.email;
                   print(userEmail);
                   if (userEmail != null) {
                     CollectionReference users =
                         FirebaseFirestore.instance.collection('users');
-
-
-
-                    SharedPreferences sharedToday =
-                        await SharedPreferences.getInstance();
-
                     users
                         .where('taskListLength', isGreaterThan: 0)
                         .get()
                         .then((QuerySnapshot querySnapshot) => {
-                              querySnapshot.docs.forEach((doc) {
-                                sharedToday.setStringList('isTodayList',
-                                    doc['isTodayList'].toString().split(','));
-                                sharedToday.setStringList('isCheckedList',
-                                    doc['isCheckedList'].toString().split(','));
-                                sharedToday.setStringList('taskList',
-                                    doc['taskList'].toString().split(','));
-                                sharedToday.setStringList('subtitleList',
-                                    doc['subtitleList'].toString().split(','));
+                              querySnapshot.docs.forEach((doc) async {
+                                if (doc['email'] == userEmail) {
+                                  int? nTask = doc['taskListLength'];
+                                  for (int i = 0; i < nTask!; i++) {
+
+                                    bool isChecked = false;
+                                    bool isToday = false;
+
+                                    if (doc['isCheckedList'][i] == "true") {
+                                      isChecked = true;
+                                    }
+
+                                    if ( doc['isTodayList'][i] == "true") {
+                                      isToday = true;
+                                    }
+                                    setState(() async {
+                                      tasks.add(TodoTask(
+                                          doc['taskList'][i],
+                                          doc['subtitleList'][i],
+                                          isChecked,
+                                          isToday,
+                                          TileColors.TILECOLORS
+                                              .elementAt(tasks.length)));
+
+
+
+                                    });
+
+                                  }
+
+
+                                  saveToShared();
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => MyApp()));
+                                  runApp(MyApp());
+
+                                }
                               })
                             });
 
-                    setState(() {
-                      runApp(MyApp());
-                    });
+
+
                   }
                 }),
               ],
@@ -79,5 +103,27 @@ class _LoginPageState extends State<LoginPage> {
         },
       ),
     );
+  }
+
+  void updateText() {
+    setState(() {
+      if (DefaultTabController.of(context)?.index == 1) {
+        tasks.add(TodoTask(txt.text, txt.text, false, true,
+            TileColors.TILECOLORS.elementAt(tasks.length)));
+      } else {
+        tasks.add(TodoTask(txt.text, txt.text, false, false,
+            TileColors.TILECOLORS.elementAt(tasks.length)));
+      }
+
+      txt.clear();
+      for (var i = 0; i < tasks.length; i++) {
+        getSubtitle(i);
+      }
+    });
+    txt.clear();
+
+    saveToShared();
+
+    if (FirebaseAuth.instance.currentUser != null) saveToFireStore();
   }
 }

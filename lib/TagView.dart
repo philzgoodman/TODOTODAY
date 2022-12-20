@@ -34,8 +34,9 @@ class _TagViewState extends State<TagView> {
                   itemBuilder: (context, index) {
                     if (tasks[index].subtitle == widget.hashtag) {
                       return tasks[index];
-                    } else {
-                      return tasks[index];
+                    }
+                    else {
+                      return Container();
                     }
                   },
                 ),
