@@ -45,24 +45,11 @@ class _LoginPageState extends State<LoginPage> {
                         FirebaseFirestore.instance.collection('users');
 
                     if (users.where('email', isEqualTo: userEmail).get() == null || (users.where('email', isEqualTo: userEmail).get() == '')) {
-                      users
-                          .add({
-                        'email': userEmail.toString(),
-                        'taskList':
-                        tasks.map((e) => e.name.toString()).toList(),
-                        'subtitleList': tasks.map((e) => e.subtitle).toList(),
-                        'isCheckedList':
-                        tasks.map((e) => e.isChecked.toString()).toList(),
-                        'isTodayList':
-                        tasks.map((e) => e.isToday.toString()).toList(),
-                        'taskListLength': tasks.length,
-                      })
-                          .then((value) => {
-                                print("User Added"),
-                              })
-                          .catchError(
-                              (error) => print("Failed to add user: $error"));
-                    } else {
+
+                      users.add({
+                        'email': userEmail,
+                      });
+
                       users
                           .where('email', isEqualTo: userEmail)
                           .get()
@@ -80,7 +67,6 @@ class _LoginPageState extends State<LoginPage> {
                                 TileColors.TILECOLORS.elementAt(tasks.length)));
                             print("Task added");
                           }
-
 
                         }
                       });

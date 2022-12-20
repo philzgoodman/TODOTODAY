@@ -30,7 +30,7 @@ class _TodayState extends State<Today> {
                 shrinkWrap: true,
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {
-                  if (tasks[index].isToday) {
+                  if (tasks[index].isToday && !tasks[index].isChecked) {
                     return tasks[index];
                   } else {
                     return const SizedBox(

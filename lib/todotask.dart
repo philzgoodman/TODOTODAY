@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/animate.dart';
 import 'package:flutter_animate/effects/fade_effect.dart';
 import 'package:todotoday/global.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:todotoday/main.dart';
 
 import 'MessageBox.dart';
@@ -25,10 +27,6 @@ class TodoTask extends StatefulWidget {
 }
 
 class TodoTaskState extends State<TodoTask> {
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +120,9 @@ class TodoTaskState extends State<TodoTask> {
             onChanged: (value) {
             slideSwitch();
            value = !value;
+
+            if (FirebaseAuth.instance.currentUser != null) saveToFireStore();
+
             },
           ),
 
@@ -150,6 +151,11 @@ void slideSwitch() {
       Future.delayed(const Duration(milliseconds: 300), () {
 
         saveToShared();
+
+        if (FirebaseAuth.instance.currentUser != null) saveToFireStore();
+
+
+
         runApp(MyApp());
 
 
@@ -157,6 +163,7 @@ void slideSwitch() {
       });
     });
   }
+
 
 }
 
