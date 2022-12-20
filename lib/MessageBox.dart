@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/animate.dart';
 import 'package:flutter_animate/effects/effects.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todotoday/TileColors.dart';
 import 'package:todotoday/global.dart';
@@ -43,8 +45,7 @@ class _MessageBoxState extends State<MessageBox> {
 
       saveToShared();
 
-
-
+    if (FirebaseAuth.instance.currentUser != null) saveToFireStore();
   }
 
   @override
@@ -143,6 +144,43 @@ class _MessageBoxState extends State<MessageBox> {
       ],
     );
   }
+}
+void deleteFirestore() {
+  final userEmail = FirebaseAuth.instance.currentUser?.email;
+  if (userEmail != null) {
+
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    users.where('email', isEqualTo: userEmail).get().then((value) {
+      value.docs.forEach((element) {
+        users.doc(element.id).update({
+          'taskList': [],
+          'subtitleList': [],
+          'isCheckedList': [],
+          'isTodayList': [],
+          'taskListLength': 1,
+        });
+      });
+    });
+  }
+}
+void saveToFireStore() {
+  final userEmail = FirebaseAuth.instance.currentUser?.email;
+  if (userEmail != null) {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    users.where('email', isEqualTo: userEmail).get().then((value) {
+      value.docs.forEach((element) {
+        users.doc(element.id).update({
+          'taskList': tasks.map((e) => e.name.toString()).toList(),
+          'subtitleList': tasks.map((e) => e.subtitle).toList(),
+          'isCheckedList': tasks.map((e) => e.isChecked.toString()).toList(),
+          'isTodayList': tasks.map((e) => e.isToday.toString()).toList(),
+          'taskListLength': tasks.length,
+        });
+      });
+    });
+  }
+  print("Stored to Firestore");
 }
 
 void getSubtitle(int i) {

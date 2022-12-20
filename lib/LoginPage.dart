@@ -39,26 +39,24 @@ class _LoginPageState extends State<LoginPage> {
                   runApp(MyApp());
 
                   final userEmail = FirebaseAuth.instance.currentUser?.email;
+                  print(userEmail);
                   if (userEmail != null) {
                     CollectionReference users =
                         FirebaseFirestore.instance.collection('users');
 
-                    if (users.where('email', isEqualTo: userEmail).get() ==
-                        null) {
+                    if (users.where('email', isEqualTo: userEmail).get() == null || (users.where('email', isEqualTo: userEmail).get() == '')) {
                       users
                           .add({
-                            'email': userEmail.toString(),
-                            'taskList':
-                                tasks.map((e) => e.name.toString()).toList(),
-                            'subtitleList':
-                                tasks.map((e) => e.subtitle).toList(),
-                            'isCheckedList': tasks
-                                .map((e) => e.isChecked.toString())
-                                .toList(),
-                            'isTodayList':
-                                tasks.map((e) => e.isToday.toString()).toList(),
-                            'taskListLength': tasks.length,
-                          })
+                        'email': userEmail.toString(),
+                        'taskList':
+                        tasks.map((e) => e.name.toString()).toList(),
+                        'subtitleList': tasks.map((e) => e.subtitle).toList(),
+                        'isCheckedList':
+                        tasks.map((e) => e.isChecked.toString()).toList(),
+                        'isTodayList':
+                        tasks.map((e) => e.isToday.toString()).toList(),
+                        'taskListLength': tasks.length,
+                      })
                           .then((value) => {
                                 print("User Added"),
                               })
@@ -69,16 +67,21 @@ class _LoginPageState extends State<LoginPage> {
                           .where('email', isEqualTo: userEmail)
                           .get()
                           .then((value) {
-                        tasks.clear();
-                        for (int i = 0;
-                            i < value.docs[0]['taskListLength'];
-                            i++) {
-                          tasks.add(TodoTask(
-                              value.docs[0]['taskList'][i],
-                              value.docs[0]['subtitleList'][i],
-                              value.docs[0]['isCheckedList'][i] == 'true',
-                              value.docs[0]['isTodayList'][i] == 'true',
-                              TileColors.TILECOLORS.elementAt(tasks.length)));
+                        for (int i = 0; i < tasks.length; i++) {
+
+                          if (value.docs[0]['taskList']?.contains(tasks[i].name)) {
+                            print("Task already exists");
+                          } else {
+                            tasks[i] = (TodoTask(
+                                value.docs[0]['taskList'][i],
+                                value.docs[0]['subtitleList'][i],
+                                value.docs[0]['isCheckedList'][i] == 'true',
+                                value.docs[0]['isTodayList'][i] == 'true',
+                                TileColors.TILECOLORS.elementAt(tasks.length)));
+                            print("Task added");
+                          }
+
+
                         }
                       });
                     }

@@ -240,6 +240,7 @@ void _showDialog(BuildContext context) {
           onPressed: () {
             tasks.clear();
             clearSharedPrefs();
+            deleteFirestore();
             runApp(MyApp());
           },
           child: const Text(

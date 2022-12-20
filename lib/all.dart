@@ -38,7 +38,7 @@ class _AllState extends State<All> {
                 shrinkWrap: true,
                 itemCount: tasks.length,
                 itemBuilder: (context, index) {
-                  if (index == 0 && tasks[index].isChecked == false && tasks[index].isToday == false) {
+                  if (index == tasks.length - 1 && tasks[index].isChecked == false && tasks[index].isToday == false) {
                     return Animate(effects: [
                       FadeEffect(),
                     ], child: tasks[index]);
