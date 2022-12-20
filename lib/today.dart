@@ -14,39 +14,42 @@ class Today extends StatefulWidget {
 class _TodayState extends State<Today> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        SingleChildScrollView(
-          reverse: true,
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Column(
-            children: [
-              const HeaderLabel(),
-              ListView.builder(
-                scrollDirection: Axis.vertical,
-                addAutomaticKeepAlives: false,
-                reverse: false,
-                physics: ClampingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: tasks.length,
-                itemBuilder: (context, index) {
-                  if (tasks[index].isToday && !tasks[index].isChecked) {
-                    return tasks[index];
-                  } else {
-                    return const SizedBox(
-                      height: 0,
-                    );
-                  }
-                },
-              ),
-              SizedBox(
-                height: 110,
-              ),
-              Done(),
-            ],
+    return Container(
+      color: Color(0xFFEBEFC2).withOpacity(0.2),
+      child: Stack(
+        children: [
+          SingleChildScrollView(
+            reverse: true,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Column(
+              children: [
+                const HeaderLabel(),
+                ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  addAutomaticKeepAlives: false,
+                  reverse: false,
+                  physics: ClampingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: tasks.length,
+                  itemBuilder: (context, index) {
+                    if (tasks[index].isToday && !tasks[index].isChecked) {
+                      return tasks[index];
+                    } else {
+                      return const SizedBox(
+                        height: 0,
+                      );
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 110,
+                ),
+                Done(),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

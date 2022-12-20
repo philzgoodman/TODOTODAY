@@ -39,7 +39,7 @@ class TileColors {
     Color(0xFF136760),
     Color(0xFF1C7520),
     Color(0xFF365612),
-    Color(0xFF5C6413),
+    Color(0x2FEBEFC2),
     Color(0xFF5E4D15),
     Color(0xFF56380E),
     Color(0xFF4F2212),

@@ -15,50 +15,52 @@ class All extends StatefulWidget {
 }
 
 class _AllState extends State<All> {
-
-
-
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        SingleChildScrollView(
-          reverse: true,
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Column(
-            children: [
-
-              const HeaderLabel(),
-              ListView.builder(
-                scrollDirection: Axis.vertical,
-                addAutomaticKeepAlives: false,
-                reverse: false,
-                physics: ClampingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: tasks.length,
-                itemBuilder: (context, index) {
-                  if (index == tasks.length - 1 && tasks[index].isChecked == false && tasks[index].isToday == false) {
-                    return Animate(effects: [
-                      FadeEffect(),
-                    ], child: tasks[index]);
-                  } else if (!tasks[index].isChecked && !tasks[index].isToday) {
-                    return tasks[index];
-                  } else {
-                    return const SizedBox(
-                      height: 0,
-                    );
-                  }
-                },
-              ),
-              SizedBox(
-                height: 110,
-              ),
-              Done(),
-            ],
+    return Container(
+      color: Color(0xFFD27474).withOpacity(0.2),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          SingleChildScrollView(
+            reverse: true,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Column(
+              children: [
+                const HeaderLabel(),
+                ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  addAutomaticKeepAlives: false,
+                  reverse: false,
+                  physics: ClampingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: tasks.length,
+                  itemBuilder: (context, index) {
+                    if (index == tasks.length - 1 &&
+                        tasks[index].isChecked == false &&
+                        tasks[index].isToday == false) {
+                      return Animate(effects: [
+                        FadeEffect(),
+                      ], child: tasks[index]);
+                    } else if (!tasks[index].isChecked &&
+                        !tasks[index].isToday) {
+                      return tasks[index];
+                    } else {
+                      return const SizedBox(
+                        height: 0,
+                      );
+                    }
+                  },
+                ),
+                SizedBox(
+                  height: 110,
+                ),
+                Done(),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

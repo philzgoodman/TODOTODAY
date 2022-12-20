@@ -2,12 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todotoday/main.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:todotoday/todotask.dart';
-
-import 'TileColors.dart';
-import 'global.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -34,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
           if (state is AwaitingEmailAndPassword) {
             return SignInScreen(
               actions: [
-                AuthStateChangeAction<SignedIn>((context, state) {
+                AuthStateChangeAction<SignedIn>((context, state) async {
                   Navigator.of(context).pop();
                   runApp(MyApp());
 
@@ -44,33 +41,30 @@ class _LoginPageState extends State<LoginPage> {
                     CollectionReference users =
                         FirebaseFirestore.instance.collection('users');
 
-                    if (users.where('email', isEqualTo: userEmail).get() == null || (users.where('email', isEqualTo: userEmail).get() == '')) {
 
-                      users.add({
-                        'email': userEmail,
-                      });
 
-                      users
-                          .where('email', isEqualTo: userEmail)
-                          .get()
-                          .then((value) {
-                        for (int i = 0; i < tasks.length; i++) {
+                    SharedPreferences sharedToday =
+                        await SharedPreferences.getInstance();
 
-                          if (value.docs[0]['taskList']?.contains(tasks[i].name)) {
-                            print("Task already exists");
-                          } else {
-                            tasks[i] = (TodoTask(
-                                value.docs[0]['taskList'][i],
-                                value.docs[0]['subtitleList'][i],
-                                value.docs[0]['isCheckedList'][i] == 'true',
-                                value.docs[0]['isTodayList'][i] == 'true',
-                                TileColors.TILECOLORS.elementAt(tasks.length)));
-                            print("Task added");
-                          }
+                    users
+                        .where('taskListLength', isGreaterThan: 0)
+                        .get()
+                        .then((QuerySnapshot querySnapshot) => {
+                              querySnapshot.docs.forEach((doc) {
+                                sharedToday.setStringList('isTodayList',
+                                    doc['isTodayList'].toString().split(','));
+                                sharedToday.setStringList('isCheckedList',
+                                    doc['isCheckedList'].toString().split(','));
+                                sharedToday.setStringList('taskList',
+                                    doc['taskList'].toString().split(','));
+                                sharedToday.setStringList('subtitleList',
+                                    doc['subtitleList'].toString().split(','));
+                              })
+                            });
 
-                        }
-                      });
-                    }
+                    setState(() {
+                      runApp(MyApp());
+                    });
                   }
                 }),
               ],
