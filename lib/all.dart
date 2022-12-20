@@ -23,7 +23,7 @@ class _AllState extends State<All> {
         clipBehavior: Clip.none,
         children: [
           SingleChildScrollView(
-            reverse: true,
+            controller: ScrollController(),
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Column(
               children: [

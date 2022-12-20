@@ -19,7 +19,7 @@ class _TodayState extends State<Today> {
       child: Stack(
         children: [
           SingleChildScrollView(
-            reverse: true,
+            controller: ScrollController(),
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Column(
               children: [

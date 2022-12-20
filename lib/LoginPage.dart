@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
           if (state is AwaitingEmailAndPassword) {
             return SignInScreen(
               actions: [
-                AuthStateChangeAction<SignedIn>((context, state) async {
+                AuthStateChangeAction<SignedIn>((context, state)  {
                   final userEmail = FirebaseAuth.instance.currentUser?.email;
                   print(userEmail);
                   if (userEmail != null) {
@@ -49,7 +49,6 @@ class _LoginPageState extends State<LoginPage> {
                                 if (doc['email'] == userEmail) {
                                   int? nTask = doc['taskListLength'];
                                   for (int i = 0; i < nTask!; i++) {
-
                                     bool isChecked = false;
                                     bool isToday = false;
 
@@ -57,10 +56,10 @@ class _LoginPageState extends State<LoginPage> {
                                       isChecked = true;
                                     }
 
-                                    if ( doc['isTodayList'][i] == "true") {
+                                    if (doc['isTodayList'][i] == "true") {
                                       isToday = true;
                                     }
-                                    setState(() async {
+
                                       tasks.add(TodoTask(
                                           doc['taskList'][i],
                                           doc['subtitleList'][i],
@@ -69,12 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                                           TileColors.TILECOLORS
                                               .elementAt(tasks.length)));
 
-
-
-                                    });
-
                                   }
-
 
                                   saveToShared();
                                   Navigator.pushReplacement(
@@ -82,13 +76,9 @@ class _LoginPageState extends State<LoginPage> {
                                       MaterialPageRoute(
                                           builder: (context) => MyApp()));
                                   runApp(MyApp());
-
                                 }
                               })
                             });
-
-
-
                   }
                 }),
               ],

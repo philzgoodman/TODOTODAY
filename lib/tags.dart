@@ -89,13 +89,23 @@ class _TagsState extends State<Tags> {
   void _showDialog(BuildContext context) {
     // flutter defined function
     showDialog(
+      barrierColor: Colors.transparent,
+      useSafeArea: false,
       context: context,
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
           backgroundColor: Colors.transparent,
-          elevation: 2,
           content: expandedTag,
+          elevation: 0,
+            actions: [
+              TextButton(
+                child: const Text("Close"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
         );
       },
     );
