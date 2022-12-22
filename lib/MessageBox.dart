@@ -66,7 +66,7 @@ class _MessageBoxState extends State<MessageBox> {
                   shadowColor: Colors.black,
                   elevation: 15,
                   child: Padding(
-                    padding: const EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.all(7.0),
                     child: TextField(
                         toolbarOptions: const ToolbarOptions(
                           copy: true,

@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                         .get()
                         .then((QuerySnapshot querySnapshot) => {
                               querySnapshot.docs.forEach((doc) async {
-                                if (doc['email'] == userEmail) {
+                                if (doc['email'] == userEmail && signedIn == false) {
                                   int? nTask = doc['taskListLength'];
                                   for (int i = 0; i < nTask!; i++) {
                                     bool isChecked = false;
@@ -76,6 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                                       MaterialPageRoute(
                                           builder: (context) => MyApp()));
                                   runApp(MyApp());
+                                  signedIn = true;
                                 }
                               })
                             });

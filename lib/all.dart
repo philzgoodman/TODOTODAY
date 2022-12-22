@@ -28,9 +28,10 @@ class _AllState extends State<All> {
             child: Column(
               children: [
                 const HeaderLabel(),
+               
                 ListView.builder(
+                  key: UniqueKey(),
                   scrollDirection: Axis.vertical,
-                  addAutomaticKeepAlives: false,
                   reverse: false,
                   physics: ClampingScrollPhysics(),
                   shrinkWrap: true,
@@ -39,9 +40,7 @@ class _AllState extends State<All> {
                     if (index == tasks.length - 1 &&
                         tasks[index].isChecked == false &&
                         tasks[index].isToday == false) {
-                      return Animate(effects: [
-                        FadeEffect(),
-                      ], child: tasks[index]);
+                      return tasks[index];
                     } else if (!tasks[index].isChecked &&
                         !tasks[index].isToday) {
                       return tasks[index];

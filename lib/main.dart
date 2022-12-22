@@ -33,7 +33,9 @@ class MyApp extends StatelessWidget {
   initState() {
     SharedPreferences.getInstance().then((prefs) {
 
-      getSavedPrefsToTasks();
+      if (!signedIn)getSavedPrefsToTasks();
+
+
     });
   }
 
@@ -134,10 +136,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ],
                   ),
-                  MessageBox(),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom:8.0),
+                    child: MessageBox(),
+                  ),
                   Positioned(
-                    bottom: 70,
-                    right: 6,
+                    bottom: 80,
+                    right: 21,
                     child: Transform.scale(
                       scale: .6,
                       child: FloatingActionButton(
