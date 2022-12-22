@@ -8,6 +8,7 @@ var subtitles = [];
 int currentIndex = 0;
 TextEditingController txt = TextEditingController();
 bool isEditing = false;
+bool signedIn = false;
 List<TodoTask> tasks = [];
 List<String?> savedList = [];
 int todayCount = 0;

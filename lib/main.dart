@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:todotoday/firebase_options.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todotoday/LoginPage.dart';
@@ -24,13 +23,20 @@ Future<void> main() async {
   FirebaseUIAuth.configureProviders([
     EmailAuthProvider(),
   ]);
-  await getSavedPrefsToTasks();
 
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  initState() {
+    SharedPreferences.getInstance().then((prefs) {
+
+      getSavedPrefsToTasks();
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -278,25 +284,45 @@ void _showDialog(BuildContext context) {
                     fontSize: 15,
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.blue,
-                      onPrimary: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(32.0),
+                if (!signedIn)
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue,
+                        onPrimary: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32.0),
+                        ),
                       ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginPage()),
+                        );
+                      },
+                      child: Text('Login'),
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    },
-                    child: Text('Login'),
                   ),
-                ),
+                if (signedIn)
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue,
+                        onPrimary: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(32.0),
+                        ),
+                      ),
+                      onPressed: () {
+                        signOut();
+                        tasks.clear();
+                        runApp(MyApp());
+                      },
+                      child: Text('Logout'),
+                    ),
+                  ),
               ],
             ),
           ),
@@ -314,6 +340,12 @@ void _showDialog(BuildContext context) {
       );
     },
   );
+}
+
+signOut() {
+  FirebaseUIAuth.signOut();
+  signedIn = false;
+  runApp(MyApp());
 }
 
 void clearSharedPrefs() {

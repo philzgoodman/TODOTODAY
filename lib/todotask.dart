@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todotoday/main.dart';
 
 import 'MessageBox.dart';
+import 'TileColors.dart';
 
 class TodoTask extends StatefulWidget {
   String name;
@@ -92,6 +93,18 @@ class TodoTaskState extends State<TodoTask> {
               widget.subtitle),
         ),
         trailing: Wrap(children: [
+          IconButton(
+            color: Colors.grey,
+            icon: const Icon(Icons.delete),
+            onPressed: () {
+              setState(() {
+                tasks.remove(widget);
+                saveToFireStore();
+                saveToShared();
+                runApp(MyApp());
+              });
+            },
+          ),
           SizedBox(
             width: 50,
             child: Animate(
@@ -127,10 +140,42 @@ class TodoTaskState extends State<TodoTask> {
           ),
 
 
+
         ]),
       ),
     );
   }
+
+  void updateText() {
+    setState(() {
+      if (DefaultTabController.of(context)?.index == 1) {
+        tasks.add(TodoTask(txt.text, txt.text, false, true,
+            TileColors.TILECOLORS.elementAt(tasks.length)));
+
+
+
+      } else {
+        tasks.add(TodoTask(txt.text, txt.text, false, false,
+            TileColors.TILECOLORS.elementAt(tasks.length)));
+      }
+
+      txt.clear();
+      for (var i = 0; i < tasks.length; i++) {
+        getSubtitle(i);
+      }
+    });
+    txt.clear();
+
+
+
+    saveToShared();
+
+    if (FirebaseAuth.instance.currentUser != null) saveToFireStore();
+
+
+  }
+
+
 void slideSwitch() {
   setState(() {
     widget.isToday = !widget.isToday;
