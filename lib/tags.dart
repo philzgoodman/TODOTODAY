@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todotoday/TagView.dart';
 import 'package:todotoday/global.dart';
@@ -35,8 +34,6 @@ class _TagsState extends State<Tags> {
 
   @override
   Widget build(BuildContext context) {
-    bool isExpanded = true;
-
     return Column(
       children: [
         GridView.builder(
@@ -94,18 +91,24 @@ class _TagsState extends State<Tags> {
       context: context,
       builder: (BuildContext context) {
         // return object of type Dialog
-        return AlertDialog(
-          backgroundColor: Colors.transparent,
-          content: expandedTag,
-          elevation: 0,
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: AlertDialog(
+            backgroundColor: Colors.transparent,
+            content: expandedTag,
+            elevation: 0,
             actions: [
-              TextButton(
-                child: const Text("Close"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+              Padding(
+                padding: const EdgeInsets.only(left: 40.0,bottom: 96.0),
+                child: TextButton(
+                  child: const Text("Close"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
               ),
             ],
+          ),
         );
       },
     );

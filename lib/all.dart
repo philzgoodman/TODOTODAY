@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/animate.dart';
-import 'package:flutter_animate/effects/fade_effect.dart';
 import 'package:todotoday/HeaderLabel.dart';
-import 'package:todotoday/addUser.dart';
 import 'package:todotoday/done.dart';
 import 'package:todotoday/global.dart';
 

@@ -1,12 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/animate.dart';
 import 'package:flutter_animate/effects/fade_effect.dart';
 import 'package:todotoday/global.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:todotoday/main.dart';
-
 import 'MessageBox.dart';
 import 'TileColors.dart';
 
@@ -172,7 +169,7 @@ class TodoTaskState extends State<TodoTask> {
             children: [
               TextField(
                 decoration:
-                InputDecoration(
+                const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: "Text",
 

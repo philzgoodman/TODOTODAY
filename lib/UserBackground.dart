@@ -19,7 +19,7 @@ class _UserBackgroundState extends State<UserBackground> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
-          end: Alignment(0.8, 1),
+          end: const Alignment(0.8, 1),
           colors: <Color>[
             widget.userColorList[0],
             widget.userColorList[1],

@@ -20,7 +20,7 @@ List uniqueSubtitles = [];
 int tagCount = 1;
 
 List<Color> defaultBG = [
-  Color(0xFFCC7A7A),
-  Color(0xFFDA7493),
-  Color(0xFFB270BE),
+  const Color(0xFFCC7A7A),
+  const Color(0xFFDA7493),
+  const Color(0xFFB270BE),
 ];

@@ -11,7 +11,7 @@ import 'TileColors.dart';
 import 'global.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -35,13 +35,10 @@ class _LoginPageState extends State<LoginPage> {
           if (state is AwaitingEmailAndPassword) {
             return SignInScreen(
               actions: [
-                AuthStateChangeAction<SignedIn>((context, state)  {
+                AuthStateChangeAction<SignedIn>((context, state) {
                   final userEmail = FirebaseAuth.instance.currentUser?.email;
                   print(userEmail);
                   if (userEmail != null) {
-
-
-
                     CollectionReference users =
                         FirebaseFirestore.instance.collection('users');
                     users
@@ -49,7 +46,8 @@ class _LoginPageState extends State<LoginPage> {
                         .get()
                         .then((QuerySnapshot querySnapshot) => {
                               querySnapshot.docs.forEach((doc) async {
-                                if (doc['email'] == userEmail && signedIn == false) {
+                                if (doc['email'] == userEmail &&
+                                    signedIn == false) {
                                   int? nTask = doc['taskListLength'];
                                   for (int i = 0; i < nTask!; i++) {
                                     bool isChecked = false;
@@ -90,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
               ],
             );
           } else if (state is SigningIn) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else if (state is AuthFailed) {
             return ErrorText(exception: state.exception);
           } else {

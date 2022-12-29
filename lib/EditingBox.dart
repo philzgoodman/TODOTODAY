@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todotoday/TileColors.dart';
 import 'package:todotoday/global.dart';
@@ -6,7 +5,7 @@ import 'package:todotoday/main.dart';
 import 'package:todotoday/todotask.dart';
 
 class EditingBox extends StatefulWidget {
-  EditingBox({super.key});
+  const EditingBox({super.key});
 
   @override
   State<EditingBox> createState() => _EditingBoxState();
@@ -54,7 +53,7 @@ class _EditingBoxState extends State<EditingBox> {
                       }
                     });
                     setState(() {
-                      runApp(MyApp());
+                      runApp(const MyApp());
                     });
                   },
                   textInputAction: TextInputAction.search,
@@ -62,7 +61,7 @@ class _EditingBoxState extends State<EditingBox> {
                   decoration: InputDecoration(
                     hintText: 'Now Editing',
                     suffixIcon: IconButton(
-                      icon: Icon(Icons.send),
+                      icon: const Icon(Icons.send),
                       onPressed: () {
                         setState(() {
                           updateText();
@@ -72,7 +71,7 @@ class _EditingBoxState extends State<EditingBox> {
                           }
                         });
                         setState(() {
-                          runApp(MyApp());
+                          runApp(const MyApp());
                         });
                       },
                     ),

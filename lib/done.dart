@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todotoday/global.dart';
 
 class Done extends StatefulWidget {
-  Done({super.key});
+  const Done({super.key});
 
   @override
   State<Done> createState() => _DoneState();
@@ -14,12 +14,12 @@ class _DoneState extends State<Done> {
     return Stack(
       children: [
         Column(children: [
-          SizedBox(
+          const SizedBox(
             height: 110,
           ),
           Visibility(
             visible: getDoneCount() > 0,
-            child: Opacity(
+            child: const Opacity(
               opacity: 0.7,
               child: Text(
                 'DONE ↓',

@@ -72,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
+      animationDuration: const Duration(milliseconds: 250),
       length: 3,
       child: GestureDetector(
         onTap: () {
@@ -173,37 +174,35 @@ Future<void> getSavedPrefsToTasks() async {
   List<String>? isCheckedList = [];
   List<String>? isTodayList = [];
 
-  if (sharedToday != null) {
-    if (sharedToday.containsKey("taskListLength")) {
-      int? nTask = sharedToday.getInt('taskListLength');
+  if (sharedToday.containsKey("taskListLength")) {
+    int? nTask = sharedToday.getInt('taskListLength');
 
-      if (sharedToday.containsKey("taskList")) {
-        taskList = sharedToday.getStringList('taskList');
-      }
-      if (sharedToday.containsKey("subtitleList")) {
-        subtitleList = sharedToday.getStringList('subtitleList');
-      }
-      if (sharedToday.containsKey("isCheckedList")) {
-        isCheckedList = sharedToday.getStringList('isCheckedList');
-      }
-      if (sharedToday.containsKey("isTodayList")) {
-        isTodayList = sharedToday.getStringList('isTodayList');
+    if (sharedToday.containsKey("taskList")) {
+      taskList = sharedToday.getStringList('taskList');
+    }
+    if (sharedToday.containsKey("subtitleList")) {
+      subtitleList = sharedToday.getStringList('subtitleList');
+    }
+    if (sharedToday.containsKey("isCheckedList")) {
+      isCheckedList = sharedToday.getStringList('isCheckedList');
+    }
+    if (sharedToday.containsKey("isTodayList")) {
+      isTodayList = sharedToday.getStringList('isTodayList');
+    }
+
+    for (int i = 0; i < nTask!; i++) {
+      bool isChecked = false;
+      bool isToday = false;
+
+      if (isCheckedList![i] == "true") {
+        isChecked = true;
       }
 
-      for (int i = 0; i < nTask!; i++) {
-        bool isChecked = false;
-        bool isToday = false;
-
-        if (isCheckedList![i] == "true") {
-          isChecked = true;
-        }
-
-        if (isTodayList![i] == "true") {
-          isToday = true;
-        }
-        tasks.add(TodoTask(taskList![i], subtitleList![i], isChecked, isToday,
-            TileColors.TILECOLORS.elementAt(tasks.length)));
+      if (isTodayList![i] == "true") {
+        isToday = true;
       }
+      tasks.add(TodoTask(taskList![i], subtitleList![i], isChecked, isToday,
+          TileColors.TILECOLORS.elementAt(tasks.length)));
     }
   }
   print("Loaded SharedPrefs");
@@ -246,13 +245,13 @@ void _showDialog(BuildContext context) {
     builder: (BuildContext context) {
       // return object of type Dialog
       return AlertDialog(
-        backgroundColor: Color(0xE8231216),
-        title: new TextButton(
+        backgroundColor: const Color(0xE8231216),
+        title: TextButton(
           onPressed: () {
             tasks.clear();
             clearSharedPrefs();
             deleteFirestore();
-            runApp(MyApp());
+            runApp(const MyApp());
           },
           child: const Text(
             "Clear All Tasks",
@@ -303,10 +302,10 @@ void _showDialog(BuildContext context) {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
                         );
                       },
-                      child: Text('Login'),
+                      child: const Text('Login'),
                     ),
                   ),
                 if (signedIn)
@@ -325,7 +324,7 @@ void _showDialog(BuildContext context) {
                         tasks.clear();
                         runApp(MyApp());
                       },
-                      child: Text('Logout'),
+                      child: const Text('Logout'),
                     ),
                   ),
               ],
@@ -334,8 +333,8 @@ void _showDialog(BuildContext context) {
         ),
         actions: <Widget>[
           // usually buttons at the bottom of the dialog
-          new TextButton(
-              child: new Text("Close"),
+          TextButton(
+              child: const Text("Close"),
               onPressed: () {
                 Navigator.of(context).pop();
 
