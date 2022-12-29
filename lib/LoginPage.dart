@@ -39,6 +39,9 @@ class _LoginPageState extends State<LoginPage> {
                   final userEmail = FirebaseAuth.instance.currentUser?.email;
                   print(userEmail);
                   if (userEmail != null) {
+
+
+
                     CollectionReference users =
                         FirebaseFirestore.instance.collection('users');
                     users
@@ -60,6 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                                       isToday = true;
                                     }
 
+                                    if (!tasks.contains(doc['taskList'][i])) {
                                       tasks.add(TodoTask(
                                           doc['taskList'][i],
                                           doc['subtitleList'][i],
@@ -67,10 +71,11 @@ class _LoginPageState extends State<LoginPage> {
                                           isToday,
                                           TileColors.TILECOLORS
                                               .elementAt(tasks.length)));
-
+                                    }
                                   }
 
                                   saveToShared();
+                                  saveToFireStore();
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
