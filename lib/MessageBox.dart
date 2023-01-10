@@ -151,7 +151,7 @@ void deleteFirestore() {
 
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     users.where('email', isEqualTo: userEmail).get().then((value) {
-      for (var element in value.docs) {
+      value.docs.forEach((element) {
         users.doc(element.id).update({
           'taskList': [],
           'subtitleList': [],
@@ -159,7 +159,7 @@ void deleteFirestore() {
           'isTodayList': [],
           'taskListLength': 1,
         });
-      }
+      });
     });
   }
 }
@@ -169,7 +169,7 @@ void saveToFireStore() {
     CollectionReference users = FirebaseFirestore.instance.collection('users');
 
     users.where('email', isEqualTo: userEmail).get().then((value) {
-      for (var element in value.docs) {
+      value.docs.forEach((element) {
         users.doc(element.id).update({
           'taskList': tasks.map((e) => e.name.toString()).toList(),
           'subtitleList': tasks.map((e) => e.subtitle).toList(),
@@ -177,7 +177,7 @@ void saveToFireStore() {
           'isTodayList': tasks.map((e) => e.isToday.toString()).toList(),
           'taskListLength': tasks.length,
         });
-      }
+      });
     });
   }
   print("Stored to Firestore");

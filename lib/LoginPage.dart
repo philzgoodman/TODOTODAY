@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todotoday/main.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:todotoday/todotask.dart';
@@ -73,7 +72,6 @@ class _LoginPageState extends State<LoginPage> {
                                   }
 
                                   saveToShared();
-                                  saveToFireStore();
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(

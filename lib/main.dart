@@ -23,22 +23,15 @@ Future<void> main() async {
   FirebaseUIAuth.configureProviders([
     EmailAuthProvider(),
   ]);
-
-  runApp(MyApp());
+  await getSavedPrefsToTasks();
+  Future.delayed(
+    Duration(seconds: 1),
+    () => runApp(MyApp()),);
 }
 
 class MyApp extends StatelessWidget {
+
   const MyApp({super.key});
-
-  initState() {
-    SharedPreferences.getInstance().then((prefs) {
-
-      if (!signedIn)getSavedPrefsToTasks();
-
-
-    });
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +63,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
+  void initState() {
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      animationDuration: const Duration(milliseconds: 250),
       length: 3,
       child: GestureDetector(
         onTap: () {
@@ -138,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom:8.0),
+                    padding: const EdgeInsets.only(bottom: 8.0),
                     child: MessageBox(),
                   ),
                   Positioned(
@@ -174,35 +170,37 @@ Future<void> getSavedPrefsToTasks() async {
   List<String>? isCheckedList = [];
   List<String>? isTodayList = [];
 
-  if (sharedToday.containsKey("taskListLength")) {
-    int? nTask = sharedToday.getInt('taskListLength');
+  if (sharedToday != null) {
+    if (sharedToday.containsKey("taskListLength")) {
+      int? nTask = sharedToday.getInt('taskListLength');
 
-    if (sharedToday.containsKey("taskList")) {
-      taskList = sharedToday.getStringList('taskList');
-    }
-    if (sharedToday.containsKey("subtitleList")) {
-      subtitleList = sharedToday.getStringList('subtitleList');
-    }
-    if (sharedToday.containsKey("isCheckedList")) {
-      isCheckedList = sharedToday.getStringList('isCheckedList');
-    }
-    if (sharedToday.containsKey("isTodayList")) {
-      isTodayList = sharedToday.getStringList('isTodayList');
-    }
-
-    for (int i = 0; i < nTask!; i++) {
-      bool isChecked = false;
-      bool isToday = false;
-
-      if (isCheckedList![i] == "true") {
-        isChecked = true;
+      if (sharedToday.containsKey("taskList")) {
+        taskList = sharedToday.getStringList('taskList');
+      }
+      if (sharedToday.containsKey("subtitleList")) {
+        subtitleList = sharedToday.getStringList('subtitleList');
+      }
+      if (sharedToday.containsKey("isCheckedList")) {
+        isCheckedList = sharedToday.getStringList('isCheckedList');
+      }
+      if (sharedToday.containsKey("isTodayList")) {
+        isTodayList = sharedToday.getStringList('isTodayList');
       }
 
-      if (isTodayList![i] == "true") {
-        isToday = true;
+      for (int i = 0; i < nTask!; i++) {
+        bool isChecked = false;
+        bool isToday = false;
+
+        if (isCheckedList![i] == "true") {
+          isChecked = true;
+        }
+
+        if (isTodayList![i] == "true") {
+          isToday = true;
+        }
+        tasks.add(TodoTask(taskList![i], subtitleList![i], isChecked, isToday,
+            TileColors.TILECOLORS.elementAt(tasks.length)));
       }
-      tasks.add(TodoTask(taskList![i], subtitleList![i], isChecked, isToday,
-          TileColors.TILECOLORS.elementAt(tasks.length)));
     }
   }
   print("Loaded SharedPrefs");
@@ -245,13 +243,13 @@ void _showDialog(BuildContext context) {
     builder: (BuildContext context) {
       // return object of type Dialog
       return AlertDialog(
-        backgroundColor: const Color(0xE8231216),
-        title: TextButton(
+        backgroundColor: Color(0xE8231216),
+        title: new TextButton(
           onPressed: () {
             tasks.clear();
             clearSharedPrefs();
             deleteFirestore();
-            runApp(const MyApp());
+            runApp(MyApp());
           },
           child: const Text(
             "Clear All Tasks",
@@ -302,10 +300,10 @@ void _showDialog(BuildContext context) {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const LoginPage()),
+                          MaterialPageRoute(builder: (context) => LoginPage()),
                         );
                       },
-                      child: const Text('Login'),
+                      child: Text('Login'),
                     ),
                   ),
                 if (signedIn)
@@ -324,7 +322,7 @@ void _showDialog(BuildContext context) {
                         tasks.clear();
                         runApp(MyApp());
                       },
-                      child: const Text('Logout'),
+                      child: Text('Logout'),
                     ),
                   ),
               ],
@@ -333,8 +331,8 @@ void _showDialog(BuildContext context) {
         ),
         actions: <Widget>[
           // usually buttons at the bottom of the dialog
-          TextButton(
-              child: const Text("Close"),
+          new TextButton(
+              child: new Text("Close"),
               onPressed: () {
                 Navigator.of(context).pop();
 
