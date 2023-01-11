@@ -1,15 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/animate.dart';
-import 'package:flutter_animate/effects/effects.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:todotoday/TileColors.dart';
-import 'package:todotoday/global.dart';
-import 'package:todotoday/main.dart';
-import 'package:todotoday/todotask.dart';
-
 class MessageBox extends StatefulWidget {
   MessageBox({super.key});
 
@@ -17,200 +6,32 @@ class MessageBox extends StatefulWidget {
   State<MessageBox> createState() => _MessageBoxState();
 }
 
+
 class _MessageBoxState extends State<MessageBox> {
-  FocusNode myFocusNode = FocusNode();
-  bool onTodayScreen = false;
-
-  void updateText() {
-    setState(() {
-      if (DefaultTabController.of(context)?.index == 1) {
-        tasks.add(TodoTask(txt.text, txt.text, false, true,
-            TileColors.TILECOLORS.elementAt(tasks.length)));
-
-
-
-      } else {
-        tasks.add(TodoTask(txt.text, txt.text, false, false,
-            TileColors.TILECOLORS.elementAt(tasks.length)));
-      }
-
-      txt.clear();
-      for (var i = 0; i < tasks.length; i++) {
-        getSubtitle(i);
-      }
-    });
-    txt.clear();
-
-
-
-      saveToShared();
-
-    if (FirebaseAuth.instance.currentUser != null) saveToFireStore();
-  }
-
+  TextEditingController txt = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Visibility(
-          visible: !isEditing,
-          child: Container(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-              child: SizedBox(
-                width: 360,
-                child: Material(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.black87,
-                  shadowColor: Colors.black,
-                  elevation: 15,
-                  child: Padding(
-                    padding: const EdgeInsets.all(7.0),
-                    child: TextField(
-                        toolbarOptions: const ToolbarOptions(
-                          copy: true,
-                          cut: true,
-                          paste: true,
-                          selectAll: true,
-                        ),
-                        cursorColor: Colors.deepOrangeAccent,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 14),
-                        focusNode: myFocusNode,
-                        keyboardAppearance: Brightness.dark,
-                        onSubmitted: (value) {
-                          setState(() {
-                            updateText();
-                            FocusScopeNode currentFocus =
-                                FocusScope.of(context);
-                            if (!currentFocus.hasPrimaryFocus) {
-                              currentFocus.unfocus();
-                            }
-                          });
-                          setState(() {
-                            runApp(MyApp());
-                          });
-                        },
-                        textInputAction: TextInputAction.search,
-                        controller: txt,
-                        decoration: InputDecoration(
-                          hintText: 'Enter a task',
-                          suffixIcon: IconButton(
-                            icon: Icon(Icons.send),
-                            onPressed: () {
-                              setState(() {
-                                updateText();
-                                FocusScopeNode currentFocus =
-                                    FocusScope.of(context);
-                                if (!currentFocus.hasPrimaryFocus) {
-                                  currentFocus.unfocus();
-                                }
-                              });
-                              setState(() {
-                                runApp(MyApp());
-                              });
-                            },
-                          ),
-                        )),
-                  ),
-                ),
-              ),
-            ),
+    return Container(
+      height: 60,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 10,
+            color: Colors.black12,
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: TextField(
+          controller: txt,
+          decoration: InputDecoration(
+            hintText: 'New Task...',
+            border: InputBorder.none,
           ),
         ),
-        Animate(
-          effects: [FadeEffect()],
-          child: Visibility(
-              visible: isEditing,
-              child: Container(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
-                    child: SizedBox(
-                        width: 360,
-                        child: Material(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.black87,
-                            shadowColor: Colors.black,
-                            elevation: 15,
-                            child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Text(
-                                    textAlign: TextAlign.center,
-                                    '(Editing task)')))),
-                  ))),
-        ),
-      ],
+      ),
     );
   }
-}
-void deleteFirestore() {
-  final userEmail = FirebaseAuth.instance.currentUser?.email;
-  if (userEmail != null) {
-
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
-    users.where('email', isEqualTo: userEmail).get().then((value) {
-      value.docs.forEach((element) {
-        users.doc(element.id).update({
-          'taskList': [],
-          'subtitleList': [],
-          'isCheckedList': [],
-          'isTodayList': [],
-          'taskListLength': 1,
-        });
-      });
-    });
-  }
-}
-void saveToFireStore() {
-  final userEmail = FirebaseAuth.instance.currentUser?.email;
-  if (userEmail != null) {
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
-
-    users.where('email', isEqualTo: userEmail).get().then((value) {
-      value.docs.forEach((element) {
-        users.doc(element.id).update({
-          'taskList': tasks.map((e) => e.name.toString()).toList(),
-          'subtitleList': tasks.map((e) => e.subtitle).toList(),
-          'isCheckedList': tasks.map((e) => e.isChecked.toString()).toList(),
-          'isTodayList': tasks.map((e) => e.isToday.toString()).toList(),
-          'taskListLength': tasks.length,
-        });
-      });
-    });
-  }
-  print("Stored to Firestore");
-}
-
-void getSubtitle(int i) {
-  if (tasks[i].name == tasks[i].subtitle) {
-    tasks[i].subtitle = "#default";
-  }
-
-  if (tasks[i].name.contains('#', 0)) {
-    tasks[i].subtitle = tasks[i].name.substring(tasks[i].name.indexOf('#', 0));
-    tasks[i].name = tasks[i].name.substring(0, tasks[i].name.indexOf('#', 0));
-  }
-}
-
-String getSubtitle2(int i) {
-  if (tasks[i].name == tasks[i].subtitle) {
-    return "#default";
-  } else {
-    return tasks[i].subtitle;
-  }
-}
-
-Future<void> saveToShared() async {
-
-  SharedPreferences sharedToday = await SharedPreferences.getInstance();
-
-    sharedToday.setStringList("taskList", tasks.map((e) => e.name).toList());
-    sharedToday.setStringList("subtitleList", tasks.map((e) => e.subtitle).toList());
-    sharedToday.setStringList("isCheckedList", tasks.map((e) => e.isChecked.toString()).toList());
-    sharedToday.setStringList("isTodayList", tasks.map((e) => e.isToday.toString()).toList());
-    sharedToday.setInt("taskListLength", tasks.length);
-
-    print("Saved to shared preferences");
 }
