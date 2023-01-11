@@ -1,12 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:todotoday/task.dart';
 
 import 'TodoApp.dart';
 
-class DonePage extends StatelessWidget {
-
+class HashtagsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = FirebaseAuth.instance;
@@ -16,7 +16,7 @@ class DonePage extends StatelessWidget {
             .collection('tasks')
             .doc(auth.currentUser?.uid)
             .collection('tasks')
-            .where("completed", isEqualTo: true)
+            .where("today", isEqualTo: true)
             .snapshots()
             .map((snapshot) => snapshot.docs
             .map((doc) => Task.fromFirestore(doc))
