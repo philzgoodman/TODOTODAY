@@ -6,18 +6,24 @@ class Task {
    bool completed;
    String id;
    bool isToday;
+   String hashtag;
 
   Task({
     required this.description,
     required this.completed,
     required this.id,
     required this.isToday,
+    required this.hashtag,
   });
 
   factory Task.fromDocument(DocumentSnapshot doc) {
     return Task(
       description: doc['description'],
-      completed: doc['completed'], id: doc.id, isToday: doc['isToday'],
+      completed: doc['completed'],
+      id: doc.id,
+      isToday: doc['isToday'],
+      hashtag: doc['hashtag'],
+
     );
   }
 
@@ -37,7 +43,10 @@ class Task {
 
     return Task(
       description: doc['description'],
-      completed: doc['completed'], isToday: doc['isToday'], id: doc.id,
+      completed: doc['completed'],
+      isToday: doc['isToday'],
+      id: doc.id,
+      hashtag: doc['hashtag'],
 
     );
   }

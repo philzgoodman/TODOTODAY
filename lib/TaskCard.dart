@@ -7,8 +7,9 @@ class TaskCard extends StatefulWidget {
   bool completed = false;
   bool isToday = false;
   String id = '';
+  String hashtag = '';
 
-  TaskCard(this.description, this.isToday, this.completed, this.id, {super.key});
+  TaskCard(this.description, this.isToday, this.completed, this.id, this.hashtag, {super.key});
 
   @override
   State<TaskCard> createState() => _TaskCardState();
@@ -19,7 +20,8 @@ class _TaskCardState extends State<TaskCard> {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text("Task: " + widget.description),
+        title: Text(widget.description),
+        subtitle: Text(widget.hashtag),
         trailing: Wrap(
           children: [
             Checkbox(

@@ -11,30 +11,46 @@ class HashtagsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final db = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser;
+    int tagCount = 0;
+    String currentTag = '';
 
+return
 
-    return StreamBuilder<QuerySnapshot>(
-      stream: db
-          .collection('users')
-          .doc(user?.uid)
-          .collection('tasks').snapshots(),
+  StreamBuilder<QuerySnapshot>(
+    stream: db
+        .collection('users')
+        .doc(user?.uid)
+        .collection('tasks').snapshots(),
 
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) {
-              DocumentSnapshot task = snapshot.data!.docs[index];
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        return ListView.builder(
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (context, index) {
+            DocumentSnapshot task = snapshot.data!.docs[index];
+            if (task['hashtag'] != currentTag) {
+              currentTag = task['hashtag'];
+              tagCount++;
+              return Column(
+                children: [
+                  Text(currentTag),
+                  TaskCard(
+                      task['description'], task['isToday'], task['completed'], task.id, task['hashtag']),
+                ],
+              );
+            } else {
               return TaskCard(
-                  task['description'], task['isToday'], task['completed'], task.id);
-            },
-          );
-        }
-        return Center(child: CircularProgressIndicator());
-      },
+                  task['description'], task['isToday'], task['completed'], task.id, task['hashtag']);
+            }
+          },
+        );
+      }
+      return Center(child: CircularProgressIndicator());
+    },
+  );
 
 
-    );
-  }
+
   }
 }
+
