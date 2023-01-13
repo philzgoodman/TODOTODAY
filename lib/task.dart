@@ -2,44 +2,43 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Task {
-  final String id;
-  final String description;
-  final DateTime dueDate;
-  late final bool completed;
-  final String userId;
-  final List<String> tags;
-  final bool today;
+   String description;
+   bool completed;
+   String id;
+   bool isToday;
 
   Task({
-    required this.id,
     required this.description,
-    required this.dueDate,
     required this.completed,
-    required this.userId,
-    required this.tags,
-    required this.today
+    required this.id,
+    required this.isToday,
   });
 
-  factory Task.fromFirestore(DocumentSnapshot doc) {
-    Map data = doc.data as Map;
+  factory Task.fromDocument(DocumentSnapshot doc) {
     return Task(
-      id: doc.id,
-      description: data['description'] ?? '',
-      dueDate: data['due_date'].toDate() ?? DateTime.now(),
-      completed: data['completed'] ?? false,
-      userId: data['user'] ?? '',
-      tags: List<String>.from(data['tags'] ?? []),
-      today: data['today'] ?? false,
+      description: doc['description'],
+      completed: doc['completed'], id: doc.id, isToday: doc['isToday'],
     );
   }
+
+
+
+
 
   Map<String, dynamic> toMap() {
     return {
       'description': description,
-      'due_date': dueDate,
       'completed': completed,
-      'tags': tags,
-      'today': today,
+      'isToday': isToday,
     };
+  }
+
+  static Task fromFirestore(QueryDocumentSnapshot<Object?> doc) {
+
+    return Task(
+      description: doc['description'],
+      completed: doc['completed'], isToday: doc['isToday'], id: doc.id,
+
+    );
   }
 }
