@@ -1,69 +1,60 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:todotoday/global.dart';
+import 'package:todotoday/main.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:todotoday/task.dart';
+
+import 'TodoApp.dart';
 
 class LoginPage extends StatefulWidget {
+  LoginPage({Key? key}) : super(key: key);
+
   @override
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _auth = FirebaseAuth.instance;
-  late String _email;
-  late String _password;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+//https://github.com/firebase/flutterfire/blob/master/packages/firebase_ui_auth/doc/providers/email.md
     return Scaffold(
-        body: Container(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-          TextField(
-          decoration: InputDecoration(labelText: 'Email'),
-          onChanged: (value) => _email = value,
-        ),
-        SizedBox(height: 20),
-        TextField(
-          decoration: InputDecoration(labelText: 'Password'),
-          obscureText: true,
-          onChanged: (value) => _password = value,
-        ),
-        SizedBox(height: 20),
-        TextButton(
-        child: Text('Login'),
-    onPressed: () async {
-    try {
-      var user = await _auth.signInWithEmailAndPassword(
-          email: _email, password: _password);
-      if (user != null) {
-        Navigator.pushReplacementNamed(context, '/');
-      }
-    } catch (e) {
-      print(e);
-    }
-    },
-        ),
-                SizedBox(height: 20),
-                TextButton(
-                  child: Text('Sign up'),
-                  onPressed: () async {
-                    try {
-                      var user = await _auth.createUserWithEmailAndPassword(
-                          email: _email, password: _password);
-                      if (user != null) {
-                        Navigator.pushReplacementNamed(context, '/');
-                      }
-                    } catch (e) {
-                      print(e);
-                    }
-                  },
-                )
+      body: AuthFlowBuilder<EmailAuthController>(
+        builder: (context, state, ctrl, child) {
+          if (state is AwaitingEmailAndPassword) {
+            return SignInScreen(
+              actions: [
+                AuthStateChangeAction<SignedIn>((context, state) {
+                  final userEmail = FirebaseAuth.instance.currentUser?.email;
+                  print(userEmail);
+                  todoApp.initializeTasks();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyApp()),
+                  );
+                  loggedIn = true;
+
+                  Future.delayed(Duration(seconds: 1), () {
+                    runApp(MyApp());
+                  });
+                }),
               ],
-          ),
-        ),
+            );
+          } else if (state is SignedIn) {
+            return MyApp();
+          } else {
+            return Container();
+          }
+        },
+      ),
     );
   }
 }
-
-

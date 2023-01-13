@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-class MessageBox extends StatefulWidget {
+import 'package:todotoday/TodoApp.dart';
+import 'package:todotoday/global.dart';
+
+import 'main.dart';
+class MessageBox extends StatefulWidget with ChangeNotifier {
   MessageBox({super.key});
 
   @override
@@ -8,30 +12,70 @@ class MessageBox extends StatefulWidget {
 
 
 class _MessageBoxState extends State<MessageBox> {
+  FocusNode myFocusNode = FocusNode();
+
   TextEditingController txt = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 10,
-            color: Colors.black12,
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: TextField(
-          controller: txt,
-          decoration: InputDecoration(
-            hintText: 'New Task...',
-            border: InputBorder.none,
+    return Stack(
+      children: [
+      Container(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
+          child: SizedBox(
+            width: 360,
+            child: Material(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.black87,
+              shadowColor: Colors.black,
+              elevation: 15,
+              child: Padding(
+                padding: const EdgeInsets.all(7.0),
+                child: TextField(
+                    toolbarOptions: const ToolbarOptions(
+                      copy: true,
+                      cut: true,
+                      paste: true,
+                      selectAll: true,
+                    ),
+                    cursorColor: Colors.deepOrangeAccent,
+                    style:
+                    const TextStyle(color: Colors.white, fontSize: 14),
+                    focusNode: myFocusNode,
+                    keyboardAppearance: Brightness.dark,
+                    onSubmitted: (value) {
+
+                        addNewTask(context);
+
+                    },
+                    textInputAction: TextInputAction.search,
+                    controller: txt,
+                    decoration: InputDecoration(
+                      hintText: 'Enter a task',
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.send),
+                        onPressed: () {
+                            addNewTask(context);
+                        },
+                      ),
+                    )),
+              ),
+            ),
           ),
         ),
       ),
+      ],
     );
   }
+
+  void addNewTask(BuildContext context) {
+
+    todoApp.createTask(txt.text);
+    txt.clear();
+
+  }
+
+
 }
+
