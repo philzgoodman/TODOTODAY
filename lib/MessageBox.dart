@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todotoday/TodoApp.dart';
 import 'package:todotoday/global.dart';
 
-import 'main.dart';
 class MessageBox extends StatefulWidget with ChangeNotifier {
   MessageBox({super.key});
 

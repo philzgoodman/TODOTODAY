@@ -37,6 +37,7 @@ class TodoApp with ChangeNotifier {
       'description': description,
       'completed': false,
       'isToday': false,
+      'hashtag': getHashtag(description),
 
     });
 
@@ -125,6 +126,17 @@ var user = FirebaseAuth.instance.currentUser;
 
 
 
+  }
+
+  getHashtag(String description) {
+
+
+    if (description.contains("#")) {
+      var hashtag = description.split("#");
+      return hashtag[1];
+    } else {
+      return "#default";
+    }
   }
 
 

@@ -31,7 +31,7 @@ class TodayTaskPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 DocumentSnapshot task = snapshot.data!.docs[index];
                 return TaskCard(
-                    task['description'], task['isToday'], task['completed'], task.id);
+                    task['description'], task['isToday'], task['completed'], task.id, task['hashtag']);
               },
             );
           }
