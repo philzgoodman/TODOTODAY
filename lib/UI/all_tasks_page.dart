@@ -17,8 +17,14 @@ class _AllTasksPageState extends State<AllTasksPage> {
     final db = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser;
 
+    Query query = db
+        .collection('users')
+        .doc(user?.uid)
+        .collection('tasks')
+        .orderBy('date', descending: false);
+
     return
-      TaskView(db: db, user: user);
+      TaskView(db: db, user: user, query: query,);
   }
 
 

@@ -25,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+
 //https://github.com/firebase/flutterfire/blob/master/packages/firebase_ui_auth/doc/providers/email.md
     return Scaffold(
       body: AuthFlowBuilder<EmailAuthController>(

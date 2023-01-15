@@ -9,7 +9,9 @@ class TaskCard extends StatefulWidget {
   String id = '';
   String hashtag = '';
 
-  TaskCard(this.description, this.isToday, this.completed, this.id, this.hashtag, {super.key});
+  DateTime date;
+
+  TaskCard(this.description, this.isToday, this.completed, this.id, this.hashtag, this.date, {super.key});
 
   @override
   State<TaskCard> createState() => _TaskCardState();
@@ -20,9 +22,17 @@ class _TaskCardState extends State<TaskCard> {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text(widget.description),
-        subtitle: Text(widget.hashtag),
+        title: GestureDetector(
+          onTap: () {
+         showEditDialog();
+            },
+            child: Text(widget.description)),
+        subtitle: Text(widget.hashtag,
+            style: TextStyle(
+                color: Colors.blue)),
         trailing: Wrap(
+          crossAxisAlignment:  WrapCrossAlignment.center,
+
           children: [
             Checkbox(
               value: widget.completed,
@@ -36,7 +46,7 @@ class _TaskCardState extends State<TaskCard> {
             IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
-                todoApp.deleteTask(widget.description);
+                todoApp.deleteTask(widget.date);
               },
             ),
             Switch(
@@ -52,5 +62,39 @@ class _TaskCardState extends State<TaskCard> {
         ),
       ),
     );
+  }
+
+  void showEditDialog() {
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Edit Task'),
+            content: TextField(
+              controller: TextEditingController(text: widget.description),
+              onChanged: (String value) {
+                widget.description = value;
+              },
+            ),
+            actions: [
+              TextButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text('Save'),
+                onPressed: () {
+                  todoApp.updateTask(widget);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+
+
   }
 }

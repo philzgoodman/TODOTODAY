@@ -11,38 +11,21 @@ import 'TaskView.dart';
 
 class TodayTaskPage extends StatelessWidget {
   TodayTaskPage({super.key});
-  final db = FirebaseFirestore.instance;
-  final user = FirebaseAuth.instance.currentUser;
-
-    @override
-    Widget build(BuildContext context) {
-      return StreamBuilder<QuerySnapshot>(
-        stream: db
-            .collection('users')
-            .doc(user?.uid)
-            .collection('tasks')
-            .where('isToday', isEqualTo: true)
-            .snapshots(),
-
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                DocumentSnapshot task = snapshot.data!.docs[index];
-                return TaskCard(
-                    task['description'], task['isToday'], task['completed'], task.id, task['hashtag']);
-              },
-            );
-          }
-          return Center(child: CircularProgressIndicator());
-        },
 
 
-      );
-    }
+  @override
+  Widget build(BuildContext context) {
+    final dbToday = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser;
 
+    Query query = dbToday
+        .collection('users')
+        .doc(user?.uid)
+        .collection('tasks')
+        .where('isToday', isEqualTo: true);
 
-
+    return TaskView(db: dbToday, user: user, query: query,);
   }
+
+}
 

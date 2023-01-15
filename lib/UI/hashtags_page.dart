@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:todotoday/UI/TagView.dart';
 import '../TaskCard.dart';
 import 'TaskView.dart';
 
@@ -43,11 +44,10 @@ class HashtagsPage extends StatelessWidget {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text('Delete this hashtag?'),
-                        content: Text(
-                            'Are you sure you want to delete this hashtag?'),
 
-
+                        content: TagView(
+                          tag: uniqueSubtitles[index],
+                        ),
 
                       );
                     },

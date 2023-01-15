@@ -14,6 +14,9 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+
+
   FirebaseUIAuth.configureProviders([
     EmailAuthProvider(),
   ]);
@@ -21,6 +24,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     if (loggedIn) {
@@ -61,6 +65,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -72,7 +80,7 @@ class _MainPageState extends State<MainPage> {
         child: Stack(
           children: [
             Scaffold(
-              backgroundColor: Colors.black26,
+
               resizeToAvoidBottomInset: true,
               appBar: AppBar(
                 shadowColor: Colors.black87,

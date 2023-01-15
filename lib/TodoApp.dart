@@ -38,6 +38,7 @@ class TodoApp with ChangeNotifier {
       'completed': false,
       'isToday': false,
       'hashtag': getHashtag(description),
+      'date': DateTime.now(),
 
     });
 
@@ -103,7 +104,7 @@ var user = FirebaseAuth.instance.currentUser;
 
   }
 
-  void deleteTask(String description) {
+  void deleteTask(DateTime timeStamp) {
 
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -113,11 +114,10 @@ var user = FirebaseAuth.instance.currentUser;
         .collection('users')
         .doc(user.uid)
         .collection('tasks')
-        .where('description', isEqualTo: description)
+        .where('date', isEqualTo: timeStamp)
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
-        print(doc["description"]);
         doc.reference.delete();
       });
     });

@@ -5,21 +5,41 @@ import '../TaskCard.dart';
 import '../global.dart';
 import 'TaskView.dart';
 
-class DonePage extends StatelessWidget {
+
+class TagView extends StatefulWidget {
+
+  String tag;
+  TagView({super.key, required this.tag});
+
+  @override
+  State<TagView> createState() => _TagViewState();
+}
+
+class _TagViewState extends State<TagView> {
 
   @override
   Widget build(BuildContext context) {
-    final dbDone = FirebaseFirestore.instance;
+    final dbTag = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser;
-    Query query = dbDone
+    Query query = dbTag
         .collection('users')
         .doc(user?.uid)
         .collection('tasks')
-        .where('completed', isEqualTo: true);
+        .where('hashtag', isEqualTo: widget.tag);
 
-    return
-      TaskView(db: dbDone, user: user, query: query,);
+      return
+        TaskView(db: dbTag, user: user, query: query,);
+
+    }
 
   }
 
-}
+
+
+
+
+
+
+
+
+
