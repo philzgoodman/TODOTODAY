@@ -22,6 +22,7 @@ class TaskView extends StatelessWidget {
           .doc(user?.uid)
           .collection('tasks').snapshots(),
 
+
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
