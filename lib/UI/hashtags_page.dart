@@ -5,68 +5,78 @@ import 'package:todotoday/UI/TagView.dart';
 import '../TaskCard.dart';
 import 'TaskView.dart';
 
+
 class HashtagsPage extends StatelessWidget {
   int quantity = 1;
   String hashtag = '';
   String sendTag = '';
-  int count = 0;
   List<String> subtitles = [];
   List<String> uniqueSubtitles = [];
 
   HashtagsPage({super.key});
+
+
 
   @override
   Widget build(BuildContext context) {
     final db = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser;
 
-    return StreamBuilder<QuerySnapshot>(
-      stream:
-          db.collection('users').doc(user?.uid).collection('tasks').snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          for (var i = 0; i < snapshot.data!.docs.length; i++) {
-            subtitles.add(snapshot.data!.docs[i]['hashtag']);
-          }
-          uniqueSubtitles = subtitles.toSet().toList();
-          return GridView.builder(
-            itemCount: uniqueSubtitles.length,
-            itemBuilder: (context, index) {
-              count = 0;
-              for (var i = 0; i < subtitles.length; i++) {
-                if (subtitles[i] == uniqueSubtitles[index]) {
-                  count++;
-                }
-              }
-              return GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
+    Query query = db.collection('users').doc(user?.uid).collection('tasks');
 
-                        content: TagView(
-                          tag: uniqueSubtitles[index],
-                        ),
+    for (int i = 0; i < quantity; i++) {
+      query.get().then((value) {
+        for (var element in value.docs) {
+          subtitles.add(element['hashtag']);
+        }
+      });
+    }
 
-                      );
-                    },
+    uniqueSubtitles = subtitles.toSet().toList();
+    List<String> subTitleCount = [];
 
+    for (int i = 0; i < uniqueSubtitles.length; i++) {
+      int count = 0;
+      for (int j = 0; j < subtitles.length; j++) {
+        if (uniqueSubtitles[i] == subtitles[j]) {
+          count++;
+        }
+      }
+      subTitleCount.add(count.toString());
+    }
 
+    final List<String> finalCounts = subTitleCount;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Hashtags'),
+        backgroundColor: Color(0xFF356C40),
+      ),
+      body: GridView.builder(
+        itemCount: uniqueSubtitles.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(uniqueSubtitles[index]),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: Colors.transparent,
+                    insetPadding: EdgeInsets.zero,
+                    contentPadding: EdgeInsets.zero,
+                    content: TagView(
+                      tag: uniqueSubtitles[index],
+                    ),
                   );
                 },
-                child: Card(
-                    child: Center(
-                        child: Text(
-                            uniqueSubtitles[index] + ' ' + count.toString()))),
               );
             },
-            gridDelegate:
-                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
           );
-        }
-        return Center(child: CircularProgressIndicator());
-      },
+        },
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+      ),
     );
   }
 }

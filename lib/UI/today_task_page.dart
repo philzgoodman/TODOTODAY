@@ -22,9 +22,22 @@ class TodayTaskPage extends StatelessWidget {
         .collection('users')
         .doc(user?.uid)
         .collection('tasks')
-        .where('isToday', isEqualTo: true);
+        .where('isToday', isEqualTo: true)
+        .where('completed', isEqualTo: false)
+    ;
 
-    return TaskView(db: dbToday, user: user, query: query,);
+    return  Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFFB0BD8A),
+              Color(0xFF356C40),
+              Color(0xFF34574A),
+            ],
+          ),),
+        child: TaskView(db: dbToday, user: user, query: query,));
   }
 
 }

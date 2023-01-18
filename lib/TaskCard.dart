@@ -9,7 +9,7 @@ class TaskCard extends StatefulWidget {
   String id = '';
   String hashtag = '';
 
-  DateTime date;
+  String date = '';
 
   TaskCard(this.description, this.isToday, this.completed, this.id, this.hashtag, this.date, {super.key});
 
@@ -21,7 +21,13 @@ class _TaskCardState extends State<TaskCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shadowColor: Colors.black,
+      elevation: 3,
+
+      color: getRandomColor(widget.date),
       child: ListTile(
+        visualDensity:  VisualDensity(horizontal: 0, vertical: -4),
+
         title: GestureDetector(
           onTap: () {
          showEditDialog();
@@ -65,36 +71,79 @@ class _TaskCardState extends State<TaskCard> {
   }
 
   void showEditDialog() {
-
+    FocusNode myFocusNode = FocusNode();
+    TextEditingController txt = TextEditingController();
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Edit Task'),
-            content: TextField(
-              controller: TextEditingController(text: widget.description),
-              onChanged: (String value) {
-                widget.description = value;
-              },
-            ),
-            actions: [
-              TextButton(
-                child: Text('Cancel'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+          return Stack(
+            children: [
+              AlertDialog(
+                title: Text('Edit Task'),
+                content: Column(
+                  children: [
+                    TextField(
+                      controller: TextEditingController(text: widget.description),
+                      onChanged: (String value) {
+                        widget.description = value;
+                      },
+                    ),
+                    TextField(
+                      controller: TextEditingController(text: widget.hashtag),
+                      onChanged: (String value) {
+                        widget.hashtag = value;
+                      },
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child: Text('Save'),
+                    onPressed: () {
+                      todoApp.updateTask(widget);
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
               ),
-              TextButton(
-                child: Text('Save'),
-                onPressed: () {
-                  todoApp.updateTask(widget);
-                  Navigator.of(context).pop();
-                },
-              ),
+
+
             ],
           );
         });
 
 
   }
+
+  void addSubTask(BuildContext context) {
+    FocusScope.of(context).unfocus();
+    todoApp.addSubTask(widget.id, widget.description);
+
+
+
+
+  }
+
+  Color getRandomColor(String date) {
+    return darken(Colors.accents[date.hashCode % Colors.accents.length], 50);
+
+  }
+
+  Color darken(Color c, [int percent = 10]) {
+    assert(1 <= percent && percent <= 100);
+    var f = 1 - percent / 100;
+    return Color.fromARGB(
+        c.alpha,
+        (c.red * f).round(),
+        (c.green  * f).round(),
+        (c.blue * f).round()
+    ).withOpacity(0.8);
+  }
+
 }

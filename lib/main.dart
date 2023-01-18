@@ -1,11 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:todotoday/UI/done.dart';
 import 'package:todotoday/UI/today_task_page.dart';
 import 'package:todotoday/UI/all_tasks_page.dart';
 import 'package:todotoday/UI/hashtags_page.dart';
 import 'LoginPage.dart';
 import 'MessageBox.dart';
+import 'UI/TagView.dart';
+import 'UI/TaskView.dart';
 import 'firebase_options.dart';
 import 'global.dart';
 
@@ -37,7 +40,8 @@ class MyApp extends StatelessWidget {
           secondary: Colors.green,
           tertiary: Colors.red,
         ),
-        fontFamily: 'Courier',
+        fontFamily: 'JetBrainsMono',
+
         ),
         home: MainPage(),
       );
@@ -51,7 +55,7 @@ class MyApp extends StatelessWidget {
             secondary: Colors.green,
             tertiary: Colors.red,
           ),
-          fontFamily: 'Courier',
+          fontFamily: 'JetBrainsMono',
         ),
         home: LoginPage(),
       );
@@ -80,7 +84,6 @@ class _MainPageState extends State<MainPage> {
         child: Stack(
           children: [
             Scaffold(
-
               resizeToAvoidBottomInset: true,
               appBar: AppBar(
                 shadowColor: Colors.black87,
@@ -125,6 +128,36 @@ class _MainPageState extends State<MainPage> {
                       ),
                     ),
                   ),
+                  Positioned(
+                    bottom: 80,
+                    right: 21,
+                    child: Transform.scale(
+                      scale: .6,
+                      child: FloatingActionButton(
+                        backgroundColor: Colors.grey,
+                        onPressed: () {
+
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                backgroundColor: Colors.transparent,
+                                insetPadding: EdgeInsets.zero,
+                                contentPadding: EdgeInsets.zero,
+                                content: DonePage(),
+
+
+                              );
+                            },
+                          );
+
+                        },
+                        tooltip: 'DONE',
+                        child: const Icon(Icons.done),
+                      ),
+                    ),
+                  ),
+
                 ],
               ),
             ),

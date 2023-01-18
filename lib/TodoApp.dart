@@ -38,7 +38,7 @@ class TodoApp with ChangeNotifier {
       'completed': false,
       'isToday': false,
       'hashtag': getHashtag(description),
-      'date': DateTime.now(),
+      'date': DateTime.now().toString(),
 
     });
 
@@ -57,11 +57,12 @@ class TodoApp with ChangeNotifier {
         .doc(user.uid)
         .collection('tasks')
         .doc(task.id)
-        .update({ 'completed': task.completed, 'isToday': task.isToday , 'description': task.description});
-
+        .update({
+      'completed': task.completed,
+      'isToday': task.isToday,
+      'description': task.description
+    });
   }
-
-
 
 
   Future<List<Task>> getTasks(index) {
@@ -81,11 +82,10 @@ class TodoApp with ChangeNotifier {
       });
       return tasks;
     });
-
   }
 
   void initializeTasks() {
-var user = FirebaseAuth.instance.currentUser;
+    var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       throw StateError('Not logged in');
     }
@@ -100,12 +100,9 @@ var user = FirebaseAuth.instance.currentUser;
         tasks.add(Task.fromFirestore(doc));
       });
     });
-
-
   }
 
-  void deleteTask(DateTime timeStamp) {
-
+  void deleteTask(String timeStamp) {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       throw StateError('Not logged in');
@@ -121,16 +118,9 @@ var user = FirebaseAuth.instance.currentUser;
         doc.reference.delete();
       });
     });
-
-
-
-
-
   }
 
   getHashtag(String description) {
-
-
     if (description.contains("#")) {
       var hashtag = description.split("#");
       return hashtag[1];
@@ -139,9 +129,30 @@ var user = FirebaseAuth.instance.currentUser;
     }
   }
 
-
-
-
+  void addSubTask(String description, String id) {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+    _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('tasks')
+        .doc(id)
+        .collection('subtask')
+        .add({
+      'description': description,
+      'completed': false,
+      'isToday': false,
+      'hashtag': getHashtag(description),
+      'date': DateTime.now(),
+    });
+  }
 
 
 }
+
+
+
+
+
