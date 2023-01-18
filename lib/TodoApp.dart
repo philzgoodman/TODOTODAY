@@ -23,7 +23,7 @@ class TodoApp with ChangeNotifier {
     await _auth.signOut();
   }
 
-  Future<void> createTask(String description) async {
+  Future<void> createTask(String description, bool isToday) async {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       throw StateError('Not logged in');
@@ -36,7 +36,7 @@ class TodoApp with ChangeNotifier {
         .add({
       'description': description,
       'completed': false,
-      'isToday': false,
+      'isToday': isToday,
       'hashtag': getHashtag(description),
       'date': DateTime.now().toString(),
 

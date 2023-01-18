@@ -69,8 +69,13 @@ class _MessageBoxState extends State<MessageBox> {
 
   void addNewTask(BuildContext context) {
 
-    todoApp.createTask(txt.text);
-    txt.clear();
+    if (DefaultTabController.of(context)!.index == 1) {
+      todoApp.createTask(txt.text, true);
+    }
+    else {
+      todoApp.createTask(txt.text, false);
+    }
+
 
   }
 
