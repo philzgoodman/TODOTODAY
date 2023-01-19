@@ -8,7 +8,6 @@ import 'package:todotoday/UI/hashtags_page.dart';
 import 'LoginPage.dart';
 import 'MessageBox.dart';
 import 'firebase_options.dart';
-import 'global.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

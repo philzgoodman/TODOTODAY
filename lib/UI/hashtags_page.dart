@@ -45,6 +45,7 @@ class HashtagsPage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return GridView.builder(
+            shrinkWrap: true,
             itemCount: uniqueSubtitles.length,
             itemBuilder: (context, index) {
               return Center(
@@ -54,11 +55,12 @@ class HashtagsPage extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
+                          elevation: 0,
                           backgroundColor: Colors.transparent,
                           insetPadding: EdgeInsets.zero,
                           contentPadding: EdgeInsets.zero,
                           content: SizedBox(
-                            width: MediaQuery.of(context).size.width - 100,
+                            width: MediaQuery.of(context).size.width *.9,
                             child: TagView(
                               tag: uniqueSubtitles[index],
                             ),
@@ -79,33 +81,29 @@ class HashtagsPage extends StatelessWidget {
                       },
                     );
                   },
-                  child: SizedBox(
-                    width: 150,
-                    height: 150,
-                    child: Card(
-                      color: getRandomColor(uniqueSubtitles[index]),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              textAlign: TextAlign.center,
-                              uniqueSubtitles[index],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
+                  child: Card(
+                    color: getRandomColor(uniqueSubtitles[index]),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            textAlign: TextAlign.center,
+                            uniqueSubtitles[index],
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
                             ),
-                            Text(
-                              subTitleCount[index],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
+                          ),
+                          Text(
+                            subTitleCount[index],
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
