@@ -14,6 +14,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+
   );
 
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (loggedIn) {
+    if (checkIfLoggedin()) {
       return MaterialApp(
         title: 'TodoToday',
         theme: ThemeData(
@@ -60,6 +61,8 @@ class MyApp extends StatelessWidget {
       );
     }
   }
+
+
 }
 
 class MainPage extends StatefulWidget {
@@ -120,9 +123,10 @@ class _MainPageState extends State<MainPage> {
                     child: Transform.scale(
                       scale: .6,
                       child: FloatingActionButton(
+                        heroTag: 'settings',
                         backgroundColor: Colors.grey,
                         onPressed: () {},
-                        tooltip: 'Add',
+                        tooltip: 'Settings',
                         child: const Icon(Icons.settings),
                       ),
                     ),
@@ -133,6 +137,7 @@ class _MainPageState extends State<MainPage> {
                     child: Transform.scale(
                       scale: .6,
                       child: FloatingActionButton(
+                        heroTag: 'done',
                         backgroundColor: Colors.grey,
                         onPressed: () {
 

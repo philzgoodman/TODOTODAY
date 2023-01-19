@@ -57,3 +57,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+bool checkIfLoggedin() {
+  if (FirebaseAuth.instance.currentUser != null) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
