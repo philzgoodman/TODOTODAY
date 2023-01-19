@@ -60,7 +60,8 @@ class TodoApp with ChangeNotifier {
         .update({
       'completed': task.completed,
       'isToday': task.isToday,
-      'description': task.description
+      'description': task.description,
+      'hashtag': getHashtag(task.description),
     });
   }
 
@@ -123,7 +124,7 @@ class TodoApp with ChangeNotifier {
   getHashtag(String description) {
     if (description.contains("#")) {
       var hashtag = description.split("#");
-      return hashtag[1];
+      return '#${hashtag[1]}';
     } else {
       return "#default";
     }

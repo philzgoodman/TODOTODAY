@@ -7,8 +7,6 @@ import 'package:todotoday/UI/all_tasks_page.dart';
 import 'package:todotoday/UI/hashtags_page.dart';
 import 'LoginPage.dart';
 import 'MessageBox.dart';
-import 'UI/TagView.dart';
-import 'UI/TaskView.dart';
 import 'firebase_options.dart';
 import 'global.dart';
 

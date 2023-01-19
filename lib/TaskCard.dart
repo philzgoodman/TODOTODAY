@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'global.dart';
-import 'task.dart';
 
 class TaskCard extends StatefulWidget {
   String description;
@@ -80,21 +79,12 @@ class _TaskCardState extends State<TaskCard> {
             children: [
               AlertDialog(
                 title: Text('Edit Task'),
-                content: Column(
-                  children: [
-                    TextField(
-                      controller: TextEditingController(text: widget.description),
-                      onChanged: (String value) {
-                        widget.description = value;
-                      },
-                    ),
-                    TextField(
-                      controller: TextEditingController(text: widget.hashtag),
-                      onChanged: (String value) {
-                        widget.hashtag = value;
-                      },
-                    ),
-                  ],
+                content: TextField(
+                  maxLines: 8,
+                  controller: TextEditingController(text: widget.description),
+                  onChanged: (String value) {
+                    widget.description = value;
+                  },
                 ),
                 actions: [
                   TextButton(
@@ -130,20 +120,21 @@ class _TaskCardState extends State<TaskCard> {
 
   }
 
-  Color getRandomColor(String date) {
-    return darken(Colors.accents[date.hashCode % Colors.accents.length], 50);
 
-  }
+}
 
-  Color darken(Color c, [int percent = 10]) {
-    assert(1 <= percent && percent <= 100);
-    var f = 1 - percent / 100;
-    return Color.fromARGB(
-        c.alpha,
-        (c.red * f).round(),
-        (c.green  * f).round(),
-        (c.blue * f).round()
-    ).withOpacity(0.8);
-  }
+Color getRandomColor(String date) {
+  return darken(Colors.accents[date.hashCode % Colors.accents.length], 50);
 
+}
+
+Color darken(Color c, [int percent = 10]) {
+  assert(1 <= percent && percent <= 100);
+  var f = 1 - percent / 100;
+  return Color.fromARGB(
+      c.alpha,
+      (c.red * f).round(),
+      (c.green  * f).round(),
+      (c.blue * f).round()
+  ).withOpacity(0.8);
 }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:todotoday/UI/done.dart';
-import '../TaskCard.dart';
 import 'TaskView.dart';
 
 class AllTasksPage extends StatefulWidget {
