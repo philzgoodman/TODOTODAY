@@ -75,7 +75,7 @@ class _MessageBoxState extends State<MessageBox> {
     else {
       todoApp.createTask(txt.text, false);
     }
-
+    txt.clear();
 
   }
 
