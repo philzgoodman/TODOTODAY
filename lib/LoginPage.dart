@@ -4,7 +4,6 @@ import 'package:todotoday/global.dart';
 import 'package:todotoday/main.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 
-
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
 
@@ -23,7 +22,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
 //https://github.com/firebase/flutterfire/blob/master/packages/firebase_ui_auth/doc/providers/email.md
     return Scaffold(
       body: AuthFlowBuilder<EmailAuthController>(
@@ -57,11 +55,11 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
+
 bool checkIfLoggedin() {
   if (FirebaseAuth.instance.currentUser != null) {
     return true;
   } else {
     return false;
   }
-
 }

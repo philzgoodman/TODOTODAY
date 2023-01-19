@@ -1,12 +1,11 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Task {
-   String description;
-   bool completed;
-   String id;
-   bool isToday;
-   String hashtag;
+  String description;
+  bool completed;
+  String id;
+  bool isToday;
+  String hashtag;
 
   Task({
     required this.description,
@@ -23,13 +22,8 @@ class Task {
       id: doc.id,
       isToday: doc['isToday'],
       hashtag: doc['hashtag'],
-
     );
   }
-
-
-
-
 
   Map<String, dynamic> toMap() {
     return {
@@ -40,14 +34,12 @@ class Task {
   }
 
   static Task fromFirestore(QueryDocumentSnapshot<Object?> doc) {
-
     return Task(
       description: doc['description'],
       completed: doc['completed'],
       isToday: doc['isToday'],
       id: doc.id,
       hashtag: doc['hashtag'],
-
     );
   }
 }

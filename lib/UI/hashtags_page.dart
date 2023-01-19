@@ -58,16 +58,15 @@ class HashtagsPage extends StatelessWidget {
                           insetPadding: EdgeInsets.zero,
                           contentPadding: EdgeInsets.zero,
                           content: SizedBox(
-                            width:MediaQuery.of(context).size.width-100,
-
+                            width: MediaQuery.of(context).size.width - 100,
                             child: TagView(
-
                               tag: uniqueSubtitles[index],
                             ),
                           ),
                           actions: [
                             Padding(
-                              padding: const EdgeInsets.only(bottom:108.0,left:30),
+                              padding: const EdgeInsets.only(
+                                  bottom: 108.0, left: 30),
                               child: TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);

@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,6 @@ import 'TaskView.dart';
 
 class TodayTaskPage extends StatelessWidget {
   TodayTaskPage({super.key});
-
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +16,9 @@ class TodayTaskPage extends StatelessWidget {
         .doc(user?.uid)
         .collection('tasks')
         .where('isToday', isEqualTo: true)
-        .where('completed', isEqualTo: false)
-    ;
+        .where('completed', isEqualTo: false);
 
-    return  Container(
+    return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -31,9 +28,12 @@ class TodayTaskPage extends StatelessWidget {
               Color(0xFF356C40),
               Color(0xFF34574A),
             ],
-          ),),
-        child: TaskView(db: dbToday, user: user, query: query,));
+          ),
+        ),
+        child: TaskView(
+          db: dbToday,
+          user: user,
+          query: query,
+        ));
   }
-
 }
-

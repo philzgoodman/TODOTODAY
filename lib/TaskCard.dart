@@ -10,7 +10,9 @@ class TaskCard extends StatefulWidget {
 
   String date = '';
 
-  TaskCard(this.description, this.isToday, this.completed, this.id, this.hashtag, this.date, {super.key});
+  TaskCard(this.description, this.isToday, this.completed, this.id,
+      this.hashtag, this.date,
+      {super.key});
 
   @override
   State<TaskCard> createState() => _TaskCardState();
@@ -22,22 +24,17 @@ class _TaskCardState extends State<TaskCard> {
     return Card(
       shadowColor: Colors.black,
       elevation: 3,
-
       color: getRandomColor(widget.date),
       child: ListTile(
-        visualDensity:  VisualDensity(horizontal: 0, vertical: -4),
-
+        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
         title: GestureDetector(
-          onTap: () {
-         showEditDialog();
+            onTap: () {
+              showEditDialog();
             },
             child: Text(widget.description)),
-        subtitle: Text(widget.hashtag,
-            style: TextStyle(
-                color: Colors.blue)),
+        subtitle: Text(widget.hashtag, style: TextStyle(color: Colors.blue)),
         trailing: Wrap(
-          crossAxisAlignment:  WrapCrossAlignment.center,
-
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             Checkbox(
               value: widget.completed,
@@ -102,39 +99,25 @@ class _TaskCardState extends State<TaskCard> {
                   ),
                 ],
               ),
-
-
             ],
           );
         });
-
-
   }
 
   void addSubTask(BuildContext context) {
     FocusScope.of(context).unfocus();
     todoApp.addSubTask(widget.id, widget.description);
-
-
-
-
   }
-
-
 }
 
 Color getRandomColor(String date) {
   return darken(Colors.accents[date.hashCode % Colors.accents.length], 50);
-
 }
 
 Color darken(Color c, [int percent = 10]) {
   assert(1 <= percent && percent <= 100);
   var f = 1 - percent / 100;
-  return Color.fromARGB(
-      c.alpha,
-      (c.red * f).round(),
-      (c.green  * f).round(),
-      (c.blue * f).round()
-  ).withOpacity(0.8);
+  return Color.fromARGB(c.alpha, (c.red * f).round(), (c.green * f).round(),
+          (c.blue * f).round())
+      .withOpacity(0.8);
 }

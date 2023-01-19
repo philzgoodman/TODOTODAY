@@ -28,20 +28,13 @@ class TodoApp with ChangeNotifier {
     if (user == null) {
       throw StateError('Not logged in');
     }
-    await _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('tasks')
-
-        .add({
+    await _firestore.collection('users').doc(user.uid).collection('tasks').add({
       'description': description,
       'completed': false,
       'isToday': isToday,
       'hashtag': getHashtag(description),
       'date': DateTime.now().toString(),
-
     });
-
 
     print("Stored to Firestore");
     notifyListeners();
@@ -64,7 +57,6 @@ class TodoApp with ChangeNotifier {
       'hashtag': getHashtag(task.description),
     });
   }
-
 
   Future<List<Task>> getTasks(index) {
     var user = FirebaseAuth.instance.currentUser;
@@ -149,11 +141,4 @@ class TodoApp with ChangeNotifier {
       'date': DateTime.now(),
     });
   }
-
-
 }
-
-
-
-
-

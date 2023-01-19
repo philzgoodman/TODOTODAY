@@ -6,7 +6,6 @@ import '../global.dart';
 import 'TaskView.dart';
 
 class DonePage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final dbDone = FirebaseFirestore.instance;
@@ -17,9 +16,10 @@ class DonePage extends StatelessWidget {
         .collection('tasks')
         .where('completed', isEqualTo: true);
 
-    return
-      TaskView(db: dbDone, user: user, query: query,);
-
+    return TaskView(
+      db: dbDone,
+      user: user,
+      query: query,
+    );
   }
-
 }

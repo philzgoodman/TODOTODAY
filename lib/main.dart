@@ -14,10 +14,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-
   );
-
-
 
   FirebaseUIAuth.configureProviders([
     EmailAuthProvider(),
@@ -26,22 +23,19 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     if (checkIfLoggedin()) {
       return MaterialApp(
         title: 'TodoToday',
         theme: ThemeData(
-        brightness: Brightness.dark,
-        colorScheme: const ColorScheme.highContrastDark().copyWith(
-          primary: Colors.greenAccent,
-          secondary: Colors.green,
-          tertiary: Colors.red,
-        ),
-        fontFamily: 'JetBrainsMono',
-
-
+          brightness: Brightness.dark,
+          colorScheme: const ColorScheme.highContrastDark().copyWith(
+            primary: Colors.greenAccent,
+            secondary: Colors.green,
+            tertiary: Colors.red,
+          ),
+          fontFamily: 'JetBrainsMono',
         ),
         home: MainPage(),
       );
@@ -61,8 +55,6 @@ class MyApp extends StatelessWidget {
       );
     }
   }
-
-
 }
 
 class MainPage extends StatefulWidget {
@@ -71,10 +63,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -140,7 +128,6 @@ class _MainPageState extends State<MainPage> {
                         heroTag: 'done',
                         backgroundColor: Colors.grey,
                         onPressed: () {
-
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -149,19 +136,15 @@ class _MainPageState extends State<MainPage> {
                                 insetPadding: EdgeInsets.zero,
                                 contentPadding: EdgeInsets.zero,
                                 content: DonePage(),
-
-
                               );
                             },
                           );
-
                         },
                         tooltip: 'DONE',
                         child: const Icon(Icons.done),
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),

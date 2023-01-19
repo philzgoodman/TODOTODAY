@@ -19,10 +19,9 @@ class TaskView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return StreamBuilder<QuerySnapshot>(
-      stream: query
-          .snapshots(), // db.collection('users').doc(user?.uid).collection('tasks').snapshots(),
+      stream: query.snapshots(),
+      // db.collection('users').doc(user?.uid).collection('tasks').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
@@ -30,17 +29,17 @@ class TaskView extends StatelessWidget {
             itemBuilder: (context, index) {
               DocumentSnapshot task = snapshot.data!.docs[index];
               return TaskCard(
-                  task['description'], task['isToday'], task['completed'], task.id, task['hashtag'], task['date'].toString());
+                  task['description'],
+                  task['isToday'],
+                  task['completed'],
+                  task.id,
+                  task['hashtag'],
+                  task['date'].toString());
             },
           );
         }
         return Center(child: CircularProgressIndicator());
       },
-
-
     );
   }
-
-
-
 }

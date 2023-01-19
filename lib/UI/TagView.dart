@@ -5,10 +5,9 @@ import '../TaskCard.dart';
 import '../global.dart';
 import 'TaskView.dart';
 
-
 class TagView extends StatefulWidget {
-
   String tag;
+
   TagView({super.key, required this.tag});
 
   @override
@@ -16,7 +15,6 @@ class TagView extends StatefulWidget {
 }
 
 class _TagViewState extends State<TagView> {
-
   @override
   Widget build(BuildContext context) {
     final dbTag = FirebaseFirestore.instance;
@@ -27,19 +25,10 @@ class _TagViewState extends State<TagView> {
         .collection('tasks')
         .where('hashtag', isEqualTo: widget.tag);
 
-      return
-        TaskView(db: dbTag, user: user, query: query,);
-
-    }
-
+    return TaskView(
+      db: dbTag,
+      user: user,
+      query: query,
+    );
   }
-
-
-
-
-
-
-
-
-
-
+}
