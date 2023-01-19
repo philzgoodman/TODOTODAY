@@ -6,9 +6,7 @@ import 'package:todotoday/UI/TagView.dart';
 import '../TaskCard.dart';
 
 class HashtagsPage extends StatelessWidget {
-  String hashtag = '';
-  String sendTag = '';
-  List<String> subTitleCount = [];
+
 
   HashtagsPage({super.key});
 
@@ -18,32 +16,26 @@ class HashtagsPage extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     List<String> subtitles = [];
     List<String> uniqueSubtitles = [];
-    subTitleCount = [];
+    List<String> subTitleCount = [];
     Query query = db.collection('users').doc(user?.uid).collection('tasks');
-
-    query.get().then((QuerySnapshot querySnapshot) {
-      for (var doc in querySnapshot.docs) {
-        subtitles.add(doc['hashtag']);
-      }
-
-      uniqueSubtitles = subtitles.toSet().toList();
-
-      for (int i = 0; i < uniqueSubtitles.length; i++) {
-        int count = 0;
-        for (int j = 0; j < subtitles.length; j++) {
-          if (uniqueSubtitles[i] == subtitles[j]) {
-            count++;
-          }
-        }
-        subTitleCount.add(count.toString());
-      }
-    });
-
     return StreamBuilder<QuerySnapshot>(
       stream: query.snapshots(),
-      // db.collection('users').doc(user?.uid).collection('tasks').snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          for (int i = 0; i < snapshot.data!.docs.length; i++) {
+            DocumentSnapshot task = snapshot.data!.docs[i];
+            subtitles.add(task['hashtag']);
+          }
+          uniqueSubtitles = subtitles.toSet().toList();
+          for (int i = 0; i < uniqueSubtitles.length; i++) {
+            int count = 0;
+            for (int j = 0; j < subtitles.length; j++) {
+              if (uniqueSubtitles[i] == subtitles[j]) {
+                count++;
+              }
+            }
+            subTitleCount.add(count.toString());
+          }
           return GridView.builder(
             shrinkWrap: true,
             itemCount: uniqueSubtitles.length,
