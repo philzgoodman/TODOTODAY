@@ -48,7 +48,9 @@ class _TaskCardState extends State<TaskCard> {
             IconButton(
               icon: Icon(Icons.delete),
               onPressed: () {
-                todoApp.deleteTask(widget.date);
+                setState(() {
+                  todoApp.deleteTask(widget.date);
+                });
               },
             ),
             Switch(

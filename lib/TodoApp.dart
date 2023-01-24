@@ -40,6 +40,23 @@ class TodoApp with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> createTaskWithHashtag(String description, String hashtag) async {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+    await _firestore.collection('users').doc(user.uid).collection('tasks').add({
+      'description': description,
+      'completed': false,
+      'isToday': false,
+      'hashtag': getHashtag(description + hashtag),
+      'date': DateTime.now().toString(),
+    });
+
+    print("Stored to Firestore");
+    notifyListeners();
+  }
+
   void updateTask(TaskCard task) {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -111,12 +128,15 @@ class TodoApp with ChangeNotifier {
         doc.reference.delete();
       });
     });
+
+
   }
 
   getHashtag(String description) {
     if (description.contains("#")) {
       var hashtag = description.split("#");
-      return '#${hashtag[1]}';
+      var hashtag2 = hashtag[1].split(" ");
+      return '#${hashtag2[0]}';
     } else {
       return "#default";
     }
@@ -140,5 +160,27 @@ class TodoApp with ChangeNotifier {
       'hashtag': getHashtag(description),
       'date': DateTime.now(),
     });
+  }
+
+  int getHashtagCount(String tag) {
+
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+    int count = 0;
+    _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('tasks')
+        .get()
+        .then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        if (doc['hashtag'] == tag) {
+          count++;
+        }
+      });
+    });
+    return count;
   }
 }

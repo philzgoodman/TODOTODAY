@@ -1,13 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:todotoday/MessageBox.dart';
+import 'package:todotoday/MessageTagBox.dart';
 import 'package:todotoday/UI/TagView.dart';
+import 'package:todotoday/main.dart';
 
 import '../TaskCard.dart';
+import '../global.dart';
 
 class HashtagsPage extends StatelessWidget {
-
-
   HashtagsPage({super.key});
 
   @override
@@ -16,7 +18,7 @@ class HashtagsPage extends StatelessWidget {
     final user = FirebaseAuth.instance.currentUser;
     List<String> subtitles = [];
     List<String> uniqueSubtitles = [];
-    List<String> subTitleCount = [];
+
     Query query = db.collection('users').doc(user?.uid).collection('tasks');
     return StreamBuilder<QuerySnapshot>(
       stream: query.snapshots(),
@@ -34,7 +36,7 @@ class HashtagsPage extends StatelessWidget {
                 count++;
               }
             }
-            subTitleCount.add(count.toString());
+            subTitleCount.add(count);
           }
           return GridView.builder(
             shrinkWrap: true,
@@ -52,9 +54,23 @@ class HashtagsPage extends StatelessWidget {
                           insetPadding: EdgeInsets.zero,
                           contentPadding: EdgeInsets.zero,
                           content: SizedBox(
-                            width: MediaQuery.of(context).size.width *.9,
-                            child: TagView(
-                              tag: uniqueSubtitles[index],
+                            width: MediaQuery.of(context).size.width * .9,
+                            child: Container(
+                              height: MediaQuery.of(context).size.height * .9,
+                              child: Stack(
+                                children: [
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * .9,
+                                    height:
+                                        MediaQuery.of(context).size.height * .9,
+                                    child: TagView(
+                                      tag: uniqueSubtitles[index],
+                                    ),
+                                  ),
+                                  MessageTagBox(uniqueSubtitles[index], index),
+                                ],
+                              ),
                             ),
                           ),
                           actions: [
@@ -62,11 +78,15 @@ class HashtagsPage extends StatelessWidget {
                               padding: const EdgeInsets.only(
                                   bottom: 108.0, left: 30),
                               child: TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text('Close'),
-                              ),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Center(
+                                    child: Text(
+                                      'Close',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  )),
                             ),
                           ],
                         );
@@ -89,7 +109,7 @@ class HashtagsPage extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            subTitleCount[index],
+                            subTitleCount[index].toString(),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
@@ -105,8 +125,10 @@ class HashtagsPage extends StatelessWidget {
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3),
           );
+        } else {
+          subTitleCount.clear();
+          return Center(child: CircularProgressIndicator());
         }
-        return Center(child: CircularProgressIndicator());
       },
     );
   }
