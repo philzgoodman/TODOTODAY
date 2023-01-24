@@ -14,10 +14,9 @@
             <option value="$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-4.2.0/android" />
             <option value="$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/desktop_webview_auth-0.0.11/android" />
             <option value="$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_analytics-10.0.7/android" />
-            <option value="$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-4.2.1/android" />
-            <option value="$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-2.4.0/android" />
-            <option value="$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_dynamic_links-5.0.9/android" />
-            <option value="$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/google_sign_in_android-6.1.4/android" />
+            <option value="$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_auth-4.2.5/android" />
+            <option value="$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-2.4.1/android" />
+            <option value="$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_dynamic_links-5.0.11/android" />
             <option value="$PROJECT_DIR$/../../../../../../src/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-2.2.2/android" />
           </set>
         </option>

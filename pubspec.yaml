@@ -38,17 +38,36 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   firebase_core:
 
-  cupertino_icons: ^1.0.2
   flutter_animate: ^2.0.1
   cloud_firestore: ^4.2.0
   firebase_analytics: ^10.0.7
   provider: ^6.0.5
   firebase_auth: ^4.2.5
   firebase_ui_auth: ^1.1.7
+  flutter_launcher_icons: ^0.11.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  image_path: "lib/icons/Icon-512.png"
+
+  android: true
+  adaptive_icon_background: "lib/icons/background.png"
+  adaptive_icon_foreground: "lib/icons/foreground.png"
+
+  ios: true
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: false
+  windows:
+    generate: false
+  macos:
+    generate: false
+
+
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -180,9 +180,9 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
-      name="io.flutter:x86_64_release:1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a@jar"
-      jars="C:\Users\Phil\.gradle\caches\modules-2\files-2.1\io.flutter\x86_64_release\1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a\7cb9c65ad6faf1c93af5a2f472069a96f8508a5a\x86_64_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.jar"
-      resolved="io.flutter:x86_64_release:1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a"/>
+      name="io.flutter:arm64_v8a_release:1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a@jar"
+      jars="C:\Users\Phil\.gradle\caches\modules-2\files-2.1\io.flutter\arm64_v8a_release\1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a\30eb9cbefab6c0a452b5514ff376a7eb97e38fb\arm64_v8a_release-1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a.jar"
+      resolved="io.flutter:arm64_v8a_release:1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a"/>
   <library
       name="androidx.multidex:multidex:2.0.0@aar"
       jars="C:\Users\Phil\.gradle\caches\transforms-3\60455f47848b88c03b916134aaa9223d\transformed\multidex-2.0.0\jars\classes.jar"
