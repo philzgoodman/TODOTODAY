@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'Header.dart';
 import 'TaskView.dart';
 
 class TodayTaskPage extends StatelessWidget {
@@ -18,22 +19,27 @@ class TodayTaskPage extends StatelessWidget {
         .where('isToday', isEqualTo: true)
         .where('completed', isEqualTo: false);
 
-    return Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFFB0BD8A),
-              Color(0xFF356C40),
-              Color(0xFF34574A),
-            ],
-          ),
-        ),
-        child: TaskView(
-          db: dbToday,
-          user: user,
-          query: query,
-        ));
+    return Stack(
+      children: [
+        Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFFB0BD8A),
+                  Color(0xFF356C40),
+                  Color(0xFF34574A),
+                ],
+              ),
+            ),
+            child: TaskView(
+              db: dbToday,
+              user: user,
+              query: query,
+            )),
+        Header(),
+      ],
+    );
   }
 }

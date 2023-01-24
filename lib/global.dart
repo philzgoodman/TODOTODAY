@@ -4,4 +4,5 @@ import 'TodoApp.dart';
 
 TodoApp todoApp = TodoApp();
 bool loggedIn = false;
-List<int> subTitleCount = [];
+List<String> subTitleCount = [];
+bool isVisible = true;

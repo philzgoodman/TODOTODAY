@@ -7,6 +7,7 @@ import 'package:todotoday/UI/TagView.dart';
 import 'package:todotoday/main.dart';
 
 import '../TaskCard.dart';
+import '../TodoApp.dart';
 import '../global.dart';
 
 class HashtagsPage extends StatelessWidget {
@@ -36,8 +37,10 @@ class HashtagsPage extends StatelessWidget {
                 count++;
               }
             }
-            subTitleCount.add(count);
+            TodoApp().createOrUpdateSubtitleCount(uniqueSubtitles[i], count);
+            subTitleCount.add(count.toString());
           }
+
           return GridView.builder(
             shrinkWrap: true,
             itemCount: uniqueSubtitles.length,
@@ -50,43 +53,79 @@ class HashtagsPage extends StatelessWidget {
                       builder: (BuildContext context) {
                         return AlertDialog(
                           elevation: 0,
-                          backgroundColor: Colors.transparent,
+                          backgroundColor:
+                              getRandomColor(uniqueSubtitles[index], 70),
                           insetPadding: EdgeInsets.zero,
                           contentPadding: EdgeInsets.zero,
                           content: SizedBox(
                             width: MediaQuery.of(context).size.width * .9,
                             child: Container(
-                              height: MediaQuery.of(context).size.height * .9,
+                              height: MediaQuery.of(context).size.height * 1,
                               child: Stack(
                                 children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * .9,
-                                    height:
-                                        MediaQuery.of(context).size.height * .9,
-                                    child: TagView(
-                                      tag: uniqueSubtitles[index],
+                                  Align(
+                                    alignment: Alignment.topCenter,
+                                    child: SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              .1,
+                                      child: Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 25.0),
+                                          child: Text(
+                                            uniqueSubtitles[index],
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                  MessageTagBox(uniqueSubtitles[index], index),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 38.0),
+                                    child: SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          .9,
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              .95,
+                                      child: TagView(
+                                        tag: uniqueSubtitles[index],
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 48.0),
+                                      child: MessageTagBox(
+                                          uniqueSubtitles[index], index),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
                           ),
                           actions: [
                             Padding(
-                              padding: const EdgeInsets.only(
-                                  bottom: 108.0, left: 30),
-                              child: TextButton(
+                              padding:
+                                  const EdgeInsets.only(bottom: 58.0, left: 30),
+                              child: Center(
+                                child: TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
+                                    finished();
                                   },
-                                  child: Center(
-                                    child: Text(
-                                      'Close',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  )),
+                                  child: Text(
+                                    'Ⓧ Close',
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         );
@@ -94,21 +133,25 @@ class HashtagsPage extends StatelessWidget {
                     );
                   },
                   child: Card(
-                    color: getRandomColor(uniqueSubtitles[index]),
+                    color: getRandomColor(uniqueSubtitles[index], 50),
                     child: Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            textAlign: TextAlign.center,
-                            uniqueSubtitles[index],
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Text(
+                              textAlign: TextAlign.center,
+                              uniqueSubtitles[index],
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
                             ),
                           ),
                           Text(
+                            textAlign: TextAlign.center,
                             subTitleCount[index].toString(),
                             style: TextStyle(
                               color: Colors.white,
@@ -131,5 +174,9 @@ class HashtagsPage extends StatelessWidget {
         }
       },
     );
+  }
+
+  void finished() {
+    runApp(MyApp());
   }
 }

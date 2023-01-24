@@ -24,7 +24,7 @@ class _TaskCardState extends State<TaskCard> {
     return Card(
       shadowColor: Colors.black,
       elevation: 3,
-      color: getRandomColor(widget.date),
+      color: getRandomColor(widget.date, 50),
       child: ListTile(
         visualDensity: VisualDensity(horizontal: 0, vertical: -4),
         title: GestureDetector(
@@ -105,15 +105,10 @@ class _TaskCardState extends State<TaskCard> {
           );
         });
   }
-
-  void addSubTask(BuildContext context) {
-    FocusScope.of(context).unfocus();
-    todoApp.addSubTask(widget.id, widget.description);
-  }
 }
 
-Color getRandomColor(String date) {
-  return darken(Colors.accents[date.hashCode % Colors.accents.length], 50);
+Color getRandomColor(String date, int darkAmt) {
+  return darken(Colors.accents[date.hashCode % Colors.accents.length], darkAmt);
 }
 
 Color darken(Color c, [int percent = 10]) {

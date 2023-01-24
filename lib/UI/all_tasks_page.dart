@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'Header.dart';
 import 'TaskView.dart';
 
 class AllTasksPage extends StatefulWidget {
@@ -26,22 +27,27 @@ class _AllTasksPageState extends State<AllTasksPage> {
         )
         .orderBy('date', descending: false);
 
-    return Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF73ADAD),
-              Color(0xFF9799F9),
-              Color(0xFF986291),
-            ],
-          ),
-        ),
-        child: TaskView(
-          db: db,
-          user: user,
-          query: query,
-        ));
+    return Stack(
+      children: [
+        Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFF73ADAD),
+                  Color(0xFF9799F9),
+                  Color(0xFF986291),
+                ],
+              ),
+            ),
+            child: TaskView(
+              db: db,
+              user: user,
+              query: query,
+            )),
+        Header(),
+      ],
+    );
   }
 }

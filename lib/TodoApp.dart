@@ -57,6 +57,19 @@ class TodoApp with ChangeNotifier {
     notifyListeners();
   }
 
+  void createOrUpdateSubtitleCount(String uniqueSubtitle, int count) {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+    _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('subtitleCount')
+        .doc(uniqueSubtitle)
+        .set({'count': count});
+  }
+
   void updateTask(TaskCard task) {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -72,25 +85,6 @@ class TodoApp with ChangeNotifier {
       'isToday': task.isToday,
       'description': task.description,
       'hashtag': getHashtag(task.description),
-    });
-  }
-
-  Future<List<Task>> getTasks(index) {
-    var user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      throw StateError('Not logged in');
-    }
-    return _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('tasks')
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        print(doc["description"]);
-        tasks.add(Task.fromFirestore(doc));
-      });
-      return tasks;
     });
   }
 
@@ -128,8 +122,6 @@ class TodoApp with ChangeNotifier {
         doc.reference.delete();
       });
     });
-
-
   }
 
   getHashtag(String description) {
@@ -140,47 +132,5 @@ class TodoApp with ChangeNotifier {
     } else {
       return "#default";
     }
-  }
-
-  void addSubTask(String description, String id) {
-    var user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      throw StateError('Not logged in');
-    }
-    _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('tasks')
-        .doc(id)
-        .collection('subtask')
-        .add({
-      'description': description,
-      'completed': false,
-      'isToday': false,
-      'hashtag': getHashtag(description),
-      'date': DateTime.now(),
-    });
-  }
-
-  int getHashtagCount(String tag) {
-
-    var user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      throw StateError('Not logged in');
-    }
-    int count = 0;
-    _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('tasks')
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        if (doc['hashtag'] == tag) {
-          count++;
-        }
-      });
-    });
-    return count;
   }
 }
