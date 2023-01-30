@@ -76,30 +76,34 @@ class _TaskCardState extends State<TaskCard> {
         builder: (BuildContext context) {
           return Stack(
             children: [
-              AlertDialog(
-                title: Text('Edit Task'),
-                content: TextField(
-                  maxLines: 8,
-                  controller: TextEditingController(text: widget.description),
-                  onChanged: (String value) {
-                    widget.description = value;
-                  },
+              Container(
+                width: MediaQuery.of(context).size.width * .9,
+                child: AlertDialog(
+                  backgroundColor: getRandomColor(widget.date, 50),
+                  title: Text('Edit Task'),
+                  content: TextField(
+                    maxLines: 8,
+                    controller: TextEditingController(text: widget.description),
+                    onChanged: (String value) {
+                      widget.description = value;
+                    },
+                  ),
+                  actions: [
+                    TextButton(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: Text('Save'),
+                      onPressed: () {
+                        todoApp.updateTask(widget);
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
                 ),
-                actions: [
-                  TextButton(
-                    child: Text('Cancel'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  TextButton(
-                    child: Text('Save'),
-                    onPressed: () {
-                      todoApp.updateTask(widget);
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
               ),
             ],
           );

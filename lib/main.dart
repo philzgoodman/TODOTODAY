@@ -77,14 +77,25 @@ class _MainPageState extends State<MainPage> {
             Scaffold(
               resizeToAvoidBottomInset: true,
               appBar: AppBar(
+
                 shadowColor: Colors.black87,
                 elevation: 6,
                 bottom: TabBar(
+                  labelStyle: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                  ),
                   enableFeedback: true,
                   tabs: [
-                    Tab(icon: Icon(Icons.all_inbox, color: Colors.redAccent)),
-                    Tab(icon: Icon(Icons.sunny, color: Color(0xFFFFBD64))),
-                    Tab(icon: Icon(Icons.tag, color: Colors.blue)),
+                    Tab(
+                        icon: Icon(Icons.all_inbox, color: Colors.redAccent),
+                        text: 'BACKLOG'),
+                    Tab(
+                        icon: Icon(Icons.sunny, color: Color(0xFFFFBD64)),
+                        text: 'TODO TODAY'),
+                    Tab(
+                        icon: Icon(Icons.tag, color: Colors.blue),
+                        text: 'TAGS'),
                   ],
                 ),
                 toolbarHeight: 0,
