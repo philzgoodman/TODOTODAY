@@ -17,7 +17,9 @@ class TodayTaskPage extends StatelessWidget {
         .doc(user?.uid)
         .collection('tasks')
         .where('isToday', isEqualTo: true)
-        .where('completed', isEqualTo: false);
+        .where('completed', isEqualTo: false)
+        .orderBy('date', descending: false);
+
 
     return Stack(
       children: [

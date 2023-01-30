@@ -34,24 +34,41 @@ class TaskView extends StatelessWidget {
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     DocumentSnapshot task = snapshot.data!.docs[index];
-                     if (index != snapshot.data!.docs.length - 1)
-                    return TaskCard(
-                        task['description'],
-                        task['isToday'],
-                        task['completed'],
-                        task.id,
-                        task['hashtag'],
-                        task['date'].toString());
+                    if (index != snapshot.data!.docs.length - 1) {
+                      return TaskCard(
+                          task['description'],
+                          task['isToday'],
+                          task['completed'],
+                          task.id,
+                          task['hashtag'],
+                          task['date'].toString());
+                    } else {
+                      return
 
-                    return SizedBox(
-                      height: 300,
-                      child: Opacity(
-                        opacity: 0.4,
+                       Column(
+                         children: [
+                           TaskCard(
+                              task['description'],
+                              task['isToday'],
+                              task['completed'],
+                              task.id,
+                              task['hashtag'],
+                              task['date'].toString()),
 
-                          child: DonePage()),
-                    );
-                  },
+                    SizedBox(
+                    height: 300,
+                    child: Opacity(
+                    opacity: 0.4,
 
+                    child: DonePage()),
+                    ),
+                         ],
+                       );
+
+
+
+                    }
+                  }
                 );
               }
               return Center(child: CircularProgressIndicator());

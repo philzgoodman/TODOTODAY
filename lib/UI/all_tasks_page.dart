@@ -26,7 +26,6 @@ class _AllTasksPageState extends State<AllTasksPage> {
           isEqualTo: false,
         )
         .orderBy('date', descending: false);
-
     return Stack(
       children: [
         Container(

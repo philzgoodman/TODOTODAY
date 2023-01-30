@@ -14,8 +14,8 @@ class DonePage extends StatelessWidget {
         .doc(user?.uid)
         .collection('tasks')
         .where('completed', isEqualTo: true)
-        .limit(5)
-        .orderBy('date', descending: false);
+        .limit(7)
+        .orderBy('date', descending: true);
 
     return Stack(
       children: [
