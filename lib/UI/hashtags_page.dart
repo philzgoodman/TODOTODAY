@@ -13,6 +13,10 @@ import '../global.dart';
 class HashtagsPage extends StatelessWidget {
   HashtagsPage({super.key});
 
+
+
+
+
   @override
   Widget build(BuildContext context) {
     final db = FirebaseFirestore.instance;
@@ -21,6 +25,9 @@ class HashtagsPage extends StatelessWidget {
     List<String> uniqueSubtitles = [];
 
     Query query = db.collection('users').doc(user?.uid).collection('tasks');
+
+    finished();
+
     return StreamBuilder<QuerySnapshot>(
       stream: query.snapshots(),
       builder: (context, snapshot) {
@@ -118,7 +125,6 @@ class HashtagsPage extends StatelessWidget {
                                 child: TextButton(
                                   onPressed: () {
                                     Navigator.pop(context);
-                                    finished();
                                   },
                                   child: Text(
                                     'Ⓧ Close',
