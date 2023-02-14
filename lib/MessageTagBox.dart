@@ -70,6 +70,7 @@ class _MessageBoxState extends State<MessageTagBox> {
 
   void addNewTask(BuildContext context) {
     todoApp.createTaskWithHashtag(txt.text, widget.tag);
+
     txt.clear();
     setState(() {});
   }

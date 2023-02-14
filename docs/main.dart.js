@@ -23368,21 +23368,15 @@ yk:function yk(a){this.a=a},
 a1x:function a1x(){},
 a1w:function a1w(a){this.a=a},
 KE:function KE(a){this.a=a},
-a4X:function a4X(a,b,c){this.a=a
+a4X:function a4X(a,b){this.a=a
+this.b=b},
+a4W:function a4W(a){this.a=a},
+a4V:function a4V(a,b,c){this.a=a
 this.b=b
 this.c=c},
-a4W:function a4W(a,b){this.a=a
+a4U:function a4U(a,b){this.a=a
 this.b=b},
-a4V:function a4V(a,b,c,d){var _=this
-_.a=a
-_.b=b
-_.c=c
-_.d=d},
-a4U:function a4U(a,b,c){this.a=a
-this.b=b
-this.c=c},
-a4T:function a4T(a,b){this.a=a
-this.b=b},
+a4T:function a4T(a){this.a=a},
 Pr:function Pr(a){this.a=a},
 Y7(){var s=0,r=A.V(t.H)
 var $async$Y7=A.W(function(a,b){if(a===1)return A.S(b,r)
@@ -78969,23 +78963,25 @@ q=s.a
 return A.afT(A.cq(r,q),A.cq(p.bO(0,"isToday"),q),A.cq(p.bO(0,"completed"),q),B.b.gU(p.b.a),A.cq(p.bO(0,"hashtag"),q),J.cY(A.cq(p.bO(0,"date"),q)))},
 $S:171}
 A.KE.prototype={
-G(a){var s,r,q,p,o="[DEFAULT]",n={},m=$.al,l=(m==null?$.al=$.br():m).bo(0,o)
-m=$.bC()
-A.aP(l,m,!0)
-s=A.t6(new A.ba(l))
+G(a){var s,r,q,p,o,n="[DEFAULT]",m={},l=$.al,k=(l==null?$.al=$.br():l).bo(0,n)
+l=$.bC()
+A.aP(k,l,!0)
+s=A.t6(new A.ba(k))
 r=$.al
-l=(r==null?$.al=$.br():r).bo(0,o)
-A.aP(l,m,!0)
-m=A.cQ(new A.ba(l))
-q=m.gbQ(m)
-m=t.s
-p=A.a([],m)
-n.a=A.a([],m)
-m=A.kc(s,s.gcr().cL("users"))
-return A.afs(new A.a4X(n,this,p),m.d3(0,q==null?null:q.a.c.h(0,"uid")).cL("tasks").uq(),t.l7)}}
+k=(r==null?$.al=$.br():r).bo(0,n)
+A.aP(k,l,!0)
+l=A.cQ(new A.ba(k))
+q=l.gbQ(l)
+l=t.s
+p=A.a([],l)
+m.a=A.a([],l)
+l=A.kc(s,s.gcr().cL("users"))
+o=l.d3(0,q==null?null:q.a.c.h(0,"uid")).cL("tasks")
+A.auc(new A.jA(null))
+return A.afs(new A.a4X(m,p),o.uq(),t.l7)}}
 A.a4X.prototype={
 $2(a,a0){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d=null,c="[DEFAULT]",b=a0.b
-if(b!=null){for(s=J.aE(b),r=this.c,q=0;q<s.ghs(b).length;++q){p=s.ghs(b)[q]
+if(b!=null){for(s=J.aE(b),r=this.b,q=0;q<s.ghs(b).length;++q){p=s.ghs(b)[q]
 r.push(A.cq(p.b.bO(0,"hashtag"),p.a))}b=A.mM(r,A.ac(r).c)
 s=this.a
 s.a=A.af(b,!0,A.j(b).c)
@@ -79035,30 +79031,28 @@ g.toString
 m.mj(0,g,d)
 $.aug.push(B.f.j(l))}b=!0
 b=b?B.h_:d
-return new A.KD(B.zN,new A.OC(new A.a4W(s,this.b),m,!0,!0,!0,d),d,B.am,!1,d,d,b,d,!0,d,0,d,m,B.U,B.lu,d,B.T,d)}else{B.b.a_($.aug)
+return new A.KD(B.zN,new A.OC(new A.a4W(s),m,!0,!0,!0,d),d,B.am,!1,d,d,b,d,!0,d,0,d,m,B.U,B.lu,d,B.T,d)}else{B.b.a_($.aug)
 return A.cZ(A.I8(4,d),d,d)}},
 $S:61}
 A.a4W.prototype={
 $2(a,b){var s=null,r=this.a,q=A.Y5(r.a[b],50)
-return A.cZ(A.tt(!1,s,!0,A.avz(A.cZ(A.eO(A.a([new A.bq(B.hC,A.bS(r.a[b],s,s,s,s,A.e5(s,s,B.k,s,s,s,s,s,s,s,s,20,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),B.bl,s),s),A.bS($.aug[b],s,s,s,s,A.e5(s,s,B.k,s,s,s,s,s,s,s,s,20,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),B.bl,s)],t.p),B.W,B.cT,B.a7),s,s),q,s,s),s,!0,s,s,s,s,s,s,s,s,s,new A.a4V(r,this.b,a,b),s,s,s,s,s),s,s)},
+return A.cZ(A.tt(!1,s,!0,A.avz(A.cZ(A.eO(A.a([new A.bq(B.hC,A.bS(r.a[b],s,s,s,s,A.e5(s,s,B.k,s,s,s,s,s,s,s,s,20,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),B.bl,s),s),A.bS($.aug[b],s,s,s,s,A.e5(s,s,B.k,s,s,s,s,s,s,s,s,20,s,s,s,s,s,!0,s,s,s,s,s,s,s,s),B.bl,s)],t.p),B.W,B.cT,B.a7),s,s),q,s,s),s,!0,s,s,s,s,s,s,s,s,s,new A.a4V(r,a,b),s,s,s,s,s),s,s)},
 $S:118}
 A.a4V.prototype={
-$0(){var s=this
-A.auf(new A.a4U(s.a,s.b,s.d),s.c,t.z)},
+$0(){A.auf(new A.a4U(this.a,this.c),this.b,t.z)},
 $S:0}
 A.a4U.prototype={
-$1(a){var s,r=null,q=this.a,p=this.c,o=A.Y5(q.a[p],70),n=t.w,m=a.N(n).f,l=a.N(n).f,k=a.N(n).f
+$1(a){var s,r=null,q=this.a,p=this.b,o=A.Y5(q.a[p],70),n=t.w,m=a.N(n).f,l=a.N(n).f,k=a.N(n).f
 k=A.dp(A.cZ(new A.bq(B.Eo,A.bS(q.a[p],r,r,r,r,A.e5(r,r,B.k,r,r,r,r,r,r,r,r,12,r,r,B.ca,r,r,!0,r,r,r,r,r,r,r,r),B.bl,r),r),r,r),k.a.b*0.1,r)
 s=a.N(n).f
 n=a.N(n).f
 p=q.a[p]
 q=t.p
 m=A.dp(A.d_(r,A.e1(B.a4,A.a([new A.eu(B.mA,r,r,k,r),new A.bq(B.Et,A.dp(new A.Cv(p,r),n.a.b*0.95,s.a.a*0.9),r),A.ub(0,new A.bq(B.Eu,new A.A1(p,$.ad(),r),r),r,r,r,r,r,r)],q),B.a8),r,r,r,l.a.b,r,r,r),r,m.a.a*0.9)
-return A.aro(A.a([new A.bq(B.EA,A.cZ(A.afW(!1,A.bS("\u24cd Close",r,r,r,r,r,B.bl,r),B.r,r,r,r,r,r,new A.a4T(this.b,a),r),r,r),r)],q),o,m,B.L,0,B.L,r)},
+return A.aro(A.a([new A.bq(B.EA,A.cZ(A.afW(!1,A.bS("\u24cd Close",r,r,r,r,r,B.bl,r),B.r,r,r,r,r,r,new A.a4T(a),r),r,r),r)],q),o,m,B.L,0,B.L,r)},
 $S:148}
 A.a4T.prototype={
-$0(){A.d2(this.b,!1).tA(null)
-A.auc(new A.jA(null))},
+$0(){A.d2(this.a,!1).tA(null)},
 $S:0}
 A.Pr.prototype={
 G(a){var s,r,q,p=null,o="[DEFAULT]",n=$.al,m=(n==null?$.al=$.br():n).bo(0,o)
