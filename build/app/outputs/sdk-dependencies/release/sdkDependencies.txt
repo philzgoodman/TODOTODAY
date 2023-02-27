@@ -1059,11 +1059,11 @@ library {
 library {
   maven_library {
     groupId: "io.flutter"
-    artifactId: "arm64_v8a_release"
+    artifactId: "x86_64_release"
     version: "1.0.0-3316dd8728419ad3534e3f6112aa6291f587078a"
   }
   digests {
-    sha256: "\261O\336y\vY\247\f\260V\375w\2257\254\234.\024\024\246_\343\362\303\306#\230\257#\276\001\376"
+    sha256: "Gowf\276\005j*\320-\207}n\003\027\017\247\257\337t=\277\271S\227\320\2216\034\a\352\347"
   }
   repo_index {
     value: 2
@@ -1083,7 +1083,7 @@ library {
 }
 library {
   digests {
-    sha256: "\344\033\004\027\333\251]\361hr+]\206y\3443\211|\343+\323\376_-Q\021S\r\373|\352\261"
+    sha256: "l\277|\276jw:\213?\350\024D\r\\\260\330@8\247\341J\t\342$\374\314Z\252\306i\235\246"
   }
 }
 library_dependencies {

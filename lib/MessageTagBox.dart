@@ -23,7 +23,7 @@ class _MessageBoxState extends State<MessageTagBox> {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [ 
+      children: [
         Transform.translate(
           offset: Offset(5, 0),
           child: Container(
