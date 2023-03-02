@@ -26,7 +26,6 @@ class HashtagsPage extends StatelessWidget {
 
     Query query = db.collection('users').doc(user?.uid).collection('tasks');
 
-    finished();
 
     return StreamBuilder<QuerySnapshot>(
       stream: query.snapshots(),
@@ -37,16 +36,7 @@ class HashtagsPage extends StatelessWidget {
             subtitles.add(task['hashtag']);
           }
           uniqueSubtitles = subtitles.toSet().toList();
-          for (int i = 0; i < uniqueSubtitles.length; i++) {
-            int count = 0;
-            for (int j = 0; j < subtitles.length; j++) {
-              if (uniqueSubtitles[i] == subtitles[j]) {
-                count++;
-              }
-            }
-            TodoApp().createOrUpdateSubtitleCount(uniqueSubtitles[i], count);
-            subTitleCount.add(count.toString());
-          }
+
 
           return GridView.builder(
             shrinkWrap: true,
@@ -118,6 +108,8 @@ class HashtagsPage extends StatelessWidget {
                             ),
                           ),
                           actions: [
+
+
                             Padding(
                               padding:
                                   const EdgeInsets.only(bottom: 58.0, left: 30),
@@ -126,6 +118,7 @@ class HashtagsPage extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
+
                                   child: Text(
                                     'Ⓧ Close',
                                     textAlign: TextAlign.center,
@@ -136,7 +129,9 @@ class HashtagsPage extends StatelessWidget {
                           ],
                         );
                       },
-                    );
+                    ).then((val){
+                      finished();
+                    });;
                   },
                   child: Card(
                     color: getRandomColor(uniqueSubtitles[index], 50),
@@ -158,7 +153,11 @@ class HashtagsPage extends StatelessWidget {
                           ),
                           Text(
                             textAlign: TextAlign.center,
-                            subTitleCount[index].toString(),
+                            subtitles
+                                .where((element) =>
+                                    element == uniqueSubtitles[index])
+                                .length
+                                .toString(),
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,

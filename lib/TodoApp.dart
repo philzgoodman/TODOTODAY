@@ -57,18 +57,6 @@ class TodoApp with ChangeNotifier {
     notifyListeners();
   }
 
-  void createOrUpdateSubtitleCount(String uniqueSubtitle, int count) {
-    var user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      throw StateError('Not logged in');
-    }
-    _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('subtitleCount')
-        .doc(uniqueSubtitle)
-        .set({'count': count});
-  }
 
   void updateTask(TaskCard task) {
     var user = FirebaseAuth.instance.currentUser;
