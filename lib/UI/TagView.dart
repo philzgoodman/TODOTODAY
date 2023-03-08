@@ -25,27 +25,31 @@ class _TagViewState extends State<TagView> {
         .collection('tasks')
         .where('hashtag', isEqualTo: widget.tag);
 
-    return StreamBuilder<QuerySnapshot>(
-      stream: query.snapshots(),
-      // db.collection('users').doc(user?.uid).collection('tasks').snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) {
-              DocumentSnapshot task = snapshot.data!.docs[index];
-              return TaskCard(
-                  task['description'],
-                  task['isToday'],
-                  task['completed'],
-                  task.id,
-                  task['hashtag'],
-                  task['date'].toString());
-            },
-          );
-        }
-        return Center(child: CircularProgressIndicator());
-      },
+    return
+           StreamBuilder<QuerySnapshot>(
+          stream: query.snapshots(),
+          // db.collection('users').doc(user?.uid).collection('tasks').snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                itemCount: snapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  DocumentSnapshot task = snapshot.data!.docs[index];
+                  return TaskCard(
+                      task['description'],
+                      task['isToday'],
+                      task['completed'],
+                      task.id,
+                      task['hashtag'],
+                      task['date'].toString());
+                },
+              );
+            }
+            return Center(child: CircularProgressIndicator());
+          },
+
     );
   }
+
+
 }
