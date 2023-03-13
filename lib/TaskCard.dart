@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todotoday/main.dart';
 import 'global.dart';
 
 class TaskCard extends StatefulWidget {
@@ -77,10 +78,9 @@ class _TaskCardState extends State<TaskCard> {
           return Stack(
             children: [
               Container(
-                width: MediaQuery.of(context).size.width * .9,
                 child: AlertDialog(
-                  backgroundColor: getRandomColor(widget.date, 50),
                   title: Text('Edit Task'),
+                  backgroundColor: getRandomColor(widget.date, 50),
                   content: TextField(
                     maxLines: 8,
                     controller: TextEditingController(text: widget.description),
@@ -89,16 +89,20 @@ class _TaskCardState extends State<TaskCard> {
                     },
                   ),
                   actions: [
-                    TextButton(
-                      child: Text('Cancel'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        style: TextStyle(color: Colors.blue),
+                        maxLines: 1,
+                        controller: TextEditingController(text: widget.hashtag),
+                        onChanged: (String value) {
+                          widget.hashtag = value.toString();
+                        },
+                      ),
                     ),
-                    TextButton(
-                      child: Text('Save'),
+                    IconButton(
+                      icon: Icon(Icons.close),
                       onPressed: () {
-                        todoApp.updateTask(widget);
                         Navigator.of(context).pop();
                       },
                     ),
@@ -107,7 +111,11 @@ class _TaskCardState extends State<TaskCard> {
               ),
             ],
           );
-        });
+        }).then((val) {
+      todoApp.updateTask(widget);
+      runApp(MyApp());
+    });
+    ;
   }
 }
 

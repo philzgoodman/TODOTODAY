@@ -49,14 +49,13 @@ class TodoApp with ChangeNotifier {
       'description': description,
       'completed': false,
       'isToday': false,
-      'hashtag': getHashtag(description + hashtag),
+      'hashtag': hashtag,
       'date': DateTime.now().toString(),
     });
 
     print("Stored to Firestore");
     notifyListeners();
   }
-
 
   void updateTask(TaskCard task) {
     var user = FirebaseAuth.instance.currentUser;
@@ -72,7 +71,7 @@ class TodoApp with ChangeNotifier {
       'completed': task.completed,
       'isToday': task.isToday,
       'description': task.description,
-      'hashtag': getHashtag(task.description),
+      'hashtag': task.hashtag,
     });
   }
 
@@ -115,7 +114,7 @@ class TodoApp with ChangeNotifier {
   getHashtag(String description) {
     if (description.contains("#")) {
       var hashtag = description.split("#");
-      var hashtag2 = hashtag[1].split(" ");
+      var hashtag2 = hashtag[1].split("");
       return '#${hashtag2[0]}';
     } else {
       return "#default";

@@ -27,8 +27,10 @@ class HashtagsPage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           for (int i = 0; i < snapshot.data!.docs.length; i++) {
-            DocumentSnapshot task = snapshot.data!.docs[i];
-            subtitles.add(task['hashtag']);
+            if (snapshot.data!.docs[i]['hashtag'] != null) {
+              subtitles.add(snapshot.data!.docs[i]['hashtag']);
+            }
+
           }
           uniqueSubtitles = subtitles.toSet().toList();
 
@@ -62,8 +64,6 @@ class HashtagsPage extends StatelessWidget {
                               height: MediaQuery.of(context).size.height * 1,
                               child: Stack(
                                 children: [
-
-
                                   Column(
                                     children: [
                                       Align(
@@ -75,36 +75,33 @@ class HashtagsPage extends StatelessWidget {
                                               .06,
                                           child: Center(
                                             child: Text(
-                                              uniqueSubtitles[index]
-                                                  .toString(),
+                                              uniqueSubtitles[index].toString(),
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   color: Colors.blue,
                                                   fontSize: 13,
-                                                  fontWeight:
-                                                      FontWeight.bold),
+                                                  fontWeight: FontWeight.bold),
                                             ),
                                           ),
                                         ),
                                       ),
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           TextButton(
                                             style: TextButton.styleFrom(
                                               backgroundColor: Colors.blue,
                                             ),
-
                                             onPressed: () {
                                               duplicateTaskTodoToday(
                                                   uniqueSubtitles[index]);
                                             },
-
-                                            child: Text(
-                                              'COPY LIST TO TODAY',
-                                              style: TextStyle(
-                                                  color: Colors.white,fontSize:9,)
-                                            ),
+                                            child: Text('COPY LIST TO TODAY',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 9,
+                                                )),
                                           ),
                                           SizedBox(
                                             width: 30,
@@ -117,65 +114,74 @@ class HashtagsPage extends StatelessWidget {
                                               deleteTagGroup(
                                                   uniqueSubtitles[index]);
                                             },
-                                            child: Text(
-                                              'DELETE TAG GROUP',
-                                              style: TextStyle(
-                                                color: Colors.white,fontSize:9,)
-                                            ),
+                                            child: Text('DELETE TAG GROUP',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 9,
+                                                )),
                                           ),
                                         ],
                                       ),
-                              Padding(
-                                padding: const EdgeInsets.only(top:8.0),
-                                child: Transform.translate(
-                                  offset: const Offset(0, -6),
-                                  child: Container(
-                                    color: Color(0x54000000),
-                                    height: 38,
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(top: 2.0),
-                                        child: ListTile(
-                                          title: Text("DESCRIPTION",
-                                              style: TextStyle(
-                                                fontSize: 9,
-                                              )),
-                                          visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                                          trailing: Wrap(
-                                            crossAxisAlignment: WrapCrossAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                width: 56,
-                                                child: Text("DONE",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: 9,
-                                                    )),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 8.0),
+                                        child: Transform.translate(
+                                          offset: const Offset(0, -6),
+                                          child: Container(
+                                            color: Color(0x54000000),
+                                            height: 38,
+                                            child: Center(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 2.0),
+                                                child: ListTile(
+                                                  title: Text("DESCRIPTION",
+                                                      style: TextStyle(
+                                                        fontSize: 9,
+                                                      )),
+                                                  visualDensity: VisualDensity(
+                                                      horizontal: 0,
+                                                      vertical: -4),
+                                                  trailing: Wrap(
+                                                    crossAxisAlignment:
+                                                        WrapCrossAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 56,
+                                                        child: Text("DONE",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                              fontSize: 9,
+                                                            )),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 56,
+                                                        child: Text("DELETE",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                              fontSize: 9,
+                                                            )),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 56,
+                                                        child: Text("TODAY",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                              fontSize: 9,
+                                                            )),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
-                                              SizedBox(
-                                                width: 56,
-                                                child: Text("DELETE",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: 9,
-                                                    )),
-                                              ),
-                                              SizedBox(
-                                                width: 56,
-                                                child: Text("TODAY",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: 9,
-                                                    )),
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                              ),
                                     ],
                                   ),
                                   Padding(
@@ -237,11 +243,13 @@ class HashtagsPage extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 8.0),
                             child: Text(
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
                               textAlign: TextAlign.center,
                               uniqueSubtitles[index],
                               style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
+                                color: Colors.blue,
+                                fontSize: 14,
                               ),
                             ),
                           ),
@@ -254,7 +262,7 @@ class HashtagsPage extends StatelessWidget {
                                 .toString(),
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: 18,
                             ),
                           ),
                         ],

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:todotoday/UI/Header.dart';
 import 'package:todotoday/UI/done.dart';
 
 import '../TaskCard.dart';
@@ -31,45 +30,36 @@ class TaskView extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot task = snapshot.data!.docs[index];
-                    if (index != snapshot.data!.docs.length - 1) {
-                      return TaskCard(
-                          task['description'],
-                          task['isToday'],
-                          task['completed'],
-                          task.id,
-                          task['hashtag'],
-                          task['date'].toString());
-                    } else {
-                      return
-
-                       Column(
-                         children: [
-                           TaskCard(
-                              task['description'],
-                              task['isToday'],
-                              task['completed'],
-                              task.id,
-                              task['hashtag'],
-                              task['date'].toString()),
-
-                    SizedBox(
-                    height: 300,
-                    child: Opacity(
-                    opacity: 0.4,
-
-                    child: DonePage()),
-                    ),
-                         ],
-                       );
-
-
-
-                    }
-                  }
-                );
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      DocumentSnapshot task = snapshot.data!.docs[index];
+                      if ((index != snapshot.data!.docs.length - 1) &&
+                          (snapshot.data!.docs[index]['hashtag'] != null)) {
+                        return TaskCard(
+                            task['description'],
+                            task['isToday'],
+                            task['completed'],
+                            task.id,
+                            task['hashtag'],
+                            task['date'].toString());
+                      } else {
+                        return Column(
+                          children: [
+                            TaskCard(
+                                task['description'],
+                                task['isToday'],
+                                task['completed'],
+                                task.id,
+                                task['hashtag'].toString(),
+                                task['date'].toString()),
+                            SizedBox(
+                              height: 300,
+                              child: Opacity(opacity: 0.4, child: DonePage()),
+                            ),
+                          ],
+                        );
+                      }
+                    });
               }
               return Center(child: CircularProgressIndicator());
             },
