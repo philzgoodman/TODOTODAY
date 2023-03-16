@@ -75,6 +75,9 @@ class TodoApp with ChangeNotifier {
     });
   }
 
+
+
+
   void initializeTasks() {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -93,7 +96,7 @@ class TodoApp with ChangeNotifier {
     });
   }
 
-  void deleteTask(String timeStamp) {
+  void deleteTask(String id) {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       throw StateError('Not logged in');
@@ -102,7 +105,7 @@ class TodoApp with ChangeNotifier {
         .collection('users')
         .doc(user.uid)
         .collection('tasks')
-        .where('date', isEqualTo: timeStamp)
+        .where('id', isEqualTo: id)
         .get()
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
@@ -119,5 +122,18 @@ class TodoApp with ChangeNotifier {
     } else {
       return "#default";
     }
+  }
+
+  static void deleteTaskByFirebaseId(String id) {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('tasks')
+        .doc(id)
+        .delete();
   }
 }

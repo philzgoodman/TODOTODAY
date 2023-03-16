@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todotoday/TodoApp.dart';
 import 'package:todotoday/main.dart';
+import 'UI/TagView.dart';
 import 'global.dart';
 
 class TaskCard extends StatefulWidget {
@@ -32,8 +34,15 @@ class _TaskCardState extends State<TaskCard> {
             onTap: () {
               showEditDialog();
             },
-            child: Text(widget.description)),
-        subtitle: Text(widget.hashtag, style: TextStyle(color: Colors.blue)),
+            child: Text(widget.description,
+                style: TextStyle(
+                    fontSize: 14,))
+        ),
+        subtitle: GestureDetector(
+            onTap: () {
+              openAlertDialogThatShowsTasksContainingThisTag(widget.hashtag);
+            },
+            child: Text(widget.hashtag, style: TextStyle(color: Colors.blue))),
         trailing: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
@@ -50,7 +59,7 @@ class _TaskCardState extends State<TaskCard> {
               icon: Icon(Icons.delete),
               onPressed: () {
                 setState(() {
-                  todoApp.deleteTask(widget.date);
+                  TodoApp.deleteTaskByFirebaseId(widget.id);
                 });
               },
             ),
@@ -117,13 +126,48 @@ class _TaskCardState extends State<TaskCard> {
     });
     ;
   }
+
+  void openAlertDialogThatShowsTasksContainingThisTag(String hashtag) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            insetPadding: EdgeInsets.zero,
+            contentPadding: EdgeInsets.zero,
+            actions: [
+              Padding(
+                padding:
+                const EdgeInsets.only(bottom: 28.0, left: 30),
+                child: Center(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'Ⓧ Close',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+            title: Text('Tasks with hashtag: $hashtag'),
+            content: Container(
+              width:MediaQuery.of(context).size.width * .9,
+              child: TagView(
+                tag: hashtag,
+              ),
+            ),
+          );
+        });
+  }
 }
 
 Color getRandomColor(String date, int darkAmt) {
   return darken(Colors.accents[date.hashCode % Colors.accents.length], darkAmt);
 }
 
-Color darken(Color c, [int percent = 10]) {
+Color darken(Color c, [int percent = 8]) {
   assert(1 <= percent && percent <= 100);
   var f = 1 - percent / 100;
   return Color.fromARGB(c.alpha, (c.red * f).round(), (c.green * f).round(),

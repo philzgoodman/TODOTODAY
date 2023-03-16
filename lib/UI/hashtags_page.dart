@@ -1,13 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:todotoday/MessageBox.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todotoday/MessageTagBox.dart';
 import 'package:todotoday/UI/TagView.dart';
 import 'package:todotoday/main.dart';
-
 import '../TaskCard.dart';
-import '../TodoApp.dart';
 import '../global.dart';
 
 class HashtagsPage extends StatelessWidget {
@@ -15,6 +13,7 @@ class HashtagsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final db = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser;
     List<String> subtitles = [];
@@ -288,6 +287,9 @@ class HashtagsPage extends StatelessWidget {
   }
 
   void duplicateTaskTodoToday(String tag) {
+
+
+
     final db = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser;
     Query query = db
@@ -303,12 +305,16 @@ class HashtagsPage extends StatelessWidget {
           'description': task['description'],
           'isToday': true,
           'completed': false,
-          'hashtag': task['hashtag'],
-          'date': DateTime.now(),
+          'hashtag': '#default',
+          'date': DateTime.now().add(Duration(seconds: i)).toString(),
         });
       }
     });
+
+  showToast('Copied tasks to do today. Note: Hashtag of new tasks are set to #default.');
+
   }
+
 
   void deleteTagGroup(String uniqueSubtitle) {
     final db = FirebaseFirestore.instance;
@@ -331,4 +337,16 @@ class HashtagsPage extends StatelessWidget {
       }
     });
   }
+
+  void showToast(String s) {
+    Fluttertoast.showToast(
+        msg: s,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 16.0);
+  }
+
 }

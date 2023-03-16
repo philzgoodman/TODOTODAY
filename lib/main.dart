@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:todotoday/TodoApp.dart';
 import 'package:todotoday/UI/done.dart';
 import 'package:todotoday/UI/today_task_page.dart';
 import 'package:todotoday/UI/all_tasks_page.dart';
@@ -21,11 +22,13 @@ Future<void> main() async {
     EmailAuthProvider(),
   ]);
   runApp(MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     if (checkIfLoggedin()) {
       return MaterialApp(
         title: 'TodoToday',
@@ -37,6 +40,7 @@ class MyApp extends StatelessWidget {
             tertiary: Colors.red,
           ),
           fontFamily: 'JetBrainsMono',
+
         ),
         home: MainPage(),
       );
@@ -64,8 +68,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+
   @override
   Widget build(BuildContext context) {
+
     return DefaultTabController(
       length: 3,
       child: GestureDetector(
@@ -117,43 +123,44 @@ class _MainPageState extends State<MainPage> {
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: MessageBox(),
                   ),
+
                   Positioned(
                     bottom: 80,
                     right: 21,
                     child: Transform.scale(
                       scale: .6,
-                      child: FloatingActionButton(
-                        heroTag: 'settings',
-                        backgroundColor: Colors.grey,
-                        onPressed: () {},
-                        tooltip: 'Settings',
-                        child: const Icon(Icons.settings),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 80,
-                    right: 21,
-                    child: Transform.scale(
-                      scale: .6,
-                      child: FloatingActionButton(
-                        heroTag: 'done',
-                        backgroundColor: Colors.grey,
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                backgroundColor: Colors.transparent,
-                                insetPadding: EdgeInsets.zero,
-                                contentPadding: EdgeInsets.zero,
-                                content: DonePage(),
+                      child: Column(
+                        children: [
+                          FloatingActionButton(
+                            heroTag: 'settings',
+                            backgroundColor: Colors.grey,
+                            onPressed: () {showAlertDialogWithSettingsOptions(context);},
+                            tooltip: 'Settings',
+                            child: const Icon(Icons.settings),
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          FloatingActionButton(
+                            heroTag: 'done',
+                            backgroundColor: Colors.grey,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.transparent,
+                                    insetPadding: EdgeInsets.zero,
+                                    contentPadding: EdgeInsets.zero,
+                                    content: DonePage(),
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
-                        tooltip: 'DONE',
-                        child: const Icon(Icons.done),
+                            tooltip: 'DONE',
+                            child: const Icon(Icons.done),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -165,4 +172,50 @@ class _MainPageState extends State<MainPage> {
       ),
     );
   }
+
+  void showAlertDialogWithSettingsOptions(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          actions: [
+
+            IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+          backgroundColor: Colors.transparent,
+          insetPadding: EdgeInsets.zero,
+          contentPadding: EdgeInsets.zero,
+          content: Container(
+            decoration: BoxDecoration(
+              color: Colors.black87,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: Icon(Icons.logout, color: Colors.redAccent),
+                  title: Text('Logout', style: TextStyle(color: Colors.white)),
+                  onTap: () {
+                    logout();
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
+                ),
+
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void logout() {
+TodoApp().signOut();  }
 }
