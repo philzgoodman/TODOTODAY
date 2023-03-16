@@ -117,7 +117,7 @@ class TodoApp with ChangeNotifier {
   getHashtag(String description) {
     if (description.contains("#")) {
       var hashtag = description.split("#");
-      var hashtag2 = hashtag[1].split("");
+      var hashtag2 = hashtag[1].split(" ");
       return '#${hashtag2[0]}';
     } else {
       return "#default";

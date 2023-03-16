@@ -78982,7 +78982,7 @@ s=r.gbM(r)
 if(s==null)throw A.c(A.ao("Not logged in"))
 r=this.b
 A.i4(r,r.gcf().cc("users")).cN(0,s.a.c.h(0,"uid")).cc("tasks").nz(0).b_(0,new A.agU(this),t.P)},
-T2(a){if(B.c.C(a,"#"))return"#"+A.i(J.avs(a.split("#")[1],"")[0])
+T2(a){if(B.c.C(a,"#"))return"#"+A.i(J.avs(a.split("#")[1]," ")[0])
 else return"#default"},
 $ia9:1}
 A.agU.prototype={
