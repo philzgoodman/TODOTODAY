@@ -198,11 +198,8 @@ class HashtagsPage extends StatelessWidget {
                                   ),
                                   Positioned(
                                     bottom: 0,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 48.0),
-                                      child: MessageTagBox(
-                                          uniqueSubtitles[index], index),
-                                    ),
+                                    child: MessageTagBox(
+                                        uniqueSubtitles[index], index),
                                   ),
                                 ],
                               ),

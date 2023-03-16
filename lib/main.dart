@@ -119,10 +119,7 @@ class _MainPageState extends State<MainPage> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: MessageBox(),
-                  ),
+
 
                   Positioned(
                     bottom: 80,

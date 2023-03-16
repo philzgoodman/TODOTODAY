@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../MessageBox.dart';
 import 'Header.dart';
 import 'TaskView.dart';
 
@@ -46,6 +47,10 @@ class _AllTasksPageState extends State<AllTasksPage> {
               query: query,
             )),
         Header(),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: MessageBox(),
+        ),
       ],
     );
   }
