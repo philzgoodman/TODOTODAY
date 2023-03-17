@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import '../TaskCard.dart';
 import '../global.dart';
 import 'TaskView.dart';
+import 'done.dart';
+import 'doneTag.dart';
 
 class TagView extends StatefulWidget {
   String tag;
@@ -23,7 +25,11 @@ class _TagViewState extends State<TagView> {
         .collection('users')
         .doc(user?.uid)
         .collection('tasks')
-        .where('hashtag', isEqualTo: widget.tag);
+        .where('hashtag', isEqualTo: widget.tag)
+        .where('completed', isEqualTo: false)
+        .orderBy('date', descending: false);
+
+
 
     return StreamBuilder<QuerySnapshot>(
       stream: query.snapshots(),
@@ -31,18 +37,35 @@ class _TagViewState extends State<TagView> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) {
-              DocumentSnapshot task = snapshot.data!.docs[index];
-              return TaskCard(
-                  task['description'],
-                  task['isToday'],
-                  task['completed'],
-                  task.id,
-                  task['hashtag'],
-                  task['date'].toString());
-            },
-          );
+              itemCount: snapshot.data!.docs.length,
+              itemBuilder: (context, index) {
+                DocumentSnapshot task = snapshot.data!.docs[index];
+                if ((index != snapshot.data!.docs.length - 1) ) {
+                  return TaskCard(
+                      task['description'],
+                      task['isToday'],
+                      task['completed'],
+                      task.id,
+                      task['hashtag'],
+                      task['date'].toString());
+                } else {
+                  return Column(
+                    children: [
+                      TaskCard(
+                          task['description'],
+                          task['isToday'],
+                          task['completed'],
+                          task.id,
+                          task['hashtag'].toString(),
+                          task['date'].toString()),
+                      SizedBox(
+                        height: 300,
+                        child: Opacity(opacity: 0.4, child: DoneTagPage(tag: widget.tag.toString(),)),
+                      ),
+                    ],
+                  );
+                }
+              });
         }
         return Center(child: CircularProgressIndicator());
       },

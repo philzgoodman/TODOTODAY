@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:todotoday/UI/all_tasks_page.dart';
 import 'package:todotoday/UI/hashtags_page.dart';
 import 'LoginPage.dart';
 import 'MessageBox.dart';
+import 'TaskCard.dart';
 import 'UI/Header.dart';
 import 'firebase_options.dart';
 import 'global.dart';
@@ -21,14 +24,15 @@ Future<void> main() async {
   FirebaseUIAuth.configureProviders([
     EmailAuthProvider(),
   ]);
-  runApp(MyApp());
 
+  TodoApp.setSavedBackgroundColorsFromFirestore();
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     if (checkIfLoggedin()) {
       return MaterialApp(
         title: 'TodoToday',
@@ -40,7 +44,6 @@ class MyApp extends StatelessWidget {
             tertiary: Colors.red,
           ),
           fontFamily: 'JetBrainsMono',
-
         ),
         home: MainPage(),
       );
@@ -68,11 +71,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
   @override
   Widget build(BuildContext context) {
-
     return DefaultTabController(
+      initialIndex: 1,
       length: 3,
       child: GestureDetector(
         onTap: () {
@@ -83,7 +85,6 @@ class _MainPageState extends State<MainPage> {
             Scaffold(
               resizeToAvoidBottomInset: true,
               appBar: AppBar(
-
                 shadowColor: Colors.black87,
                 elevation: 6,
                 bottom: TabBar(
@@ -119,8 +120,6 @@ class _MainPageState extends State<MainPage> {
                       ),
                     ],
                   ),
-
-
                   Positioned(
                     bottom: 80,
                     right: 21,
@@ -131,7 +130,9 @@ class _MainPageState extends State<MainPage> {
                           FloatingActionButton(
                             heroTag: 'settings',
                             backgroundColor: Colors.grey,
-                            onPressed: () {showAlertDialogWithSettingsOptions(context);},
+                            onPressed: () {
+                              showAlertDialogWithSettingsOptions(context);
+                            },
                             tooltip: 'Settings',
                             child: const Icon(Icons.settings),
                           ),
@@ -176,7 +177,6 @@ class _MainPageState extends State<MainPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           actions: [
-
             IconButton(
               icon: Icon(Icons.close),
               onPressed: () {
@@ -204,7 +204,16 @@ class _MainPageState extends State<MainPage> {
                     Navigator.of(context).pop();
                   },
                 ),
-
+                ListTile(
+                  leading: Icon(Icons.color_lens, color: Colors.greenAccent),
+                  title: Text('Shuffle Background Colors',
+                      style: TextStyle(color: Colors.white)),
+                  onTap: () {
+                    setState(() {
+                      shuffleAppBackgroundColors();
+                    });
+                  },
+                ),
               ],
             ),
           ),
@@ -214,5 +223,35 @@ class _MainPageState extends State<MainPage> {
   }
 
   void logout() {
-TodoApp().signOut();  }
+    TodoApp().signOut();
+  }
+
+  void shuffleAppBackgroundColors() {
+    setState(() {
+      today1 =
+          lighten(Colors.accents[Random().nextInt(Colors.accents.length)]);
+      today2 =
+          lighten(Colors.accents[Random().nextInt(Colors.accents.length)]);
+      today3 =
+          lighten(Colors.accents[Random().nextInt(Colors.accents.length)]);
+      all1 = invertColorBy10percent(today1);
+      all2 = invertColorBy10percent(today2);
+      all3 = invertColorBy10percent(today3);
+      hash1 = invertColorBy10percent(all1);
+      hash2 = invertColorBy10percent(all2);
+      hash3 = invertColorBy10percent(all3);
+
+
+
+      TodoApp.saveNewColorsToFirestore(today1, today2, today3);
+    });
+  }
+}
+
+Color lighten(Color c, [int percent = 30]) {
+  assert(1 <= percent && percent <= 100);
+  var f = 1 + percent / 100;
+  return Color.fromARGB(c.alpha, (c.red * f).round(), (c.green * f).round(),
+          (c.blue * f).round())
+      .withOpacity(0.7);
 }

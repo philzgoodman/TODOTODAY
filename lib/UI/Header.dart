@@ -10,7 +10,7 @@ class Header extends StatelessWidget {
     return Transform.translate(
       offset: const Offset(0, -6),
       child: Container(
-        color: Color(0x54000000),
+        color: Color(0xFF000000),
         height: 38,
         child: Center(
           child: Padding(

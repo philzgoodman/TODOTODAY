@@ -24,55 +24,58 @@ class TaskCard extends StatefulWidget {
 class _TaskCardState extends State<TaskCard> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shadowColor: Colors.black,
-      elevation: 3,
-      color: getRandomColor(widget.date, 50),
-      child: ListTile(
-        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-        title: GestureDetector(
-            onTap: () {
-              showEditDialog();
-            },
-            child: Text(widget.description,
-                style: TextStyle(
-                  fontSize: 14,
-                ))),
-        subtitle: GestureDetector(
-            onTap: () {
-              openAlertDialogThatShowsTasksContainingThisTag(widget.hashtag);
-            },
-            child: Text(widget.hashtag, style: TextStyle(color: Colors.blue))),
-        trailing: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          children: [
-            Checkbox(
-              value: widget.completed,
-              onChanged: (bool? value) {
-                setState(() {
-                  widget.completed = value!;
-                  todoApp.updateTask(widget);
-                });
+    return Padding(
+      padding: const EdgeInsets.all(0.5),
+      child: Card(
+        shadowColor: Colors.black,
+        elevation: 3,
+        color: lighten(getRandomColor(widget.date, 50)),
+        child: ListTile(
+          visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+          title: GestureDetector(
+              onTap: () {
+                showEditDialog();
               },
-            ),
-            IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                setState(() {
-                  TodoApp.deleteTaskByFirebaseId(widget.id);
-                });
+              child: Text(widget.description,
+                  style: TextStyle(
+                    fontSize: 14,
+                  ))),
+          subtitle: GestureDetector(
+              onTap: () {
+                openAlertDialogThatShowsTasksContainingThisTag(widget.hashtag);
               },
-            ),
-            Switch(
-              value: widget.isToday,
-              onChanged: (bool? value) {
-                setState(() {
-                  widget.isToday = value!;
-                  todoApp.updateTask(widget);
-                });
-              },
-            ),
-          ],
+              child: Text(widget.hashtag, style: TextStyle(color: Colors.blue))),
+          trailing: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Checkbox(
+                value: widget.completed,
+                onChanged: (bool? value) {
+                  setState(() {
+                    widget.completed = value!;
+                    todoApp.updateTask(widget);
+                  });
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  setState(() {
+                    TodoApp.deleteTaskByFirebaseId(widget.id);
+                  });
+                },
+              ),
+              Switch(
+                value: widget.isToday,
+                onChanged: (bool? value) {
+                  setState(() {
+                    widget.isToday = value!;
+                    todoApp.updateTask(widget);
+                  });
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -221,4 +224,8 @@ Color darken(Color c, [int percent = 8]) {
   return Color.fromARGB(c.alpha, (c.red * f).round(), (c.green * f).round(),
           (c.blue * f).round())
       .withOpacity(0.8);
+}
+Color invertColorBy10percent(Color today1) {
+  return Color.fromARGB(today1.alpha, today1.red + 25, today1.green + 25,
+      today1.blue + 25);
 }

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:todotoday/task.dart';
 
 import 'TaskCard.dart';
+import 'global.dart';
 
 class TodoApp with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -135,5 +136,56 @@ class TodoApp with ChangeNotifier {
         .collection('tasks')
         .doc(id)
         .delete();
+  }
+
+  static void saveNewColorsToFirestore(Color today1, Color today2, Color today3) {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('colors')
+        .doc('today')
+        .set({
+      'today1': today1.value,
+      'today2': today2.value,
+      'today3': today3.value,
+    });
+  }
+
+  static void setSavedBackgroundColorsFromFirestore() {
+    var c1;
+    var c2;
+    var c3;
+
+
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .collection('colors')
+        .doc('today')
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        c1 = Color(documentSnapshot['today1']);
+        c2 = Color(documentSnapshot['today2']);
+        c3 = Color(documentSnapshot['today3']);
+      }
+
+      if (c1 != null && c2 != null && c3 != null) {
+        today1 = c1;
+        today2 = c2;
+        today3 = c3;
+      }
+
+
+
+    });
   }
 }
