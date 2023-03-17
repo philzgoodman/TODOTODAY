@@ -38,26 +38,51 @@ class _LoginPageState extends State<LoginPage> {
                     MaterialPageRoute(builder: (context) => MyApp()),
                   );
                   loggedIn = true;
-
-                  Future.delayed(Duration(seconds: 1), () {
+                  setState(() {
                     runApp(MyApp());
                   });
                 }),
+                AuthStateChangeAction<UserCreated>((context, state) {
+                  loggedIn = true;
+                  setState(() {
+                    runApp(MyApp());
+                  });
+                }),
+
               ],
             );
           } else if (state is SignedIn) {
             return MyApp();
+          } else if (state is UserCreated) {
+            return MyApp();
           }
-
-
-
-
-          else {
+          {
             return LoginPage();
           }
         },
       ),
     );
+  }
+
+  void logIn() {
+    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+      FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: emailController.text, password: passwordController.text)
+          .then((value) {
+        if (value.user != null) {
+          todoApp.initializeTasks();
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => MyApp()),
+          );
+          loggedIn = true;
+          setState(() {
+            runApp(MyApp());
+          });
+        }
+      });
+    }
   }
 }
 

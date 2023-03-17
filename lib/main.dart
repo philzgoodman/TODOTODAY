@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:todotoday/TodoApp.dart';
 import 'package:todotoday/UI/done.dart';
 import 'package:todotoday/UI/today_task_page.dart';
@@ -25,8 +26,7 @@ Future<void> main() async {
     EmailAuthProvider(),
   ]);
 
-
-  runApp(MyApp());
+  runApp(Phoenix(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -224,25 +224,22 @@ class _MainPageState extends State<MainPage> {
   }
 
   void logout() {
-    TodoApp().signOut();
-  }
+   TodoApp().signOut();
+
+    }
+
 
   void shuffleAppBackgroundColors() {
     setState(() {
-      today1 =
-          lighten(Colors.accents[Random().nextInt(Colors.accents.length)]);
-      today2 =
-          lighten(Colors.accents[Random().nextInt(Colors.accents.length)]);
-      today3 =
-          lighten(Colors.accents[Random().nextInt(Colors.accents.length)]);
+      today1 = lighten(Colors.accents[Random().nextInt(Colors.accents.length)]);
+      today2 = lighten(Colors.accents[Random().nextInt(Colors.accents.length)]);
+      today3 = lighten(Colors.accents[Random().nextInt(Colors.accents.length)]);
       all1 = invertColorBy10percent(today1);
       all2 = invertColorBy10percent(today2);
       all3 = invertColorBy10percent(today3);
       hash1 = invertColorBy10percent(all1);
       hash2 = invertColorBy10percent(all2);
       hash3 = invertColorBy10percent(all3);
-
-
 
       TodoApp.saveNewColorsToFirestore(today1, today2, today3);
     });

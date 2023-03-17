@@ -85,6 +85,7 @@ class _TaskCardState extends State<TaskCard> {
 
     FocusNode myFocusNode = FocusNode();
     TextEditingController txt = TextEditingController(text: widget.description);
+    TextEditingController txt2 = TextEditingController(text: widget.hashtag);
 
     showDialog(
         context: context,
@@ -123,7 +124,7 @@ class _TaskCardState extends State<TaskCard> {
                       child: TextField(
                         style: TextStyle(color: Colors.blue),
                         maxLines: 1,
-                        controller: TextEditingController(text: widget.hashtag),
+                        controller: txt2,
                         onChanged: (String value) {
                           widget.hashtag = value.toString();
                         },
@@ -142,9 +143,12 @@ class _TaskCardState extends State<TaskCard> {
             ],
           );
         }).then((val) {
-      widget.description = txt.text;
-      todoApp.updateTask(widget);
-      runApp(MyApp());
+          if (widget.description != txt.text || widget.hashtag != txt2.text) {
+            widget.description = txt.text;
+            todoApp.updateTask(widget);
+            runApp(MyApp());
+          }
+
     });
     ;
   }
@@ -194,6 +198,8 @@ class _TaskCardState extends State<TaskCard> {
     }
     txt.text = newStr;
   }
+
+
 }
 
 void launchWordDocEditor(TaskCard widget) {}

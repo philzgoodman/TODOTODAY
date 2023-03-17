@@ -7,7 +7,7 @@ const RESOURCES = {
 "assets/FontManifest.json": "e7a6a1336f6f49556e9bd0830c857c27",
 "assets/fonts/MaterialIcons-Regular.otf": "95db9098c58fd6db106f1116bae85a0b",
 "assets/lib/fonts/JetBrainsMonoNL-Regular.ttf": "0dc7ccd81c27e2fca57bebda54e11e09",
-"assets/NOTICES": "f6789158fdaaedc9051bd6abdf47264c",
+"assets/NOTICES": "e1a8c9f8069662fc51c1b7b0f75fb981",
 "assets/packages/fluttertoast/assets/toastify.css": "a85675050054f179444bc5ad70ffc635",
 "assets/packages/fluttertoast/assets/toastify.js": "e7006a0a033d834ef9414d48db3be6fc",
 "assets/packages/toast/assets/toastify.css": "a85675050054f179444bc5ad70ffc635",
@@ -23,9 +23,9 @@ const RESOURCES = {
 "icons/Icon-512.png": "533a65d72ed434c297c44eacba1fe5d4",
 "icons/Icon-maskable-192.png": "a492fe3e06e60101aced07d448a2efbc",
 "icons/Icon-maskable-512.png": "20725c7d677c79f7e67e425230c24ad2",
-"index.html": "02685792e25ec2f2992b8c0f4e999360",
-"/": "02685792e25ec2f2992b8c0f4e999360",
-"main.dart.js": "f2721e5d141cb18a339e751040408570",
+"index.html": "321a90a754c8af066a312a2eadde0b14",
+"/": "321a90a754c8af066a312a2eadde0b14",
+"main.dart.js": "75cc09b0dc62e8ca85d07a736d27e322",
 "manifest.json": "689a9eaa9b64954a8048d19561372e86",
 "version.json": "30e616f587a4aabc4ab0a298f5de93a8"
 };

@@ -1,10 +1,13 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:todotoday/task.dart';
 
 import 'TaskCard.dart';
 import 'global.dart';
+import 'main.dart';
 
 class TodoApp with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -18,10 +21,6 @@ class TodoApp with ChangeNotifier {
 
   Future<void> signIn(String email, String password) async {
     await _auth.signInWithEmailAndPassword(email: email, password: password);
-  }
-
-  Future<void> signOut() async {
-    await _auth.signOut();
   }
 
   Future<void> createTask(String description, bool isToday) async {
@@ -75,9 +74,6 @@ class TodoApp with ChangeNotifier {
       'hashtag': task.hashtag,
     });
   }
-
-
-
 
   void initializeTasks() {
     var user = FirebaseAuth.instance.currentUser;
@@ -138,7 +134,8 @@ class TodoApp with ChangeNotifier {
         .delete();
   }
 
-  static void saveNewColorsToFirestore(Color today1, Color today2, Color today3) {
+  static void saveNewColorsToFirestore(
+      Color today1, Color today2, Color today3) {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       throw StateError('Not logged in');
@@ -159,7 +156,6 @@ class TodoApp with ChangeNotifier {
     var c1;
     var c2;
     var c3;
-
 
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -183,9 +179,14 @@ class TodoApp with ChangeNotifier {
         today2 = c2;
         today3 = c3;
       }
-
-
-
     });
   }
-}
+
+  Future<void> signOut() async {
+
+    await FirebaseAuth.instance.signOut();
+    runApp(Phoenix(child: MyApp()));
+  }
+
+  }
+
