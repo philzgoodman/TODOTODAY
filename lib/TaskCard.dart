@@ -28,7 +28,7 @@ class _TaskCardState extends State<TaskCard> {
       padding: const EdgeInsets.all(0.5),
       child: Card(
         shadowColor: Colors.black,
-        elevation: 3,
+        elevation: 1,
         color: lighten(getRandomColor(widget.date, 50)),
         child: ListTile(
           visualDensity: VisualDensity(horizontal: 0, vertical: -4),

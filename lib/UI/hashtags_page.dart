@@ -290,7 +290,7 @@ class HashtagsPage extends StatelessWidget {
                       ;
                     },
                     child: Card(
-                      color: lighten(getRandomColor(uniqueSubtitles[index], 50)),
+                      color: getRandomColor(uniqueSubtitles[index], 50),
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
