@@ -25,7 +25,6 @@ Future<void> main() async {
     EmailAuthProvider(),
   ]);
 
-  TodoApp.setSavedBackgroundColorsFromFirestore();
 
   runApp(MyApp());
 }
@@ -73,6 +72,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
+    TodoApp.setSavedBackgroundColorsFromFirestore();
+
     return DefaultTabController(
       initialIndex: 1,
       length: 3,

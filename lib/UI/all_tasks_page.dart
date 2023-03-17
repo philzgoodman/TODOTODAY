@@ -37,13 +37,13 @@ class _AllTasksPageState extends State<AllTasksPage> {
                 end: Alignment.bottomRight,
                 colors: [
                   make20percentLessSaturated(all1),
-              make20percentLessSaturated(all2),
-              make20percentLessSaturated(all3),
+                  make20percentLessSaturated(all2),
+                  make20percentLessSaturated(all3),
                 ],
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.only(top:5.0),
+              padding: const EdgeInsets.only(top: 5.0),
               child: TaskView(
                 db: db,
                 user: user,

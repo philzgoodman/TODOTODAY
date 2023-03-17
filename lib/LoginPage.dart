@@ -47,8 +47,13 @@ class _LoginPageState extends State<LoginPage> {
             );
           } else if (state is SignedIn) {
             return MyApp();
-          } else {
-            return Container();
+          }
+
+
+
+
+          else {
+            return LoginPage();
           }
         },
       ),
