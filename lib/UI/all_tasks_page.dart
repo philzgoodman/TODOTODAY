@@ -36,9 +36,9 @@ class _AllTasksPageState extends State<AllTasksPage> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  all1,
-                  all2,
-                  all3,
+                  make20percentLessSaturated(all1),
+              make20percentLessSaturated(all2),
+              make20percentLessSaturated(all3),
                 ],
               ),
             ),
@@ -56,6 +56,15 @@ class _AllTasksPageState extends State<AllTasksPage> {
           child: MessageBox(),
         ),
       ],
+    );
+  }
+
+  make20percentLessSaturated(Color all1) {
+    return Color.fromARGB(
+      all1.alpha,
+      all1.red - 20,
+      all1.green - 20,
+      all1.blue - 20,
     );
   }
 }
