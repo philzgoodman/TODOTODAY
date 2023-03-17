@@ -36,8 +36,8 @@ class _TaskCardState extends State<TaskCard> {
             },
             child: Text(widget.description,
                 style: TextStyle(
-                    fontSize: 14,))
-        ),
+                  fontSize: 14,
+                ))),
         subtitle: GestureDetector(
             onTap: () {
               openAlertDialogThatShowsTasksContainingThisTag(widget.hashtag);
@@ -79,8 +79,10 @@ class _TaskCardState extends State<TaskCard> {
   }
 
   void showEditDialog() {
+
     FocusNode myFocusNode = FocusNode();
-    TextEditingController txt = TextEditingController();
+    TextEditingController txt = TextEditingController(text: widget.description);
+
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -90,12 +92,27 @@ class _TaskCardState extends State<TaskCard> {
                 child: AlertDialog(
                   title: Text('Edit Task'),
                   backgroundColor: getRandomColor(widget.date, 50),
-                  content: TextField(
-                    maxLines: 8,
-                    controller: TextEditingController(text: widget.description),
-                    onChanged: (String value) {
-                      widget.description = value;
-                    },
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        maxLines: 8,
+                        controller: txt,
+                        onChanged: (String value) {},
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                typeBulletedListIntoTextField(txt);
+                              });
+                            },
+                            icon: Icon(Icons.format_list_numbered),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                   actions: [
                     Padding(
@@ -112,6 +129,7 @@ class _TaskCardState extends State<TaskCard> {
                     IconButton(
                       icon: Icon(Icons.close),
                       onPressed: () {
+                        trimWhiteSpaceAtEndofString(txt);
                         Navigator.of(context).pop();
                       },
                     ),
@@ -121,6 +139,7 @@ class _TaskCardState extends State<TaskCard> {
             ],
           );
         }).then((val) {
+      widget.description = txt.text;
       todoApp.updateTask(widget);
       runApp(MyApp());
     });
@@ -136,8 +155,7 @@ class _TaskCardState extends State<TaskCard> {
             contentPadding: EdgeInsets.zero,
             actions: [
               Padding(
-                padding:
-                const EdgeInsets.only(bottom: 28.0, left: 30),
+                padding: const EdgeInsets.only(bottom: 28.0, left: 30),
                 child: Center(
                   child: TextButton(
                     onPressed: () {
@@ -153,7 +171,7 @@ class _TaskCardState extends State<TaskCard> {
             ],
             title: Text('Tasks with hashtag: $hashtag'),
             content: Container(
-              width:MediaQuery.of(context).size.width * .9,
+              width: MediaQuery.of(context).size.width * .9,
               child: TagView(
                 tag: hashtag,
               ),
@@ -161,6 +179,36 @@ class _TaskCardState extends State<TaskCard> {
           );
         });
   }
+
+  void trimWhiteSpaceAtEndofString(TextEditingController txt) {
+    var str = txt.text;
+    var newStr = '';
+    for (var i = str.length - 1; i >= 0; i--) {
+      if (str[i] != ' ') {
+        newStr = str.substring(0, i + 1);
+        break;
+      }
+    }
+    txt.text = newStr;
+  }
+}
+
+void launchWordDocEditor(TaskCard widget) {}
+
+void typeBulletedListIntoTextField(TextEditingController txt) {
+  var _isBulletedList = false;
+  if (_isBulletedList) {
+    txt.text = txt.text + '•';
+  } else {
+    txt.text = txt.text + '\n•';
+  }
+
+  moveCursorToEnd(txt);
+}
+
+void moveCursorToEnd(TextEditingController txt) {
+  txt.selection =
+      TextSelection.fromPosition(TextPosition(offset: txt.text.length));
 }
 
 Color getRandomColor(String date, int darkAmt) {
