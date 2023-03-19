@@ -36,7 +36,9 @@ class DonePage extends StatelessWidget {
                         task['completed'],
                         task.id,
                         task['hashtag'],
-                        task['date'].toString());
+                        task['date'].toString(),
+                        task['hasDocument'],
+                        );
 
                   },
 

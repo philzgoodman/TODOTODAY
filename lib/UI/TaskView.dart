@@ -41,7 +41,9 @@ class TaskView extends StatelessWidget {
                             task['completed'],
                             task.id,
                             task['hashtag'],
-                            task['date'].toString());
+                            task['date'].toString(),
+                            task['hasDocument'],
+                        );
                       } else {
                         return Column(
                           children: [
@@ -51,7 +53,12 @@ class TaskView extends StatelessWidget {
                                 task['completed'],
                                 task.id,
                                 task['hashtag'].toString(),
-                                task['date'].toString()),
+                                task['date'].toString(),
+                                task['hasDocument'],
+
+                            )
+
+                            ,
                             SizedBox(
                               height: 300,
                               child: Opacity(opacity: 0.4, child: DonePage()),

@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:todotoday/TodoApp.dart';
 import 'package:todotoday/main.dart';
+import 'UI/DocumentEditingScreen.dart';
 import 'UI/TagView.dart';
 import 'global.dart';
 
@@ -10,11 +14,12 @@ class TaskCard extends StatefulWidget {
   bool isToday = false;
   String id = '';
   String hashtag = '';
+  bool hasDocument = false;
 
   String date = '';
 
   TaskCard(this.description, this.isToday, this.completed, this.id,
-      this.hashtag, this.date,
+      this.hashtag, this.date, this.hasDocument,
       {super.key});
 
   @override
@@ -44,7 +49,8 @@ class _TaskCardState extends State<TaskCard> {
               onTap: () {
                 openAlertDialogThatShowsTasksContainingThisTag(widget.hashtag);
               },
-              child: Text(widget.hashtag, style: TextStyle(color: Colors.blue))),
+              child:
+                  Text(widget.hashtag, style: TextStyle(color: Colors.blue))),
           trailing: Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
@@ -82,7 +88,6 @@ class _TaskCardState extends State<TaskCard> {
   }
 
   void showEditDialog() {
-
     FocusNode myFocusNode = FocusNode();
     TextEditingController txt = TextEditingController(text: widget.description);
     TextEditingController txt2 = TextEditingController(text: widget.hashtag);
@@ -105,6 +110,7 @@ class _TaskCardState extends State<TaskCard> {
                         onChanged: (String value) {},
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           IconButton(
                             onPressed: () {
@@ -113,6 +119,75 @@ class _TaskCardState extends State<TaskCard> {
                               });
                             },
                             icon: Icon(Icons.format_list_numbered),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Transform.translate(
+                            offset: Offset(15, 0),
+                            child: Offstage(
+                                offstage: !widget.hasDocument,
+                                child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Icon(
+                                      Icons.task,
+                                      color: Colors.grey,
+                                    ))),
+                          ),
+                          Transform.translate(
+                            offset: Offset(15, 0),
+                            child: Offstage(
+                                offstage: widget.hasDocument,
+                                child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Icon(
+                                      Icons.task,
+                                      color: Colors.greenAccent,
+                                    ))),
+                          ),
+                          Offstage(
+                            offstage: !widget.hasDocument,
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              DocumentEditingScreen(widget.id,
+                                                  widget.hasDocument)));
+                                });
+                              },
+                              child: Transform.translate(
+                                offset: Offset(6, 0),
+                                child: Text(
+                                  'Add Word Doc',
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Offstage(
+                            offstage: widget.hasDocument,
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              DocumentEditingScreen(widget.id,
+                                                  widget.hasDocument)));
+                                });
+                              },
+                              child: Text(
+                                'Edit Attached Doc',
+                                textAlign: TextAlign.right,
+                                style: TextStyle(fontSize: 10),
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -143,12 +218,9 @@ class _TaskCardState extends State<TaskCard> {
             ],
           );
         }).then((val) {
-          if (widget.description != txt.text || widget.hashtag != txt2.text) {
-            widget.description = txt.text;
-            todoApp.updateTask(widget);
-            runApp(MyApp());
-          }
-
+      widget.description = txt.text;
+      todoApp.updateTask(widget);
+      runApp(MyApp());
     });
     ;
   }
@@ -199,10 +271,15 @@ class _TaskCardState extends State<TaskCard> {
     txt.text = newStr;
   }
 
-
+  void uploadStringToFirebaseStorage(TextEditingController txt) {
+    var storage = FirebaseStorage.instance;
+    var ref = storage.ref().child('test.txt');
+    var uploadTask = ref.putString(txt.text);
+    uploadTask.then((res) {
+      res.ref.getDownloadURL().then((value) {});
+    });
+  }
 }
-
-void launchWordDocEditor(TaskCard widget) {}
 
 void typeBulletedListIntoTextField(TextEditingController txt) {
   var _isBulletedList = false;
@@ -231,7 +308,8 @@ Color darken(Color c, [int percent = 8]) {
           (c.blue * f).round())
       .withOpacity(0.8);
 }
+
 Color invertColorBy10percent(Color today1) {
-  return Color.fromARGB(today1.alpha, today1.red + 25, today1.green + 25,
-      today1.blue + 25);
+  return Color.fromARGB(
+      today1.alpha, today1.red + 25, today1.green + 25, today1.blue + 25);
 }

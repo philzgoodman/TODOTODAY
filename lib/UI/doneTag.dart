@@ -7,6 +7,7 @@ class DoneTagPage extends StatelessWidget {
   String tag;
 
   DoneTagPage({super.key, required this.tag});
+
   @override
   Widget build(BuildContext context) {
     final dbDoneTag = FirebaseFirestore.instance;
@@ -15,11 +16,9 @@ class DoneTagPage extends StatelessWidget {
         .collection('users')
         .doc(user?.uid)
         .collection('tasks')
-        .where('completed', isEqualTo: true );
+        .where('completed', isEqualTo: true);
 
-    Query query2 = query
-        .where('hashtag', isEqualTo: tag);
-
+    Query query2 = query.where('hashtag', isEqualTo: tag);
 
     return Stack(
       children: [
@@ -35,15 +34,15 @@ class DoneTagPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     DocumentSnapshot task = snapshot.data!.docs[index];
                     return TaskCard(
-                        task['description'],
-                        task['isToday'],
-                        task['completed'],
-                        task.id,
-                        task['hashtag'],
-                        task['date'].toString());
-
+                      task['description'],
+                      task['isToday'],
+                      task['completed'],
+                      task.id,
+                      task['hashtag'],
+                      task['date'].toString(),
+                      task['hasDocument'],
+                    );
                   },
-
                 );
               }
               return Center(child: CircularProgressIndicator());
@@ -52,7 +51,5 @@ class DoneTagPage extends StatelessWidget {
         ),
       ],
     );
-
-
   }
 }

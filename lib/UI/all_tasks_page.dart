@@ -55,6 +55,8 @@ class _AllTasksPageState extends State<AllTasksPage> {
           padding: const EdgeInsets.only(bottom: 8.0),
           child: MessageBox(),
         ),
+
+     const Icon(Icons.add),
       ],
     );
   }
@@ -67,4 +69,5 @@ class _AllTasksPageState extends State<AllTasksPage> {
       all1.blue - 20,
     );
   }
+
 }

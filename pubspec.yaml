@@ -29,7 +29,6 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  sqflite:
   flutter:
     sdk: flutter
 
@@ -48,6 +47,7 @@ dependencies:
   toast: ^0.3.0
   fluttertoast: ^8.2.1
   flutter_phoenix: ^1.1.0
+  firebase_storage: ^11.0.16
 
 dev_dependencies:
   flutter_test:

@@ -47,7 +47,8 @@ class _TagViewState extends State<TagView> {
                       task['completed'],
                       task.id,
                       task['hashtag'],
-                      task['date'].toString());
+                      task['date'].toString(),
+                      task['hasDocument']);
                 } else {
                   return Column(
                     children: [
@@ -57,7 +58,10 @@ class _TagViewState extends State<TagView> {
                           task['completed'],
                           task.id,
                           task['hashtag'].toString(),
-                          task['date'].toString()),
+                          task['date'].toString(),
+                          task['hasDocument']
+
+                ),
                       SizedBox(
                         height: 300,
                         child: Opacity(opacity: 0.4, child: DoneTagPage(tag: widget.tag.toString(),)),

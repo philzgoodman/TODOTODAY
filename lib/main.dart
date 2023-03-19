@@ -15,12 +15,18 @@ import 'TaskCard.dart';
 import 'UI/Header.dart';
 import 'firebase_options.dart';
 import 'global.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  final storageRef = FirebaseStorage.instance.ref();
+
 
   FirebaseUIAuth.configureProviders([
     EmailAuthProvider(),
@@ -128,6 +134,7 @@ class _MainPageState extends State<MainPage> {
                       scale: .6,
                       child: Column(
                         children: [
+
                           FloatingActionButton(
                             heroTag: 'settings',
                             backgroundColor: Colors.grey,
