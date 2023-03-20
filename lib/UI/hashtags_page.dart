@@ -7,6 +7,7 @@ import 'package:todotoday/UI/TagView.dart';
 import 'package:todotoday/main.dart';
 import '../TaskCard.dart';
 import '../global.dart';
+import 'Header.dart';
 
 class HashtagsPage extends StatelessWidget {
   HashtagsPage({super.key});
@@ -30,17 +31,6 @@ class HashtagsPage extends StatelessWidget {
             }
           }
           uniqueSubtitles = subtitles.toSet().toList();
-
-          var subtitleWithHashtagCountmap = Map.fromIterable(uniqueSubtitles,
-              key: (e) => e,
-              value: (e) =>
-              subtitles
-                  .where((element) => element == e)
-                  .length);
-
-          var sortedMap = Map.fromEntries(
-              subtitleWithHashtagCountmap.entries.toList()
-                ..sort((e1, e2) => e2.value.compareTo(e1.value)));
 
           return Container(
             decoration: BoxDecoration(
@@ -162,7 +152,7 @@ class HashtagsPage extends StatelessWidget {
                                                   backgroundColor: Colors.purple,
                                                 ),
                                                 onPressed: () {
-                                                  deleteTagGroup(
+                                                  deleteCompletedTasks(
                                                       uniqueSubtitles[index]);
                                                 },
                                                 child: Text('DELETE DONE TASKS',
@@ -175,67 +165,7 @@ class HashtagsPage extends StatelessWidget {
                                             ),
                                           ],
                                         ),
-                                        Padding(
-                                          padding:
-                                          const EdgeInsets.only(top: 8.0),
-                                          child: Transform.translate(
-                                            offset: const Offset(0, -6),
-                                            child: Container(
-                                              color: getRandomColor(uniqueSubtitles[index], 70),
-                                              height: 38,
-                                              child: Center(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      top: 2.0),
-                                                  child: ListTile(
-                                                    title: Text("DESCRIPTION",
-                                                        style: TextStyle(
-                                                          fontSize: 9,
-                                                        )),
-                                                    visualDensity: VisualDensity(
-                                                        horizontal: 0,
-                                                        vertical: -4),
-                                                    trailing: Wrap(
-                                                      crossAxisAlignment:
-                                                      WrapCrossAlignment
-                                                          .center,
-                                                      children: [
-                                                        SizedBox(
-                                                          width: 56,
-                                                          child: Text("DONE",
-                                                              textAlign: TextAlign
-                                                                  .center,
-                                                              style: TextStyle(
-                                                                fontSize: 9,
-                                                              )),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 56,
-                                                          child: Text("DELETE",
-                                                              textAlign: TextAlign
-                                                                  .center,
-                                                              style: TextStyle(
-                                                                fontSize: 9,
-                                                              )),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 56,
-                                                          child: Text("TODAY",
-                                                              textAlign: TextAlign
-                                                                  .center,
-                                                              style: TextStyle(
-                                                                fontSize: 9,
-                                                              )),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                        Header(), ],
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 138.0),
@@ -290,7 +220,9 @@ class HashtagsPage extends StatelessWidget {
                       ;
                     },
                     child: Card(
-                      color: getRandomColor(uniqueSubtitles[index], 50),
+                      color: darken(getRandomColor(uniqueSubtitles[index], 50)),
+                      elevation: 2,
+                        shadowColor: Colors.grey,
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -377,6 +309,29 @@ class HashtagsPage extends StatelessWidget {
         .doc(user?.uid)
         .collection('tasks')
         .where('hashtag', isEqualTo: uniqueSubtitle);
+
+    query.get().then((value) {
+      for (int i = 0; i < value.docs.length; i++) {
+        DocumentSnapshot task = value.docs[i];
+        db
+            .collection('users')
+            .doc(user?.uid)
+            .collection('tasks')
+            .doc(task.id)
+            .delete();
+      }
+    });
+  }
+
+  void deleteCompletedTasks(String uniqueSubtitle) {
+    final db = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser;
+    Query query = db
+        .collection('users')
+        .doc(user?.uid)
+        .collection('tasks')
+        .where('hashtag', isEqualTo: uniqueSubtitle)
+        .where('completed', isEqualTo: true);
 
     query.get().then((value) {
       for (int i = 0; i < value.docs.length; i++) {

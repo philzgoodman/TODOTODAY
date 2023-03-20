@@ -155,10 +155,39 @@ class _MainPageState extends State<MainPage> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
+                                    title: Text(
+                                      'Completed Tasks',textAlign: TextAlign.center,
+                                      style: TextStyle(
+
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
                                     backgroundColor: Colors.transparent,
                                     insetPadding: EdgeInsets.zero,
                                     contentPadding: EdgeInsets.zero,
-                                    content: DonePage(),
+                                    content: SizedBox(
+                                        width: MediaQuery
+                                            .of(context)
+                                            .size
+                                            .width * .9,child: DonePage()),
+
+                                  actions: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom:15.0),
+                                      child: Center(
+                                        child: TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(
+                                            'Ⓧ Close',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      ),
+                                    ),],
                                   );
                                 },
                               );

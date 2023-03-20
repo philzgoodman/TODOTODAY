@@ -52,6 +52,7 @@ class TodoApp with ChangeNotifier {
       'isToday': false,
       'hashtag': hashtag,
       'date': DateTime.now().toString(),
+      'hasDocument': false,
     });
 
     print("Stored to Firestore");
@@ -73,6 +74,7 @@ class TodoApp with ChangeNotifier {
       'isToday': task.isToday,
       'description': task.description,
       'hashtag': task.hashtag,
+      'hasDocument': task.hasDocument,
     });
   }
 
@@ -204,52 +206,8 @@ class TodoApp with ChangeNotifier {
     });
   }
 
-  static bool checkIfHasAttachedMDFile(String id) {
-    var user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      throw StateError('Not logged in');
-    }
 
 
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .collection('tasks')
-        .doc(id)
-        .get()
-        .then((DocumentSnapshot documentSnapshot)
-        {
-      if (documentSnapshot.exists) {
-        if(documentSnapshot['hasDocument'] != null)
-        if (documentSnapshot['hasDocument']
-            .toString()
-            .toLowerCase()
-            .contains("true")) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-    });
-   return false;
-  }
-
-  static void updateFieldsInFireStoreHasDocumentEqualsFalseForEachTask() {
-    var user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      throw StateError('Not logged in');
-    }
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .collection('tasks')
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        updateFirestoreBoolValueHasDocument(doc.id, false);
-      });
-    });
-  }
 
   }
 

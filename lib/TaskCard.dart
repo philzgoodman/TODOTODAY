@@ -30,8 +30,9 @@ class _TaskCardState extends State<TaskCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(0.5),
+      padding: const EdgeInsets.all(0.6),
       child: Card(
+
         shadowColor: Colors.black,
         elevation: 1,
         color: lighten(getRandomColor(widget.date, 50)),
@@ -51,36 +52,53 @@ class _TaskCardState extends State<TaskCard> {
               },
               child:
                   Text(widget.hashtag, style: TextStyle(color: Colors.blue))),
-          trailing: Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
-            children: [
-              Checkbox(
-                value: widget.completed,
-                onChanged: (bool? value) {
-                  setState(() {
-                    widget.completed = value!;
-                    todoApp.updateTask(widget);
-                  });
-                },
+          trailing: Transform.scale(
+            scale: 0.95,
+              child:
+
+            Transform.translate(
+              offset: const Offset(5, 0),
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 56,
+                    child: Checkbox(
+                      value: widget.completed,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          widget.completed = value!;
+                          todoApp.updateTask(widget);
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: 56,
+                    child: IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        setState(() {
+                          TodoApp.deleteTaskByFirebaseId(widget.id);
+                        });
+                      },
+                    ),
+                  ),
+                  SizedBox(
+                    width: 56,
+                    child: Switch(
+                      value: widget.isToday,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          widget.isToday = value!;
+                          todoApp.updateTask(widget);
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () {
-                  setState(() {
-                    TodoApp.deleteTaskByFirebaseId(widget.id);
-                  });
-                },
-              ),
-              Switch(
-                value: widget.isToday,
-                onChanged: (bool? value) {
-                  setState(() {
-                    widget.isToday = value!;
-                    todoApp.updateTask(widget);
-                  });
-                },
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -126,7 +144,7 @@ class _TaskCardState extends State<TaskCard> {
                           Transform.translate(
                             offset: Offset(15, 0),
                             child: Offstage(
-                                offstage: !widget.hasDocument,
+                                offstage: widget.hasDocument,
                                 child: Align(
                                     alignment: Alignment.centerRight,
                                     child: Icon(
@@ -137,7 +155,7 @@ class _TaskCardState extends State<TaskCard> {
                           Transform.translate(
                             offset: Offset(15, 0),
                             child: Offstage(
-                                offstage: widget.hasDocument,
+                                offstage: !widget.hasDocument,
                                 child: Align(
                                     alignment: Alignment.centerRight,
                                     child: Icon(
@@ -146,7 +164,7 @@ class _TaskCardState extends State<TaskCard> {
                                     ))),
                           ),
                           Offstage(
-                            offstage: !widget.hasDocument,
+                            offstage: widget.hasDocument,
                             child: TextButton(
                               onPressed: () {
                                 setState(() {
@@ -170,7 +188,7 @@ class _TaskCardState extends State<TaskCard> {
                             ),
                           ),
                           Offstage(
-                            offstage: widget.hasDocument,
+                            offstage: !widget.hasDocument,
                             child: TextButton(
                               onPressed: () {
                                 setState(() {

@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../TaskCard.dart';
-import '../global.dart';
-import 'TaskView.dart';
-import 'done.dart';
+
 import 'doneTag.dart';
 
 class TagView extends StatefulWidget {
@@ -48,7 +46,8 @@ class _TagViewState extends State<TagView> {
                       task.id,
                       task['hashtag'],
                       task['date'].toString(),
-                      task['hasDocument']);
+                      false,
+                      );
                 } else {
                   return Column(
                     children: [
@@ -59,7 +58,8 @@ class _TagViewState extends State<TagView> {
                           task.id,
                           task['hashtag'].toString(),
                           task['date'].toString(),
-                          task['hasDocument']
+                          false,
+
 
                 ),
                       SizedBox(
@@ -75,4 +75,6 @@ class _TagViewState extends State<TagView> {
       },
     );
   }
+
+
 }

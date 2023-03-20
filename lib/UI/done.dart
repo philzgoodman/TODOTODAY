@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../TaskCard.dart';
-import 'TaskView.dart';
 
 class DonePage extends StatelessWidget {
   @override
@@ -14,7 +13,7 @@ class DonePage extends StatelessWidget {
         .doc(user?.uid)
         .collection('tasks')
         .where('completed', isEqualTo: true)
-        .limit(7)
+        .limit(30)
         .orderBy('date', descending: true);
 
     return Stack(
@@ -37,7 +36,7 @@ class DonePage extends StatelessWidget {
                         task.id,
                         task['hashtag'],
                         task['date'].toString(),
-                        task['hasDocument'],
+                        false,
                         );
 
                   },

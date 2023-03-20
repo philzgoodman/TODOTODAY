@@ -74,8 +74,9 @@ class _DocumentEditingScreenState extends State<DocumentEditingScreen> {
         ],
       ),
       body: Center(
-        child: TextField(
-          controller: txtedt,
+        child: SelectableText(
+txtedt.text,
+
           maxLines: 100,
           minLines: 100,
 
