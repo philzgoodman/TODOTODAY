@@ -64,7 +64,7 @@ class _TagViewState extends State<TagView> {
                 ),
                       SizedBox(
                         height: 300,
-                        child: Opacity(opacity: 0.4, child: DoneTagPage(tag: widget.tag.toString(),)),
+                        child: Opacity(opacity: 0.1, child: DoneTagPage(tag: widget.tag.toString(),)),
                       ),
                     ],
                   );

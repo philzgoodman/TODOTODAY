@@ -27,6 +27,14 @@ class TaskCard extends StatefulWidget {
 }
 
 class _TaskCardState extends State<TaskCard> {
+
+  @override
+  void initState() {
+    super.initState();
+   widget.hasDocument = TodoApp.checkFirestoreIfHasDocument(widget.id);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -226,8 +234,11 @@ class _TaskCardState extends State<TaskCard> {
                     IconButton(
                       icon: Icon(Icons.close),
                       onPressed: () {
-                        trimWhiteSpaceAtEndofString(txt);
-                        Navigator.of(context).pop();
+                        setState(() {
+                          trimWhiteSpaceAtEndofString(txt);
+                          Navigator.of(context).pop();
+                        });
+
                       },
                     ),
                   ],
@@ -238,6 +249,7 @@ class _TaskCardState extends State<TaskCard> {
         }).then((val) {
       widget.description = txt.text;
       todoApp.updateTask(widget);
+      TodoApp.updateFirestoreBoolValueHasDocument(widget.id, true);
       runApp(MyApp());
     });
     ;

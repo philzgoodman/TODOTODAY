@@ -40,12 +40,7 @@ class _DocumentEditingScreenState extends State<DocumentEditingScreen> {
       appBar: AppBar(
         title: const Text("Document Editing"),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
+
           IconButton(
             icon: const Icon(Icons.format_bold),
             onPressed: () {},
@@ -74,8 +69,9 @@ class _DocumentEditingScreenState extends State<DocumentEditingScreen> {
         ],
       ),
       body: Center(
-        child: SelectableText(
-txtedt.text,
+        child: TextField(
+          controller: txtedt,
+
 
           maxLines: 100,
           minLines: 100,
@@ -108,6 +104,9 @@ txtedt.text,
 
     TodoApp.updateFirestoreBoolValueHasDocument(id, true);
   }
+
+
+
 
    getDocumentFromFirebaseStorage(String id) {
 

@@ -206,6 +206,32 @@ class TodoApp with ChangeNotifier {
     });
   }
 
+  static bool checkFirestoreIfHasDocument(String id) {
+
+
+      var user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        throw StateError('Not logged in');
+      }
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .collection('tasks')
+          .doc(id)
+          .get()
+          .then((DocumentSnapshot documentSnapshot) {
+        if (documentSnapshot.exists) {
+          return true;
+        } else {
+          return false;
+        }
+      });return false;
+    }
+
+
+
+
+
 
 
 

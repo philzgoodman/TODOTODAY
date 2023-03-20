@@ -292,6 +292,7 @@ class HashtagsPage extends StatelessWidget {
           'completed': false,
           'hashtag': '#default',
           'date': DateTime.now().add(Duration(seconds: i)).toString(),
+          'hasDocument': false,
         });
       }
     });
