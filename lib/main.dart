@@ -32,6 +32,8 @@ Future<void> main() async {
     EmailAuthProvider(),
   ]);
 
+  notes.add("Welcome to TodoToday!");
+
   runApp(Phoenix(child: MyApp()));
 }
 

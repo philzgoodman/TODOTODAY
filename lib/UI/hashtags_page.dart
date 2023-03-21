@@ -24,6 +24,8 @@ class HashtagsPage extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: query.snapshots(),
       builder: (context, snapshot) {
+        subtitles.clear();
+        uniqueSubtitles.clear();
         if (snapshot.hasData) {
           for (int i = 0; i < snapshot.data!.docs.length; i++) {
             if (snapshot.data!.docs[i]['hashtag'] != null) {
@@ -292,7 +294,6 @@ class HashtagsPage extends StatelessWidget {
           'completed': false,
           'hashtag': '#default',
           'date': DateTime.now().add(Duration(seconds: i)).toString(),
-          'hasDocument': false,
         });
       }
     });

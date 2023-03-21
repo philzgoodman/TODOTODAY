@@ -46,7 +46,6 @@ class _TagViewState extends State<TagView> {
                       task.id,
                       task['hashtag'],
                       task['date'].toString(),
-                      false,
                       );
                 } else {
                   return Column(
@@ -58,7 +57,6 @@ class _TagViewState extends State<TagView> {
                           task.id,
                           task['hashtag'].toString(),
                           task['date'].toString(),
-                          false,
 
 
                 ),

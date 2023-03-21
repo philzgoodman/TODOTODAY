@@ -14,12 +14,11 @@ class TaskCard extends StatefulWidget {
   bool isToday = false;
   String id = '';
   String hashtag = '';
-  bool hasDocument = false;
 
   String date = '';
 
   TaskCard(this.description, this.isToday, this.completed, this.id,
-      this.hashtag, this.date, this.hasDocument,
+      this.hashtag, this.date,
       {super.key});
 
   @override
@@ -31,7 +30,6 @@ class _TaskCardState extends State<TaskCard> {
   @override
   void initState() {
     super.initState();
-   widget.hasDocument = TodoApp.checkFirestoreIfHasDocument(widget.id);
   }
 
 
@@ -39,72 +37,74 @@ class _TaskCardState extends State<TaskCard> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(0.6),
-      child: Card(
+      child: GestureDetector(
+        onTap: () {
+          showEditDialog();
+        },
+        child: Card(
 
-        shadowColor: Colors.black,
-        elevation: 1,
-        color: lighten(getRandomColor(widget.date, 50)),
-        child: ListTile(
-          visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-          title: GestureDetector(
-              onTap: () {
-                showEditDialog();
-              },
-              child: Text(widget.description,
-                  style: TextStyle(
-                    fontSize: 14,
-                  ))),
-          subtitle: GestureDetector(
-              onTap: () {
-                openAlertDialogThatShowsTasksContainingThisTag(widget.hashtag);
-              },
-              child:
-                  Text(widget.hashtag, style: TextStyle(color: Colors.blue))),
-          trailing: Transform.scale(
-            scale: 0.95,
+          shadowColor: Colors.black,
+          elevation: 1,
+          color: lighten(getRandomColor(widget.date, 50)),
+          child: ListTile(
+            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+            title: Text(widget.description,
+                style: TextStyle(
+                  fontSize: 14,
+                )),
+            subtitle: GestureDetector(
+
+                onTap: () {
+                  openAlertDialogThatShowsTasksContainingThisTag(widget.hashtag);
+                },
+                child:
+                Text(widget.hashtag, style: TextStyle(color: Colors.blue))),
+            trailing: Transform.scale(
+              scale: 0.95,
               child:
 
-            Transform.translate(
-              offset: const Offset(5, 0),
-              child: Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 56,
-                    child: Checkbox(
-                      value: widget.completed,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          widget.completed = value!;
-                          todoApp.updateTask(widget);
-                        });
-                      },
+              Transform.translate(
+                offset: const Offset(5, 0),
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 56,
+                      child: Checkbox(
+                        value: widget.completed,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            widget.completed = value!;
+                            todoApp.updateTask(widget);
+                          });
+                        },
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 56,
-                    child: IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        setState(() {
-                          TodoApp.deleteTaskByFirebaseId(widget.id);
-                        });
-                      },
+                    SizedBox(
+                      width: 56,
+                      child: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          setState(() {
+                            TodoApp.deleteTaskByFirebaseId(widget.id);
+                          });
+                        },
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 56,
-                    child: Switch(
-                      value: widget.isToday,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          widget.isToday = value!;
-                          todoApp.updateTask(widget);
-                        });
-                      },
+                    SizedBox(
+                      width: 56,
+                      child: Switch(
+                        value: widget.isToday,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            widget.isToday = value!;
+                            todoApp.updateTask(widget);
+                          });
+                        },
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
@@ -124,8 +124,10 @@ class _TaskCardState extends State<TaskCard> {
           return Stack(
             children: [
               Container(
+                width: MediaQuery.of(context).size.width,
                 child: AlertDialog(
-                  title: Text('Edit Task'),
+
+
                   backgroundColor: getRandomColor(widget.date, 50),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -149,65 +151,24 @@ class _TaskCardState extends State<TaskCard> {
                           SizedBox(
                             width: 20,
                           ),
-                          Transform.translate(
-                            offset: Offset(15, 0),
-                            child: Offstage(
-                                offstage: widget.hasDocument,
-                                child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Icon(
-                                      Icons.task,
-                                      color: Colors.grey,
-                                    ))),
-                          ),
-                          Transform.translate(
-                            offset: Offset(15, 0),
-                            child: Offstage(
-                                offstage: !widget.hasDocument,
-                                child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Icon(
-                                      Icons.task,
-                                      color: Colors.greenAccent,
-                                    ))),
-                          ),
-                          Offstage(
-                            offstage: widget.hasDocument,
+
+                          SizedBox(
+                            width: 70,
                             child: TextButton(
                               onPressed: () {
-                                setState(() {
+
+                                TodoApp.getFirstNoteFromFireStore(widget.id);
+
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              DocumentEditingScreen(widget.id,
-                                                  widget.hasDocument)));
-                                });
-                              },
-                              child: Transform.translate(
-                                offset: Offset(6, 0),
-                                child: Text(
-                                  'Add Word Doc',
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Offstage(
-                            offstage: !widget.hasDocument,
-                            child: TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              DocumentEditingScreen(widget.id,
-                                                  widget.hasDocument)));
-                                });
-                              },
+                                          builder: (context)
+                                          => DocumentEditingScreen(id: widget.id)));
+                                },
+
+
+
+
                               child: Text(
                                 'Edit Attached Doc',
                                 textAlign: TextAlign.right,
@@ -238,7 +199,6 @@ class _TaskCardState extends State<TaskCard> {
                           trimWhiteSpaceAtEndofString(txt);
                           Navigator.of(context).pop();
                         });
-
                       },
                     ),
                   ],
@@ -249,7 +209,6 @@ class _TaskCardState extends State<TaskCard> {
         }).then((val) {
       widget.description = txt.text;
       todoApp.updateTask(widget);
-      TodoApp.updateFirestoreBoolValueHasDocument(widget.id, true);
       runApp(MyApp());
     });
     ;
@@ -260,6 +219,8 @@ class _TaskCardState extends State<TaskCard> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
             insetPadding: EdgeInsets.zero,
             contentPadding: EdgeInsets.zero,
             actions: [
@@ -280,7 +241,10 @@ class _TaskCardState extends State<TaskCard> {
             ],
             title: Text('Tasks with hashtag: $hashtag'),
             content: Container(
-              width: MediaQuery.of(context).size.width * .9,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width * .9,
               child: TagView(
                 tag: hashtag,
               ),
@@ -288,6 +252,7 @@ class _TaskCardState extends State<TaskCard> {
           );
         });
   }
+}
 
   void trimWhiteSpaceAtEndofString(TextEditingController txt) {
     var str = txt.text;
@@ -301,15 +266,6 @@ class _TaskCardState extends State<TaskCard> {
     txt.text = newStr;
   }
 
-  void uploadStringToFirebaseStorage(TextEditingController txt) {
-    var storage = FirebaseStorage.instance;
-    var ref = storage.ref().child('test.txt');
-    var uploadTask = ref.putString(txt.text);
-    uploadTask.then((res) {
-      res.ref.getDownloadURL().then((value) {});
-    });
-  }
-}
 
 void typeBulletedListIntoTextField(TextEditingController txt) {
   var _isBulletedList = false;
@@ -335,8 +291,8 @@ Color darken(Color c, [int percent = 8]) {
   assert(1 <= percent && percent <= 100);
   var f = 1 - percent / 100;
   return Color.fromARGB(c.alpha, (c.red * f).round(), (c.green * f).round(),
-          (c.blue * f).round())
-      .withOpacity(0.8);
+          (c.blue * f).round());
+
 }
 
 Color invertColorBy10percent(Color today1) {

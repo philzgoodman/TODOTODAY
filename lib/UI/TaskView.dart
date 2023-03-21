@@ -42,7 +42,6 @@ class TaskView extends StatelessWidget {
                             task.id,
                             task['hashtag'],
                             task['date'].toString(),
-                            task['hasDocument'],
                         );
                       } else {
                         return Column(
@@ -54,15 +53,11 @@ class TaskView extends StatelessWidget {
                                 task.id,
                                 task['hashtag'].toString(),
                                 task['date'].toString(),
-                                task['hasDocument'],
 
                             )
 
                             ,
-                            SizedBox(
-                              height: 300,
-                              child: Opacity(opacity: 0.4, child: DonePage()),
-                            ),
+                            Opacity(opacity: 0.2, child: DonePage()),
                           ],
                         );
                       }

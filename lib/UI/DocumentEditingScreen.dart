@@ -1,18 +1,27 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:todotoday/TodoApp.dart';
 
+import '../global.dart';
 import 'hashtags_page.dart';
 
 class DocumentEditingScreen extends StatefulWidget {
 
+  String id;
 
-  final String id;
-  final bool hasDocument;
-   DocumentEditingScreen(this.id, this.hasDocument, {Key? key}) : super(key: key);
+  DocumentEditingScreen({
+    Key? key,
+    required this.id,
+
+  }) : super(key: key);
+
+
+
 
   @override
   State<DocumentEditingScreen> createState() => _DocumentEditingScreenState();
@@ -25,15 +34,23 @@ class _DocumentEditingScreenState extends State<DocumentEditingScreen> {
   TextEditingController txtedt = TextEditingController(text: "");
 
   @override
-  void initState() {
+  initState()  {
+    // TODO: implement initState
     super.initState();
-    if (widget.hasDocument) {
-     getDocumentFromFirebaseStorage(widget.id);
+    txtedt.text = notes[0];
+
     }
-  }
+
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
+
+
+
 
 
     return Scaffold(
@@ -56,7 +73,7 @@ class _DocumentEditingScreenState extends State<DocumentEditingScreen> {
           IconButton(
             icon: const Icon(Icons.save),
             onPressed: () {
-              saveAsMarkdownFileToFirebaseStorage(txtedt.text, widget.id);
+              TodoApp().saveTextAsSubcollectionInFirestore(txtedt.text, widget.id);
               showToast(
                   'Saved Document to Cloud.');
             },
@@ -69,16 +86,25 @@ class _DocumentEditingScreenState extends State<DocumentEditingScreen> {
         ],
       ),
       body: Center(
-        child: TextField(
-          controller: txtedt,
+        child:
+                 TextField(
+              controller: txtedt,
 
 
-          maxLines: 100,
-          minLines: 100,
+              maxLines: 100,
+              minLines: 100,
 
 
-        ),
+            ),
+
       ),
+
+
+
+
+
+
+
     );
   }
 
@@ -102,39 +128,14 @@ class _DocumentEditingScreenState extends State<DocumentEditingScreen> {
 
     await ref.putString(text);
 
-    TodoApp.updateFirestoreBoolValueHasDocument(id, true);
   }
 
 
 
 
-   getDocumentFromFirebaseStorage(String id) {
 
 
 
-    final ref = FirebaseStorage.instance.ref().child('$id.md');
-
-    ref.getDownloadURL().then((val) {
-      ref.getDownloadURL().then((value) {
-        print(value);
-        convertContentsofHtmlUrlToString(value);
-      });
-    });
-    }
-
-  void convertContentsofHtmlUrlToString(String value) {
-    var url = Uri.parse(value);
-    var client = new HttpClient();
-    client.getUrl(url).then((HttpClientRequest request) {
-      return request.close();
-    }).then((HttpClientResponse response) {
-      response.transform(utf8.decoder).listen((contents) {
-          txtedt.text = contents;
-
-      });
-    });
-
-  }
 
 }
 

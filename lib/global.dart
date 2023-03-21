@@ -9,6 +9,10 @@ import 'main.dart';
 TodoApp todoApp = TodoApp();
 bool loggedIn = false;
 List<String> subTitleCount = [];
+
+List<String> notes = [];
+
+
 bool isVisible = true;
 Color today1 = Color(0xFFB0BD8A);
 Color today2 = Color(0xFF356C40);

@@ -40,7 +40,6 @@ class DoneTagPage extends StatelessWidget {
                       task.id,
                       task['hashtag'],
                       task['date'].toString(),
-                      false,
                     );
                   },
                 );

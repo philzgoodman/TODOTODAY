@@ -34,7 +34,6 @@ class TodoApp with ChangeNotifier {
       'isToday': isToday,
       'hashtag': getHashtag(description),
       'date': DateTime.now().toString(),
-      'hasDocument': false,
     });
 
     print("Stored to Firestore");
@@ -52,7 +51,6 @@ class TodoApp with ChangeNotifier {
       'isToday': false,
       'hashtag': hashtag,
       'date': DateTime.now().toString(),
-      'hasDocument': false,
     });
 
     print("Stored to Firestore");
@@ -74,7 +72,6 @@ class TodoApp with ChangeNotifier {
       'isToday': task.isToday,
       'description': task.description,
       'hashtag': task.hashtag,
-      'hasDocument': task.hasDocument,
     });
   }
 
@@ -137,8 +134,8 @@ class TodoApp with ChangeNotifier {
         .delete();
   }
 
-  static void saveNewColorsToFirestore(
-      Color today1, Color today2, Color today3) {
+  static void saveNewColorsToFirestore(Color today1, Color today2,
+      Color today3) {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       throw StateError('Not logged in');
@@ -186,54 +183,68 @@ class TodoApp with ChangeNotifier {
   }
 
   Future<void> signOut() async {
-
     await FirebaseAuth.instance.signOut();
     runApp(Phoenix(child: MyApp()));
   }
 
-  static void updateFirestoreBoolValueHasDocument(id, bool bool) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Future<void> saveTextAsSubcollectionInFirestore(String text, String id) async {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       throw StateError('Not logged in');
     }
-    FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .collection('tasks')
-        .doc(id)
-        .update({
-      'hasDocument': bool,
+    await _firestore.collection('users').doc(user.uid).collection('tasks')
+        .doc(id).collection('notes').add({
+
+      'text': text,
     });
-  }
 
-  static bool checkFirestoreIfHasDocument(String id) {
-
-
-      var user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        throw StateError('Not logged in');
-      }
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .collection('tasks')
-          .doc(id)
-          .get()
-          .then((DocumentSnapshot documentSnapshot) {
-        if (documentSnapshot.exists) {
-          return true;
-        } else {
-          return false;
-        }
-      });return false;
-    }
-
-
-
-
-
-
-
+    print("Stored to Firestore");
+    notifyListeners();
 
   }
+
+  static void getFirstNoteFromFireStore(String id) {var user = FirebaseAuth.instance.currentUser;
+  if (user == null) {
+    throw StateError('Not logged in');
+  }
+  FirebaseFirestore.instance
+      .collection('users')
+      .doc(user.uid)
+      .collection('tasks')
+      .doc(id)
+      .collection('notes')
+      .get()
+      .then((QuerySnapshot querySnapshot) {
+    querySnapshot.docs.forEach((doc) {
+      print(doc["text"]);
+      notes[0] = doc["text"];
+    });
+  });}
+
+
+
+}
 
