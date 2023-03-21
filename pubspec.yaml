@@ -48,6 +48,9 @@ dependencies:
   fluttertoast: ^8.2.1
   flutter_phoenix: ^1.1.0
   firebase_storage: ^11.0.16
+  html_editor_enhanced: ^2.5.1
+  firebase_app_check: ^0.1.1+14
+
 
 dev_dependencies:
   flutter_test:

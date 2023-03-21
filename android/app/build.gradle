@@ -43,7 +43,7 @@ android {
             storePassword keystoreProperties['storePassword']
         }
     }
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 33
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -92,4 +92,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-firestore'
+    implementation 'com.google.firebase:firebase-appcheck-safetynet:16.1.2'
+
+
 }

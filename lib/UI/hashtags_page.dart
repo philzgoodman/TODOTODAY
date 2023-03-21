@@ -219,7 +219,7 @@ class HashtagsPage extends StatelessWidget {
                       ).then((val) {
                         finished();
                       });
-                      ;
+
                     },
                     child: Card(
                       color: darken(getRandomColor(uniqueSubtitles[index], 50)),
@@ -276,78 +276,6 @@ class HashtagsPage extends StatelessWidget {
     runApp(MyApp());
   }
 
-  void duplicateTaskTodoToday(String tag) {
-    final db = FirebaseFirestore.instance;
-    final user = FirebaseAuth.instance.currentUser;
-    Query query = db
-        .collection('users')
-        .doc(user?.uid)
-        .collection('tasks')
-        .where('hashtag', isEqualTo: tag);
-
-    query.get().then((value) {
-      for (int i = 0; i < value.docs.length; i++) {
-        DocumentSnapshot task = value.docs[i];
-        db.collection('users').doc(user?.uid).collection('tasks').add({
-          'description': task['description'],
-          'isToday': true,
-          'completed': false,
-          'hashtag': '#default',
-          'date': DateTime.now().add(Duration(seconds: i)).toString(),
-        });
-      }
-    });
-
-    showToast(
-        'Copied tasks to do today. Note: Hashtag of new tasks are set to #default.');
-  }
-
-
-  void deleteTagGroup(String uniqueSubtitle) {
-    final db = FirebaseFirestore.instance;
-    final user = FirebaseAuth.instance.currentUser;
-    Query query = db
-        .collection('users')
-        .doc(user?.uid)
-        .collection('tasks')
-        .where('hashtag', isEqualTo: uniqueSubtitle);
-
-    query.get().then((value) {
-      for (int i = 0; i < value.docs.length; i++) {
-        DocumentSnapshot task = value.docs[i];
-        db
-            .collection('users')
-            .doc(user?.uid)
-            .collection('tasks')
-            .doc(task.id)
-            .delete();
-      }
-    });
-  }
-
-  void deleteCompletedTasks(String uniqueSubtitle) {
-    final db = FirebaseFirestore.instance;
-    final user = FirebaseAuth.instance.currentUser;
-    Query query = db
-        .collection('users')
-        .doc(user?.uid)
-        .collection('tasks')
-        .where('hashtag', isEqualTo: uniqueSubtitle)
-        .where('completed', isEqualTo: true);
-
-    query.get().then((value) {
-      for (int i = 0; i < value.docs.length; i++) {
-        DocumentSnapshot task = value.docs[i];
-        db
-            .collection('users')
-            .doc(user?.uid)
-            .collection('tasks')
-            .doc(task.id)
-            .delete();
-      }
-    });
-  }
-
 
 
 }
@@ -360,4 +288,77 @@ void showToast(String s) {
       backgroundColor: Colors.grey,
       textColor: Colors.white,
       fontSize: 16.0);
+}
+
+
+void duplicateTaskTodoToday(String tag) {
+  final db = FirebaseFirestore.instance;
+  final user = FirebaseAuth.instance.currentUser;
+  Query query = db
+      .collection('users')
+      .doc(user?.uid)
+      .collection('tasks')
+      .where('hashtag', isEqualTo: tag);
+
+  query.get().then((value) {
+    for (int i = 0; i < value.docs.length; i++) {
+      DocumentSnapshot task = value.docs[i];
+      db.collection('users').doc(user?.uid).collection('tasks').add({
+        'description': task['description'],
+        'isToday': true,
+        'completed': false,
+        'hashtag': '#default',
+        'date': DateTime.now().add(Duration(seconds: i)).toString(),
+      });
+    }
+  });
+
+  showToast(
+      'Copied tasks to do today. Note: Hashtag of new tasks are set to #default.');
+}
+
+
+void deleteTagGroup(String uniqueSubtitle) {
+  final db = FirebaseFirestore.instance;
+  final user = FirebaseAuth.instance.currentUser;
+  Query query = db
+      .collection('users')
+      .doc(user?.uid)
+      .collection('tasks')
+      .where('hashtag', isEqualTo: uniqueSubtitle);
+
+  query.get().then((value) {
+    for (int i = 0; i < value.docs.length; i++) {
+      DocumentSnapshot task = value.docs[i];
+      db
+          .collection('users')
+          .doc(user?.uid)
+          .collection('tasks')
+          .doc(task.id)
+          .delete();
+    }
+  });
+}
+
+void deleteCompletedTasks(String uniqueSubtitle) {
+  final db = FirebaseFirestore.instance;
+  final user = FirebaseAuth.instance.currentUser;
+  Query query = db
+      .collection('users')
+      .doc(user?.uid)
+      .collection('tasks')
+      .where('hashtag', isEqualTo: uniqueSubtitle)
+      .where('completed', isEqualTo: true);
+
+  query.get().then((value) {
+    for (int i = 0; i < value.docs.length; i++) {
+      DocumentSnapshot task = value.docs[i];
+      db
+          .collection('users')
+          .doc(user?.uid)
+          .collection('tasks')
+          .doc(task.id)
+          .delete();
+    }
+  });
 }
