@@ -1,18 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:todotoday/TodoApp.dart';
 
-import '../global.dart';
-import 'hashtags_page.dart';
+
+
 
 class DocumentEditingScreen extends StatefulWidget {
   String id;
@@ -30,7 +25,6 @@ class DocumentEditingScreen extends StatefulWidget {
 class _DocumentEditingScreenState extends State<DocumentEditingScreen> {
 
 
-  final HtmlEditorController controller = HtmlEditorController();
   final TextEditingController txt = TextEditingController();
   String s = '';
   String url = '';
