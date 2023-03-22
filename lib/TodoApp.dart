@@ -226,23 +226,6 @@ class TodoApp with ChangeNotifier {
 
   }
 
-  static void getFirstNoteFromFireStore(String id) {var user = FirebaseAuth.instance.currentUser;
-  if (user == null) {
-    throw StateError('Not logged in');
-  }
-  FirebaseFirestore.instance
-      .collection('users')
-      .doc(user.uid)
-      .collection('tasks')
-      .doc(id)
-      .collection('notes')
-      .get()
-      .then((QuerySnapshot querySnapshot) {
-    querySnapshot.docs.forEach((doc) {
-      print(doc["text"]);
-      notes[0] = doc["text"];
-    });
-  });}
 
 
 

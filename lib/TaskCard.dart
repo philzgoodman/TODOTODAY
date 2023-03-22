@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:todotoday/TodoApp.dart';
 import 'package:todotoday/main.dart';
@@ -160,7 +157,6 @@ class _TaskCardState extends State<TaskCard> {
                             child: TextButton(
                               onPressed: () {
 
-                                TodoApp.getFirstNoteFromFireStore(widget.id);
 
                                   Navigator.push(
                                       context,
