@@ -57,7 +57,7 @@ class TaskView extends StatelessWidget {
                             )
 
                             ,
-                            Opacity(opacity: 0.2, child: DonePage()),
+                            Opacity(opacity: 0.33, child: DonePage()),
                           ],
                         );
                       }

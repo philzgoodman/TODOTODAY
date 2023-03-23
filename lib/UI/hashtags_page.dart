@@ -222,40 +222,51 @@ class HashtagsPage extends StatelessWidget {
 
                     },
                     child: Card(
-                      color: darken(getRandomColor(uniqueSubtitles[index], 50)),
-                      elevation: 2,
-                        shadowColor: Colors.grey,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: Text(
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                textAlign: TextAlign.center,
-                                uniqueSubtitles[index],
-                                style: TextStyle(
-                                  color: Colors.blue,
-                                  fontSize: 14,
+                      color: lighten(getRandomColor( uniqueSubtitles[index], 50)),
+                      elevation: 3,
+                        shadowColor: Colors.black,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color(0xff0000005A),
+                              Color(0xff00000034),
+                            ],
+                          ),
+                        ),child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Text(
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  uniqueSubtitles[index],
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontSize: 14,
+                                  ),
                                 ),
                               ),
-                            ),
-                            Text(
-                              textAlign: TextAlign.center,
-                              subtitles
-                                  .where((element) =>
-                              element == uniqueSubtitles[index])
-                                  .length
-                                  .toString(),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
+                              Text(
+                                textAlign: TextAlign.center,
+                                subtitles
+                                    .where((element) =>
+                                element == uniqueSubtitles[index])
+                                    .length
+                                    .toString(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),

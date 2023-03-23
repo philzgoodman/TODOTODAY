@@ -93,6 +93,23 @@ class TodoApp with ChangeNotifier {
     });
   }
 
+  Future<void> copyTaskTodoToday(String description) async {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+    await _firestore.collection('users').doc(user.uid).collection('tasks').add({
+      'description': description,
+      'completed': false,
+      'isToday': true,
+      'hashtag': getHashtag(description),
+      'date': DateTime.now().toString(),
+    });
+
+    print("Stored to Firestore");
+    notifyListeners();
+  }
+
   void deleteTask(String id) {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {

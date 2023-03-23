@@ -53,9 +53,9 @@ class _TaskCardState extends State<TaskCard> {
                   fontSize: 14,
                 )),
             subtitle: GestureDetector(
-
                 onTap: () {
-                  openAlertDialogThatShowsTasksContainingThisTag(widget.hashtag);
+                  openAlertDialogThatShowsTasksContainingThisTag(
+                      widget.hashtag);
                 },
                 child:
                 Text(widget.hashtag, style: TextStyle(color: Colors.blue))),
@@ -124,7 +124,10 @@ class _TaskCardState extends State<TaskCard> {
           return Stack(
             children: [
               Container(
-                width: MediaQuery.of(context).size.width * 1.1,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 1.1,
                 child: AlertDialog(
 
 
@@ -132,6 +135,24 @@ class _TaskCardState extends State<TaskCard> {
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      Transform.scale(
+                        scale: .7,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                          ),
+                          onPressed: () {
+                            TodoApp().copyTaskTodoToday(widget.description);
+                            showToast(
+                                'Copied tasks to do today. Note: Hashtag of new tasks are set to #default.');
+                          },
+                          child: Text('COPY LIST TO TODAY',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 9,
+                              )),
+                        ),
+                      ),
                       TextField(
                         maxLines: 8,
                         controller: txt,
@@ -156,16 +177,13 @@ class _TaskCardState extends State<TaskCard> {
                             width: 70,
                             child: TextButton(
                               onPressed: () {
-
-
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context)
-                                          => DocumentEditingScreen(id: widget.id)));
-                                },
-
-
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            DocumentEditingScreen(
+                                                id: widget.id)));
+                              },
 
 
                               child: Text(
@@ -215,9 +233,9 @@ class _TaskCardState extends State<TaskCard> {
 
   void openAlertDialogThatShowsTasksContainingThisTag(String hashtag) {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return
+      context: context,
+      builder: (BuildContext context) {
+        return
           AlertDialog(
             elevation: 0,
             backgroundColor:
@@ -293,7 +311,7 @@ class _TaskCardState extends State<TaskCard> {
                                 ),
                                 onPressed: () {
                                   deleteTagGroup(
-                                     hashtag);
+                                      hashtag);
                                 },
                                 child: Text('DELETE TAG GROUP',
                                     style: TextStyle(
@@ -327,7 +345,8 @@ class _TaskCardState extends State<TaskCard> {
                             ),
                           ],
                         ),
-                        Header(), ],
+                        Header(),
+                      ],
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 138.0),
@@ -375,12 +394,11 @@ class _TaskCardState extends State<TaskCard> {
               ),
             ],
           );
-        },
-    ).then((val) {
-    });
+      },
+    ).then((val) {});
     ;
   }
-}
+
 
   void trimWhiteSpaceAtEndofString(TextEditingController txt) {
     var str = txt.text;
@@ -394,7 +412,7 @@ class _TaskCardState extends State<TaskCard> {
     txt.text = newStr;
   }
 
-
+}
 void typeBulletedListIntoTextField(TextEditingController txt) {
   var _isBulletedList = false;
   if (_isBulletedList) {
@@ -427,3 +445,4 @@ Color invertColorBy10percent(Color today1) {
   return Color.fromARGB(
       today1.alpha, today1.red + 25, today1.green + 25, today1.blue + 25);
 }
+
