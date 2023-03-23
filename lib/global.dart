@@ -12,6 +12,9 @@ List<String> subTitleCount = [];
 
 List<String> notes = [];
 
+int tagLength = 0;
+
+int calculatorResult = 0;
 
 bool isVisible = true;
 Color today1 = Color(0xFFB0BD8A);

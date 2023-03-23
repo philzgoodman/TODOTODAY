@@ -281,6 +281,7 @@ class HashtagsPage extends StatelessWidget {
         }
       },
     );
+
   }
 
   void finished() {
