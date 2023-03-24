@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todotoday/global.dart';
 import '../TaskCard.dart';
@@ -34,11 +35,14 @@ class _TagViewState extends State<TagView> {
 
 
     return Stack(
+      clipBehavior: Clip.none,
+
       children:
       [ StreamBuilder<QuerySnapshot>(
         stream: query.snapshots(),
         // db.collection('users').doc(user?.uid).collection('tasks').snapshots(),
         builder: (context, snapshot) {
+
           if (snapshot.hasData) {
             return ListView.builder(
                 itemCount: snapshot.data!.docs.length,
@@ -81,44 +85,99 @@ class _TagViewState extends State<TagView> {
         },
       ),
 
-        StreamBuilder< int>(
-          stream: getCalculatorStream(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              calculatorValue = snapshot.data!;
-            }
-            return Positioned(
-              bottom: 10,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        sumList(widget.tag);
 
-                      });
+    Positioned(
+      bottom: 70,
+      child: StreamBuilder< int>(
+      stream: getCalculatorStream(),
+      builder: (context, snapshot) {
+      if (snapshot.hasData) {
+      calculatorValue = snapshot.data!;
+      }
+      return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+      Padding(
+        padding: const EdgeInsets.only(right:48.0),
+        child: TextButton(
+          style: TextButton.styleFrom(
+          backgroundColor: Colors.blue,
+          ),
+        onPressed: () {
+        setState(() {
+        sumList(widget.tag);
 
-                    },
-            child: Text("Sum List", style: TextStyle(
-              color: Colors.white,
-            ),),
-                  ),
-                  Text(calculatorValue.toString(), style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 30,
-                  ),),
+        });
 
-
-                ],
-              ),
-            );
-          }
+        },
+        child: Text("Sum List", style: TextStyle(
+        color: Colors.white,
+        ),),
         ),
+      ),
+      Text(calculatorValue.toString(), style: TextStyle(
+      color: Colors.white,
+      fontSize: 30,
+      ),),
+
+
+      ],
+      );
+      }
+      ),
+    ),
+
 
       ],
     );
 
+  }
+  void showCalculator(BuildContext context) {
+    return Overlay.of(context)?.insert(
+      OverlayEntry(builder: (context) {
+        return Positioned(
+            top:20,
+            left: 20,
+            child:
+            StreamBuilder< int>(
+                stream: getCalculatorStream(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    calculatorValue = snapshot.data!;
+                  }
+                  return Positioned(
+                    bottom: 10,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              sumList(widget.tag);
+
+                            });
+
+                          },
+                          child: Text("Sum List", style: TextStyle(
+                            color: Colors.white,
+                          ),),
+                        ),
+                        Text(calculatorValue.toString(), style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                        ),),
+
+
+                      ],
+                    ),
+                  );
+                }
+            )
+
+            );
+      }),
+    );
+  }
   }
 
   void sumList(String tag) {
@@ -150,9 +209,9 @@ class _TagViewState extends State<TagView> {
         sum = sum! + num!;
       }
 
-      setState(() {
+
         calculatorResult = sum!;
-      });
+
 
     });
   }
@@ -168,9 +227,6 @@ class _TagViewState extends State<TagView> {
   }
 
 
-
-
-}
 
 
 
