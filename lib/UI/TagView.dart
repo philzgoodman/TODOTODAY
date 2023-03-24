@@ -18,9 +18,14 @@ class TagView extends StatefulWidget {
 
 class _TagViewState extends State<TagView> {
   var calculatorValue = 0;
+  var calcVisible = false;
+  Color selected = Colors.lightBlueAccent;
+  Color unselected = Color(0xff537E9FFF);
+  int index = 1;
+
+
   @override
   Widget build(BuildContext context) {
-
 
     final dbTag = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser;
@@ -32,152 +37,178 @@ class _TagViewState extends State<TagView> {
         .where('completed', isEqualTo: false)
         .orderBy('date', descending: false);
 
-
-
     return Stack(
       clipBehavior: Clip.none,
-
-      children:
-      [ StreamBuilder<QuerySnapshot>(
-        stream: query.snapshots(),
-        // db.collection('users').doc(user?.uid).collection('tasks').snapshots(),
-        builder: (context, snapshot) {
-
-          if (snapshot.hasData) {
-            return ListView.builder(
-                itemCount: snapshot.data!.docs.length,
-                itemBuilder: (context, index) {
-                  tagLength = snapshot.data!.docs.length;
-                  DocumentSnapshot task = snapshot.data!.docs[index];
-                  if ((index != snapshot.data!.docs.length - 1)) {
-                    return TaskCard(
-                      task['description'],
-                      task['isToday'],
-                      task['completed'],
-                      task.id,
-                      task['hashtag'],
-                      task['date'].toString(),
-                    );
-                  } else {
-                    return Column(
-                      children: [
-                        TaskCard(
-                          task['description'],
-                          task['isToday'],
-                          task['completed'],
-                          task.id,
-                          task['hashtag'].toString(),
-                          task['date'].toString(),
-
-
-                        ),
-                        SizedBox(
-                          height: 300,
-                          child: Opacity(opacity: 0.1,
-                              child: DoneTagPage(tag: widget.tag.toString(),)),
-                        ),
-                      ],
-                    );
-                  }
-                });
-          }
-          return Center(child: CircularProgressIndicator());
-        },
-      ),
-
-
-    Positioned(
-      bottom: 70,
-      child: StreamBuilder< int>(
-      stream: getCalculatorStream(),
-      builder: (context, snapshot) {
-      if (snapshot.hasData) {
-      calculatorValue = snapshot.data!;
-      }
-      return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-      Padding(
-        padding: const EdgeInsets.only(right:48.0),
-        child: TextButton(
-          style: TextButton.styleFrom(
-          backgroundColor: Colors.blue,
-          ),
-        onPressed: () {
-        setState(() {
-        sumList(widget.tag);
-
-        });
-
-        },
-        child: Text("Sum List", style: TextStyle(
-        color: Colors.white,
-        ),),
+        StreamBuilder<QuerySnapshot>(
+          stream: query.snapshots(),
+          // db.collection('users').doc(user?.uid).collection('tasks').snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    tagLength = snapshot.data!.docs.length;
+                    DocumentSnapshot task = snapshot.data!.docs[index];
+                    if ((index != snapshot.data!.docs.length - 1)) {
+                      return TaskCard(
+                        task['description'],
+                        task['isToday'],
+                        task['completed'],
+                        task.id,
+                        task['hashtag'],
+                        task['date'].toString(),
+                      );
+                    } else {
+                      return Column(
+                        children: [
+                          TaskCard(
+                            task['description'],
+                            task['isToday'],
+                            task['completed'],
+                            task.id,
+                            task['hashtag'].toString(),
+                            task['date'].toString(),
+                          ),
+                          SizedBox(
+                            height: 300,
+                            child: Opacity(
+                                opacity: 0.1,
+                                child: DoneTagPage(
+                                  tag: widget.tag.toString(),
+                                )),
+                          ),
+                        ],
+                      );
+                    }
+                  });
+            }
+            return Center(child: CircularProgressIndicator());
+          },
         ),
-      ),
-      Text(calculatorValue.toString(), style: TextStyle(
-      color: Colors.white,
-      fontSize: 30,
-      ),),
+        Positioned(
+
+          bottom: 210,
+          left: 0,
+          child: IconButton(
+            color: calcVisible ? selected : unselected,
+
+          onPressed: () {
+            setState(() {
+              calcVisible = !calcVisible;
+            });
+          },
+
+          icon: Icon(Icons.calculate),
+        ),
+        ),
 
 
-      ],
-      );
-      }
-      ),
-    ),
 
-
-      ],
-    );
-
-  }
-  void showCalculator(BuildContext context) {
-    return Overlay.of(context)?.insert(
-      OverlayEntry(builder: (context) {
-        return Positioned(
-            top:20,
-            left: 20,
-            child:
-            StreamBuilder< int>(
+        Visibility(
+          visible: calcVisible,
+          child: Positioned(
+            bottom: 160,
+            left: 10,
+            child: StreamBuilder<int>(
                 stream: getCalculatorStream(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     calculatorValue = snapshot.data!;
                   }
-                  return Positioned(
-                    bottom: 10,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  return
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              sumList(widget.tag);
+                        Padding(
+                          padding: const EdgeInsets.only(right: 18.0, left:  5.0),
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor:  index == 1 ? selected : unselected,
+                            ),
 
-                            });
+                            onPressed: () {
+                              setState(() {
 
-                          },
-                          child: Text("Sum List", style: TextStyle(
-                            color: Colors.white,
-                          ),),
+
+                                sumList(widget.tag);
+                                index = 1;
+                              });
+                            },
+                            child: Text(
+                              "SUM",
+                              style: TextStyle(
+                                color: Colors.white,fontSize:10,
+                              ),
+                            ),
+                          ),
                         ),
-                        Text(calculatorValue.toString(), style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                        ),),
-
-
+                        Padding(
+                          padding: const EdgeInsets.only(right: 18.0),
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor:  index == 2 ? selected : unselected,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                multiplyList(widget.tag);
+                                index = 2;
+                              });
+                            },
+                            child: Text(
+                              "MULTIPLY",
+                              style: TextStyle(
+                                color: Colors.white,fontSize:10,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 18.0),
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor:  index == 3 ? selected : unselected,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                getTaskCount(widget.tag);
+                                index = 3;
+                              });
+                            },
+                            child: Text(
+                              "COUNT",
+                              style: TextStyle(
+                                color: Colors.white,fontSize:10,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              "Result:",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
+                            Text(
+                              calculatorValue.toString(),
+                              style: TextStyle(
+                                color: Colors.yellowAccent,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
-                    ),
-                  );
-                }
-            )
 
-            );
-      }),
+                  );
+                }),
+          ),
+        ),
+      ],
     );
-  }
   }
 
   void sumList(String tag) {
@@ -196,23 +227,20 @@ class _TagViewState extends State<TagView> {
         .where('completed', isEqualTo: false);
 
     query.get().then((value) {
-
-
-
       for (int i = 0; i < value.docs.length; i++) {
-        if (value.docs[i]['description'].contains(RegExp(r'[0-9]')) != false) {
-          itemsWithNumbers.add(getOnlyNumbersAndSpaces(value.docs[i]['description']));
+        if (value.docs[i]['description'].contains(RegExp(r'[0-9]')) !=
+            false) {
+          itemsWithNumbers
+              .add(getOnlyNumbersAndSpaces(value.docs[i]['description']));
         }
       }
       for (int i = 0; i < itemsWithNumbers.length; i++) {
         num = int.parse(itemsWithNumbers[i]);
         sum = sum! + num!;
       }
-
-
+      setState(() {
         calculatorResult = sum!;
-
-
+      });
     });
   }
 
@@ -223,29 +251,77 @@ class _TagViewState extends State<TagView> {
   }
 
   getOnlyNumbersAndSpaces(doc) {
-    return doc.replaceAll(RegExp(r'[^0-9 ]'), '');
+    var onlyNumbers = doc.replaceAll(RegExp(r"[^0-9]"), "");
+    return onlyNumbers;
   }
 
 
+  void multiplyList(String tag) {
+    int product = 1;
+    int num = 1;
+    int sum = 0;
+
+    List<int> itemsWithNumbers = [];
+
+    final dbTag = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser;
+    Query query = dbTag
+        .collection('users')
+        .doc(user?.uid)
+        .collection('tasks')
+        .where('hashtag', isEqualTo: tag)
+        .where('completed', isEqualTo: false);
+
+    query.get().then((value) {
+      for (int i = 0; i < value.docs.length; i++) {
+        if (value.docs[i]['description'].contains(RegExp(r'[0-9]')) !=
+            false) {
+          itemsWithNumbers
+              .add(
+              int.parse(getOnlyNumbersAndSpaces(value.docs[i]['description'])));
+        }
+      }
+      for (int i = 0; i < itemsWithNumbers.length; i++) {
+       product = multiplyItemsInList(itemsWithNumbers);
+      }
+      setState(() {
+        calculatorResult = product;
+      });
+    });
+  }
+
+  int multiplyItemsInList(List<int> itemsWithNumbers) {
+    int product = 1;
+    for (int i = 0; i < itemsWithNumbers.length; i++) {
+      product = product * itemsWithNumbers[i];
+    }
+    return product;
+  }
+
+  void getTaskCount(String tag) {
+    int count = 0;
+
+    final dbTag = FirebaseFirestore.instance;
+    final user = FirebaseAuth.instance.currentUser;
+    Query query = dbTag
+        .collection('users')
+        .doc(user?.uid)
+        .collection('tasks')
+        .where('hashtag', isEqualTo: tag)
+        .where('completed', isEqualTo: false);
+
+    query.get().then((value) {
+      for (int i = 0; i < value.docs.length; i++) {
+        count++;
+      }
+      setState(() {
+        calculatorResult = count;
+      });
+    });
+  }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 
 
