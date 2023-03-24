@@ -32,6 +32,7 @@ class _TagViewState extends State<TagView> {
         .orderBy('date', descending: false);
 
 
+
     return Stack(
       children:
       [ StreamBuilder<QuerySnapshot>(
@@ -80,31 +81,39 @@ class _TagViewState extends State<TagView> {
         },
       ),
 
-        Positioned(
-          bottom: 40,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    sumList(widget.tag);
+        StreamBuilder< int>(
+          stream: getCalculatorStream(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              calculatorValue = snapshot.data!;
+            }
+            return Positioned(
+              bottom: 10,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        sumList(widget.tag);
 
-                  });
+                      });
 
-                },
-        child: Text("Sum List", style: TextStyle(
-          color: Colors.white,
-        ),),
+                    },
+            child: Text("Sum List", style: TextStyle(
+              color: Colors.white,
+            ),),
+                  ),
+                  Text(calculatorValue.toString(), style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                  ),),
+
+
+                ],
               ),
-              Text(calculatorValue.toString(), style: TextStyle(
-                color: Colors.white,
-                fontSize: 30,
-              ),),
-
-
-            ],
-          ),
+            );
+          }
         ),
 
       ],
@@ -115,6 +124,9 @@ class _TagViewState extends State<TagView> {
   void sumList(String tag) {
     int? sum = 0;
     int? num = 0;
+
+    List itemsWithNumbers = [];
+
     final dbTag = FirebaseFirestore.instance;
     final user = FirebaseAuth.instance.currentUser;
     Query query = dbTag
@@ -122,19 +134,37 @@ class _TagViewState extends State<TagView> {
         .doc(user?.uid)
         .collection('tasks')
         .where('hashtag', isEqualTo: tag)
-        .where('completed', isEqualTo: false)
-        .orderBy('date', descending: false);
+        .where('completed', isEqualTo: false);
 
     query.get().then((value) {
+
+
+
       for (int i = 0; i < value.docs.length; i++) {
-        num = int.tryParse(value.docs[i]['description'])?.toInt();
-        if (num != null) {
-          sum = sum! + num!;
+        if (value.docs[i]['description'].contains(RegExp(r'[0-9]')) != false) {
+          itemsWithNumbers.add(getOnlyNumbersAndSpaces(value.docs[i]['description']));
         }
       }
-      calculatorValue = sum!;
-      print(calculatorResult);
+      for (int i = 0; i < itemsWithNumbers.length; i++) {
+        num = int.parse(itemsWithNumbers[i]);
+        sum = sum! + num!;
+      }
+
+      setState(() {
+        calculatorResult = sum!;
+      });
+
     });
+  }
+
+  getCalculatorStream() {
+    return Stream<int>.periodic(Duration(seconds: 0), (x) {
+      return calculatorResult;
+    });
+  }
+
+  getOnlyNumbersAndSpaces(doc) {
+    return doc.replaceAll(RegExp(r'[^0-9 ]'), '');
   }
 
 
