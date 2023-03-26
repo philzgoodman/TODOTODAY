@@ -47,6 +47,7 @@ dependencies:
   fluttertoast: ^8.2.1
   flutter_phoenix: ^1.1.0
   firebase_storage:
+  url_launcher: ^6.1.10
 
 
 dev_dependencies:

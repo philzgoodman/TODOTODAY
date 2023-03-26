@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todotoday/TodoApp.dart';
 import 'package:todotoday/main.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'MessageTagBox.dart';
 import 'UI/DocumentEditingScreen.dart';
 import 'UI/Header.dart';
@@ -26,12 +28,17 @@ class TaskCard extends StatefulWidget {
 }
 
 class _TaskCardState extends State<TaskCard> {
+  bool hasUrl = false;
+  String textPlaceholder1 = '';
+  String textPlaceholder2 = '';
+  String mainText = '';
+  String urlText = '';
 
   @override
   void initState() {
+    checkIfHasUrl(widget.description);
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -42,71 +49,103 @@ class _TaskCardState extends State<TaskCard> {
           showEditDialog();
         },
         child: Card(
-
           shadowColor: Colors.black,
           elevation: 1,
           color: lighten(getRandomColor(widget.date, 50)),
-          child: ListTile(
-            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-            title: Text(widget.description,
-                style: TextStyle(
-                  fontSize: 14,
-                )),
-            subtitle: GestureDetector(
-                onTap: () {
-                  openAlertDialogThatShowsTasksContainingThisTag(
-                      widget.hashtag);
-                },
-                child:
-                Text(widget.hashtag, style: TextStyle(color: Colors.blue))),
-            trailing: Transform.scale(
-              scale: 0.95,
-              child:
-
-              Transform.translate(
-                offset: const Offset(5, 0),
-                child: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 56,
-                      child: Checkbox(
-                        value: widget.completed,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            widget.completed = value!;
-                            todoApp.updateTask(widget);
-                          });
-                        },
-                      ),
+          child: Column(
+            children: [
+              ListTile(
+                minLeadingWidth: 100,
+                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                title: hasUrl
+                    ? Wrap(
+                        children: [
+                          Text(textPlaceholder1,
+                              style: TextStyle(
+                                fontFamily: 'JetBrainsMono',
+                                color: Colors.white,
+                                fontSize: 14,
+                              )),
+                          GestureDetector(
+                            onTap: () {
+                              launchURL(urlText);
+                            },
+                            child: Text(urlText,
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 14,
+                                    fontFamily: 'JetBrainsMono')),
+                          ),
+                          Text(textPlaceholder2,
+                              style: TextStyle(
+                                fontFamily: 'JetBrainsMono',
+                                color: Colors.white,
+                                fontSize: 14,
+                              )),
+                        ],
+                      )
+                    : Text(widget.description,
+                        style: TextStyle(
+                          fontFamily: 'JetBrainsMono',
+                          color: Colors.white,
+                          fontSize: 14,
+                        )),
+                subtitle: GestureDetector(
+                    onTap: () {
+                      openAlertDialogThatShowsTasksContainingThisTag(
+                          widget.hashtag);
+                    },
+                    child: Text(widget.hashtag,
+                        style: TextStyle(color: Colors.blue))),
+                trailing: Transform.scale(
+                  scale: 0.95,
+                  child: Transform.translate(
+                    offset: const Offset(5, 0),
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 56,
+                          child: Checkbox(
+                            value: widget.completed,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.completed = value!;
+                                todoApp.updateTask(widget);
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 56,
+                          child: IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              setState(() {
+                                TodoApp.deleteTaskByFirebaseId(widget.id);
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 56,
+                          child: Switch(
+                            value: widget.isToday,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.isToday = value!;
+                                todoApp.updateTask(widget);
+                              });
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      width: 56,
-                      child: IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          setState(() {
-                            TodoApp.deleteTaskByFirebaseId(widget.id);
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      width: 56,
-                      child: Switch(
-                        value: widget.isToday,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            widget.isToday = value!;
-                            todoApp.updateTask(widget);
-                          });
-                        },
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),
@@ -124,13 +163,8 @@ class _TaskCardState extends State<TaskCard> {
           return Stack(
             children: [
               Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 1.1,
+                width: MediaQuery.of(context).size.width * 1.1,
                 child: AlertDialog(
-
-
                   backgroundColor: getRandomColor(widget.date, 50),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -172,7 +206,6 @@ class _TaskCardState extends State<TaskCard> {
                           SizedBox(
                             width: 20,
                           ),
-
                           SizedBox(
                             width: 70,
                             child: TextButton(
@@ -184,8 +217,6 @@ class _TaskCardState extends State<TaskCard> {
                                             DocumentEditingScreen(
                                                 id: widget.id)));
                               },
-
-
                               child: Text(
                                 'Edit Attached Doc',
                                 textAlign: TextAlign.right,
@@ -235,170 +266,137 @@ class _TaskCardState extends State<TaskCard> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return
-          AlertDialog(
-            elevation: 0,
-            backgroundColor:
-            getRandomColor(hashtag, 70),
-            insetPadding: EdgeInsets.zero,
-            contentPadding: EdgeInsets.zero,
-            content: SizedBox(
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width * .9,
-              child: Container(
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 1,
-                child: Stack(
-                  children: [
-                    Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.topCenter,
-                          child: SizedBox(
-                            height: MediaQuery
-                                .of(context)
-                                .size
-                                .height *
-                                .06,
-                            child: Center(
-                              child: Text(
-                                hashtag.toString(),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold),
-                              ),
+        return AlertDialog(
+          elevation: 0,
+          backgroundColor: getRandomColor(hashtag, 70),
+          insetPadding: EdgeInsets.zero,
+          contentPadding: EdgeInsets.zero,
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width * .9,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 1,
+              child: Stack(
+                children: [
+                  Column(
+                    children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * .06,
+                          child: Center(
+                            child: Text(
+                              hashtag.toString(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment
-                              .center,
-
-                          crossAxisAlignment: CrossAxisAlignment
-                              .center,
-                          children: [
-                            Transform.scale(
-                              scale: .7,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                ),
-                                onPressed: () {
-                                  duplicateTaskTodoToday(
-                                      hashtag);
-                                },
-                                child: Text('COPY LIST TO TODAY',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 9,
-                                    )),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Transform.scale(
+                            scale: .7,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.blue,
                               ),
+                              onPressed: () {
+                                duplicateTaskTodoToday(hashtag);
+                              },
+                              child: Text('COPY LIST TO TODAY',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 9,
+                                  )),
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Transform.scale(
-                              scale: .7,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.teal,
-                                ),
-                                onPressed: () {
-                                  deleteTagGroup(
-                                      hashtag);
-                                },
-                                child: Text('DELETE TAG GROUP',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 9,
-                                    )),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Transform.scale(
+                            scale: .7,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.teal,
                               ),
+                              onPressed: () {
+                                deleteTagGroup(hashtag);
+                              },
+                              child: Text('DELETE TAG GROUP',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 9,
+                                  )),
                             ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Transform.scale(
-                              scale: .7,
-                              child: TextButton(
-
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.purple,
-                                ),
-                                onPressed: () {
-                                  deleteCompletedTasks(
-                                      hashtag
-                                  );
-                                },
-                                child: Text('DELETE DONE TASKS',
-                                    style: TextStyle(
-
-                                      color: Colors.white,
-                                      fontSize: 9,
-                                    )),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Transform.scale(
+                            scale: .7,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.purple,
                               ),
+                              onPressed: () {
+                                deleteCompletedTasks(hashtag);
+                              },
+                              child: Text('DELETE DONE TASKS',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 9,
+                                  )),
                             ),
-                          ],
-                        ),
-                        Header(),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 138.0),
-                      child: SizedBox(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width *
-                            .9,
-                        height:
-                        MediaQuery
-                            .of(context)
-                            .size
-                            .height *
-                            .95,
-                        child: TagView(
-                          tag: hashtag,
-                        ),
+                          ),
+                        ],
+                      ),
+                      Header(),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 138.0),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * .9,
+                      height: MediaQuery.of(context).size.height * .95,
+                      child: TagView(
+                        tag: hashtag,
                       ),
                     ),
-                    Positioned(
-                      bottom: 0,
-                      child: MessageTagBox(
-                          hashtag, 0),
-                    ),
-                  ],
-                ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    child: MessageTagBox(hashtag, 0),
+                  ),
+                ],
               ),
             ),
-            actions: [
-              Padding(
-                padding:
-                const EdgeInsets.only(bottom: 28.0, left: 30),
-                child: Center(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      'Ⓧ Close',
-                      textAlign: TextAlign.center,
-                    ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 28.0, left: 30),
+              child: Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Ⓧ Close',
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
-            ],
-          );
+            ),
+          ],
+        );
       },
     ).then((val) {});
     ;
   }
-
 
   void trimWhiteSpaceAtEndofString(TextEditingController txt) {
     var str = txt.text;
@@ -412,7 +410,43 @@ class _TaskCardState extends State<TaskCard> {
     txt.text = newStr;
   }
 
+  String getFirstLinkContainingHttp(String description) {
+    var urlText = '';
+    var url = '';
+    var urlList = description.split(' ');
+    for (var i = 0; i < urlList.length; i++) {
+      if (urlList[i].contains('http')) {
+        url = urlList[i];
+        break;
+      }
+    }
+    urlText = url;
+    return urlText;
+  }
+
+  void checkIfHasUrl(String description) {
+    var fullText = '';
+    var stringList = [];
+    if (description.contains('http') || description.contains('https')) {
+      hasUrl = true;
+
+      urlText = getFirstLinkContainingHttp(description);
+      fullText = description.replaceAll(urlText, '~~~');
+      stringList = fullText.split('~~~');
+      textPlaceholder1 = stringList[0];
+      textPlaceholder2 = stringList[1];
+    } else {
+      hasUrl = false;
+    }
+  }
+
+  void launchURL(String urlText) {
+      launchUrlString(urlText);
+
+
+  }
 }
+
 void typeBulletedListIntoTextField(TextEditingController txt) {
   var _isBulletedList = false;
   if (_isBulletedList) {
@@ -437,12 +471,10 @@ Color darken(Color c, [int percent = 8]) {
   assert(1 <= percent && percent <= 100);
   var f = 1 - percent / 100;
   return Color.fromARGB(c.alpha, (c.red * f).round(), (c.green * f).round(),
-          (c.blue * f).round());
-
+      (c.blue * f).round());
 }
 
 Color invertColorBy10percent(Color today1) {
   return Color.fromARGB(
       today1.alpha, today1.red + 25, today1.green + 25, today1.blue + 25);
 }
-
