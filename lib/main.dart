@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -38,6 +40,9 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+
+
+
   @override
   Widget build(BuildContext context) {
     if (checkIfLoggedin()) {
@@ -78,9 +83,14 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+
+
   @override
   Widget build(BuildContext context) {
-    TodoApp.setSavedBackgroundColorsFromFirestore();
+
+
+
+
 
     return DefaultTabController(
       initialIndex: 1,
@@ -151,14 +161,14 @@ class _MainPageState extends State<MainPage> {
                           ),
                           FloatingActionButton(
                             heroTag: 'done',
-                            backgroundColor: Colors.grey,
+                            backgroundColor: Colors.lightBlue,
                             onPressed: () {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
                                     title: Text(
-                                      'Completed Tasks',textAlign: TextAlign.center,
+                                      'Tasks Finished Today:',textAlign: TextAlign.center,
                                       style: TextStyle(
 
                                         color: Colors.white,
@@ -195,8 +205,25 @@ class _MainPageState extends State<MainPage> {
                               );
                             },
                             tooltip: 'DONE',
-                            child: const Icon(Icons.done),
+                            child: StreamBuilder<int>(
+                                stream: TodoApp().getDailyTaskCount(),
+
+                                builder: (context, snapshot) {
+                                  return
+
+
+                                      Text(
+                                      snapshot.data.toString(),
+                                      style: TextStyle(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+
+                                  );
+                                }),
                           ),
+
                         ],
                       ),
                     ),
@@ -282,6 +309,8 @@ class _MainPageState extends State<MainPage> {
       TodoApp.saveNewColorsToFirestore(today1, today2, today3);
     });
   }
+
+
 }
 
 Color lighten(Color c, [int percent = 30]) {

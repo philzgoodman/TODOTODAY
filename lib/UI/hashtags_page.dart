@@ -48,6 +48,7 @@ class HashtagsPage extends StatelessWidget {
                 ],
               ),
             ),child: Stack(
+            clipBehavior: Clip.none,
               children: [
                 Column(
                   children: [
@@ -55,7 +56,7 @@ class HashtagsPage extends StatelessWidget {
 
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
-                      childAspectRatio: 1.5,
+                      childAspectRatio: 1.8,
                     ),
                     shrinkWrap: true,
                     itemCount: uniqueSubtitles.length,
@@ -100,7 +101,7 @@ class HashtagsPage extends StatelessWidget {
                                                       textAlign: TextAlign.center,
                                                       style: TextStyle(
                                                           color: Colors.blue,
-                                                          fontSize: 13,
+                                                          fontSize: 12,
                                                           fontWeight: FontWeight.bold),
                                                     ),
                                                   ),

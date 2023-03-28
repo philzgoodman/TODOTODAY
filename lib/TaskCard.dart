@@ -113,6 +113,9 @@ class _TaskCardState extends State<TaskCard> {
                               setState(() {
                                 widget.completed = value!;
                                 todoApp.updateTask(widget);
+
+                                if (value == true) {TodoApp().incrementDailyTaskCount();}
+                                else {TodoApp().decrementDailyTaskCount();}
                               });
                             },
                           ),

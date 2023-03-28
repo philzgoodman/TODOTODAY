@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -151,8 +150,8 @@ class TodoApp with ChangeNotifier {
         .delete();
   }
 
-  static void saveNewColorsToFirestore(Color today1, Color today2,
-      Color today3) {
+  static void saveNewColorsToFirestore(
+      Color today1, Color today2, Color today3) {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       throw StateError('Not logged in');
@@ -204,47 +203,142 @@ class TodoApp with ChangeNotifier {
     runApp(Phoenix(child: MyApp()));
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  Future<void> saveTextAsSubcollectionInFirestore(String text, String id) async {
+  Future<void> saveTextAsSubcollectionInFirestore(
+      String text, String id) async {
     var user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       throw StateError('Not logged in');
     }
-    await _firestore.collection('users').doc(user.uid).collection('tasks')
-        .doc(id).collection('notes').add({
-
+    await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('tasks')
+        .doc(id)
+        .collection('notes')
+        .add({
       'text': text,
     });
 
     print("Stored to Firestore");
     notifyListeners();
-
   }
 
+  void incrementDailyTaskCount() {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+
+    _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('dailyTaskCount')
+        .doc('count')
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        _firestore
+            .collection('users')
+            .doc(user.uid)
+            .collection('dailyTaskCount')
+            .doc('count')
+            .update({
+          'count': FieldValue.increment(1),
+        });
+      } else {
+        print('Document does not exist on the database');
+        _firestore
+            .collection('users')
+            .doc(user.uid)
+            .collection('dailyTaskCount')
+            .doc('count')
+            .set({
+          'count': 0,
+        });
+      }
+    });
+
+   }
 
 
 
+  Stream<int> getDailyTaskCount() {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+    return _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('dailyTaskCount')
+        .doc('count')
+        .snapshots()
+        .map((event) => event.data()!['count']);
+  }
+
+  void decrementDailyTaskCount() {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+
+    _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('dailyTaskCount')
+        .doc('count')
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        _firestore
+            .collection('users')
+            .doc(user.uid)
+            .collection('dailyTaskCount')
+            .doc('count')
+            .update({
+          'count': FieldValue.increment(-1),
+        });
+      } else {
+        print('Document does not exist on the database');
+        _firestore
+            .collection('users')
+            .doc(user.uid)
+            .collection('dailyTaskCount')
+            .doc('count')
+            .set({
+          'count': 0,
+        });
+      }
+    });
+  }
+
+  int getDailyTaskInt() {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+    int count = 0;
+    _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('dailyTaskCount')
+        .doc('count')
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        count = documentSnapshot['count'];
+      } else {
+        print('Document does not exist on the database');
+        _firestore
+            .collection('users')
+            .doc(user.uid)
+            .collection('dailyTaskCount')
+            .doc('count')
+            .set({
+          'count': 0,
+        });
+      }
+    });
+    return count;
+  }
 }
-

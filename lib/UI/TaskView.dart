@@ -21,6 +21,7 @@ class TaskView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 28.0),
@@ -43,7 +44,11 @@ class TaskView extends StatelessWidget {
                             task['hashtag'],
                             task['date'].toString(),
                         );
-                      } else {
+                      } else if (snapshot.data!.docs.length == 0) {
+                        return Opacity(opacity: 0.33, child: DonePage());
+
+                      }
+                      else {
                         return Column(
                           children: [
                             TaskCard(
