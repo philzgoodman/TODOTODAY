@@ -53,6 +53,7 @@ class HashtagsPage extends StatelessWidget {
                 Column(
                   children: [
                     GridView.builder(
+                      physics: ScrollPhysics(),
 
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,

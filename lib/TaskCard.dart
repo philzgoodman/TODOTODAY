@@ -55,42 +55,48 @@ class _TaskCardState extends State<TaskCard> {
           child: Column(
             children: [
               ListTile(
-                minLeadingWidth: 100,
-                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+                horizontalTitleGap: -10,
                 title: hasUrl
-                    ? Wrap(
-                        children: [
-                          Text(textPlaceholder1,
-                              style: TextStyle(
-                                fontFamily: 'JetBrainsMono',
-                                color: Colors.white,
-                                fontSize: 14,
-                              )),
-                          GestureDetector(
-                            onTap: () {
-                              launchURL(urlText);
-                            },
-                            child: Text(urlText,
+                    ? Transform.translate(
+                        offset: const Offset(0, -2),
+                      child: Wrap(
+                          children: [
+                            Text(textPlaceholder1,
                                 style: TextStyle(
-                                    color: Colors.blue,
-                                    decoration: TextDecoration.underline,
-                                    fontSize: 14,
-                                    fontFamily: 'JetBrainsMono')),
-                          ),
-                          Text(textPlaceholder2,
-                              style: TextStyle(
-                                fontFamily: 'JetBrainsMono',
-                                color: Colors.white,
-                                fontSize: 14,
-                              )),
-                        ],
-                      )
-                    : Text(widget.description,
-                        style: TextStyle(
-                          fontFamily: 'JetBrainsMono',
-                          color: Colors.white,
-                          fontSize: 14,
-                        )),
+                                  fontFamily: 'JetBrainsMono',
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                )),
+                            InkWell(
+                              onTap: () {
+                                launchURL(urlText);
+                              },
+                              child: Text(urlText,
+                                  style: TextStyle(
+                                      color: Colors.blue,
+                                      decoration: TextDecoration.underline,
+                                      fontSize: 13,
+                                      fontFamily: 'JetBrainsMono')),
+                            ),
+                            Text(textPlaceholder2,
+                                style: TextStyle(
+                                  fontFamily: 'JetBrainsMono',
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                )),
+                          ],
+                        ),
+                    )
+                    : Transform.translate(
+                  offset: const Offset(0, -2),
+                  child: Text(widget.description,
+                          style: TextStyle(
+                            fontFamily: 'JetBrainsMono',
+                            color: Colors.white,
+                            fontSize: 13,
+                          )),
+                    ),
                 subtitle: GestureDetector(
                     onTap: () {
                       openAlertDialogThatShowsTasksContainingThisTag(
@@ -99,9 +105,9 @@ class _TaskCardState extends State<TaskCard> {
                     child: Text(widget.hashtag,
                         style: TextStyle(color: Colors.blue))),
                 trailing: Transform.scale(
-                  scale: 0.95,
+                  scale: 0.90,
                   child: Transform.translate(
-                    offset: const Offset(5, 0),
+                    offset: const Offset(9, 0),
                     child: Wrap(
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
@@ -165,35 +171,33 @@ class _TaskCardState extends State<TaskCard> {
         builder: (BuildContext context) {
           return Stack(
             children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 1.1,
-                child: AlertDialog(
-                  backgroundColor: getRandomColor(widget.date, 50),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
+              AlertDialog(
+                backgroundColor: getRandomColor(widget.date, 50),
+                content: SizedBox(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * .8,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * .5,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
                     children: [
-                      Transform.scale(
-                        scale: .7,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                          ),
-                          onPressed: () {
-                            TodoApp().copyTaskTodoToday(widget.description);
-                            showToast(
-                                'Copied tasks to do today. Note: Hashtag of new tasks are set to #default.');
-                          },
-                          child: Text('COPY LIST TO TODAY',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 9,
-                              )),
-                        ),
-                      ),
+
                       TextField(
-                        maxLines: 8,
+                        maxLines: 10,
                         controller: txt,
                         onChanged: (String value) {},
+                      ),
+                      TextField(
+                        style: TextStyle(color: Colors.blue),
+                        maxLines: 1,
+                        controller: txt2,
+                        onChanged: (String value) {
+                          widget.hashtag = value.toString();
+                        },
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -209,51 +213,57 @@ class _TaskCardState extends State<TaskCard> {
                           SizedBox(
                             width: 20,
                           ),
-                          SizedBox(
-                            width: 70,
+                          Transform.scale(
+                            scale: .7,
                             child: TextButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            DocumentEditingScreen(
-                                                id: widget.id)));
-                              },
-                              child: Text(
-                                'Edit Attached Doc',
-                                textAlign: TextAlign.right,
-                                style: TextStyle(fontSize: 10),
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.blue,
                               ),
+                              onPressed: () {
+                                TodoApp().copyTaskTodoToday(widget.description);
+                                showToast(
+                                    'Copied tasks to do today. Note: Hashtag of new tasks are set to #default.');
+                              },
+                              child: Text('COPY LIST TO TODAY',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 9,
+                                  )),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          DocumentEditingScreen(
+                                              id: widget.id)));
+                            },
+                            child: Text(
+                              'Edit Attached Doc',
+                              textAlign: TextAlign.right,
+                              style: TextStyle(fontSize: 10),
                             ),
                           ),
                         ],
                       ),
-                    ],
+                       ],
                   ),
-                  actions: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        style: TextStyle(color: Colors.blue),
-                        maxLines: 8,
-                        controller: txt2,
-                        onChanged: (String value) {
-                          widget.hashtag = value.toString();
-                        },
-                      ),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: () {
-                        setState(() {
-                          trimWhiteSpaceAtEndofString(txt);
-                          Navigator.of(context).pop();
-                        });
-                      },
-                    ),
-                  ],
                 ),
+
+                actions: [
+
+                  IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {
+                      setState(() {
+                        trimWhiteSpaceAtEndofString(txt);
+                        Navigator.of(context).pop();
+                      });
+                    },
+                  ),
+                ],
               ),
             ],
           );
@@ -302,22 +312,7 @@ class _TaskCardState extends State<TaskCard> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Transform.scale(
-                            scale: .7,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                              ),
-                              onPressed: () {
-                                duplicateTaskTodoToday(hashtag);
-                              },
-                              child: Text('COPY LIST TO TODAY',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 9,
-                                  )),
-                            ),
-                          ),
+
                           SizedBox(
                             width: 10,
                           ),
@@ -380,6 +375,7 @@ class _TaskCardState extends State<TaskCard> {
             ),
           ),
           actions: [
+
             Padding(
               padding: const EdgeInsets.only(bottom: 28.0, left: 30),
               child: Center(
@@ -394,7 +390,7 @@ class _TaskCardState extends State<TaskCard> {
                 ),
               ),
             ),
-          ],
+           ],
         );
       },
     ).then((val) {});

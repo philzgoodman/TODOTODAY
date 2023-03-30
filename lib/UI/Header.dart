@@ -20,34 +20,37 @@ class Header extends StatelessWidget {
                     fontSize: 9,
                   )),
               visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-              trailing: Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 56,
-                    child: Text("DONE",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 9,
-                        )),
-                  ),
-                  SizedBox(
-                    width: 56,
-                    child: Text("DELETE",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 9,
-                        )),
-                  ),
-                  SizedBox(
-                    width: 56,
-                    child: Text("TODAY",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 9,
-                        )),
-                  ),
-                ],
+              trailing: Transform.scale(
+                scale: 0.95,
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 56,
+                      child: Text("DONE",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 9,
+                          )),
+                    ),
+                    SizedBox(
+                      width: 56,
+                      child: Text("DELETE",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 9,
+                          )),
+                    ),
+                    SizedBox(
+                      width: 56,
+                      child: Text("TODAY",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 9,
+                          )),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
