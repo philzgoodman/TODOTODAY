@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:todotoday/TodoApp.dart';
 import 'package:todotoday/main.dart';
@@ -9,6 +10,8 @@ import 'UI/Header.dart';
 import 'UI/TagView.dart';
 import 'UI/hashtags_page.dart';
 import 'global.dart';
+import 'dart:html' as html;
+
 
 class TaskCard extends StatefulWidget {
   String description;
@@ -438,11 +441,18 @@ class _TaskCardState extends State<TaskCard> {
       hasUrl = false;
     }
   }
+  void htmlOpenLink(String url) {
+    html.window.open(url, '_blank');
+  }
 
   void launchURL(String urlText) {
+
+    if (kIsWeb) {
+      htmlOpenLink(urlText);
+    }
+    else {
       launchUrlString(urlText);
-
-
+    }
   }
 }
 
