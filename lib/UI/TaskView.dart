@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:todotoday/UI/done.dart';
 
 import '../TaskCard.dart';
+import '../TodoApp.dart';
+import '../main.dart';
 
 class TaskView extends StatelessWidget {
   Query query;
@@ -36,14 +39,41 @@ class TaskView extends StatelessWidget {
                       DocumentSnapshot task = snapshot.data!.docs[index];
                       if ((index != snapshot.data!.docs.length - 1) &&
                           (snapshot.data!.docs[index]['hashtag'] != null)) {
-                        return TaskCard(
-                            task['description'],
-                            task['isToday'],
-                            task['completed'],
-                            task.id,
-                            task['hashtag'],
-                            task['date'].toString(),
+                        bool onWillAccept = false;
+
+                        return DragTarget(
+                          onWillAccept: (data) {
+
+                            print("onWillAccept");
+                            onWillAccept = true;
+                            return true;
+                            },
+                          onLeave: (data) {
+                            print("onLeave");
+                            onWillAccept = false;
+                          },
+                        onAccept: (data) {
+                          print("onAccept");
+                        TodoApp().setDateTimeofTaskTo1SecondAfter( task.id, data.toString());
+
+                        },
+                        builder: (BuildContext context, List<Object?> candidateData, List<dynamic> rejectedData) {return Opacity(
+                          opacity: onWillAccept ? 0.5 : 1.0,
+                          child: TaskCard(
+                                task['description'],
+                                task['isToday'],
+                                task['completed'],
+                                task.id,
+                                task['hashtag'],
+                                task['date'].toString(),
+                              ),
                         );
+                        } ,
+                        );
+
+
+
+
                       } else if (snapshot.data!.docs.length == 0) {
                         return Opacity(opacity: 0.33, child: DonePage());
 

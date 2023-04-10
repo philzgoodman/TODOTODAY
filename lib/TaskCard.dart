@@ -10,7 +10,8 @@ import 'UI/Header.dart';
 import 'UI/TagView.dart';
 import 'UI/hashtags_page.dart';
 import 'global.dart';
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
+
 
 
 class TaskCard extends StatefulWidget {
@@ -45,124 +46,146 @@ class _TaskCardState extends State<TaskCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(0.6),
-      child: GestureDetector(
-        onTap: () {
-          showEditDialog();
-        },
-        child: Card(
-          shadowColor: Colors.black,
-          elevation: 1,
-          color: lighten(getRandomColor(widget.date, 50)),
-          child: Column(
-            children: [
-              ListTile(
-                visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-                horizontalTitleGap: -10,
-                title: hasUrl
-                    ? Transform.translate(
-                        offset: const Offset(0, -2),
-                      child: Wrap(
-                          children: [
-                            Text(textPlaceholder1,
-                                style: TextStyle(
-                                  fontFamily: 'JetBrainsMono',
-                                  color: Colors.white,
-                                  fontSize: 13,
-                                )),
-                            InkWell(
-                              onTap: () {
-                                launchURL(urlText);
-                              },
-                              child: Text(urlText,
-                                  style: TextStyle(
-                                      color: Colors.blue,
-                                      decoration: TextDecoration.underline,
-                                      fontSize: 13,
-                                      fontFamily: 'JetBrainsMono')),
-                            ),
-                            Text(textPlaceholder2,
-                                style: TextStyle(
-                                  fontFamily: 'JetBrainsMono',
-                                  color: Colors.white,
-                                  fontSize: 13,
-                                )),
-                          ],
-                        ),
-                    )
-                    : Transform.translate(
-                  offset: const Offset(0, -2),
-                  child: Text(widget.description,
-                          style: TextStyle(
-                            fontFamily: 'JetBrainsMono',
-                            color: Colors.white,
-                            fontSize: 13,
-                          )),
-                    ),
-                subtitle: GestureDetector(
-                    onTap: () {
-                      openAlertDialogThatShowsTasksContainingThisTag(
-                          widget.hashtag);
-                    },
-                    child: Text(widget.hashtag,
-                        style: TextStyle(color: Colors.blue))),
-                trailing: Transform.scale(
-                  scale: 0.90,
-                  child: Transform.translate(
-                    offset: const Offset(9, 0),
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 56,
-                          child: Checkbox(
-                            value: widget.completed,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                widget.completed = value!;
-                                todoApp.updateTask(widget);
 
-                                if (value == true) {TodoApp().incrementDailyTaskCount();}
-                                else {TodoApp().decrementDailyTaskCount();}
-                              });
+        return
+          Padding(
+          padding: const EdgeInsets.all(0.6),
+          child: GestureDetector(
+            onTap: () {
+              showEditDialog();
+            },
+            child: LongPressDraggable(
+              data: widget.id.toString(),
+              feedback: Icon(
+                  Icons.adjust, color: getRandomColor(widget.date, 50)),
+              child: Container(
+                child: Card(
+                  shadowColor: Colors.black,
+                  elevation: 1,
+                  color: lighten(getRandomColor(widget.date, 50)),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        visualDensity: VisualDensity(
+                            horizontal: -4, vertical: -4),
+                        horizontalTitleGap: -10,
+                        title: hasUrl
+                            ? Transform.translate(
+                          offset: const Offset(0, -2),
+                          child: Wrap(
+                            children: [
+                              Text(textPlaceholder1,
+                                  style: TextStyle(
+                                    fontFamily: 'JetBrainsMono',
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                  )),
+                              InkWell(
+                                onTap: () {
+                                  launchURL(urlText);
+                                },
+                                child: Text(urlText,
+                                    style: TextStyle(
+                                        color: Colors.blue,
+                                        decoration: TextDecoration.underline,
+                                        fontSize: 13,
+                                        fontFamily: 'JetBrainsMono')),
+                              ),
+                              Text(textPlaceholder2,
+                                  style: TextStyle(
+                                    fontFamily: 'JetBrainsMono',
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                  )),
+                            ],
+                          ),
+                        )
+                            : Transform.translate(
+                          offset: const Offset(0, -2),
+                          child: Text(widget.description,
+                              style: TextStyle(
+                                fontFamily: 'JetBrainsMono',
+                                color: Colors.white,
+                                fontSize: 13,
+                              )),
+                        ),
+                        subtitle: GestureDetector(
+                            onTap: () {
+                              openAlertDialogThatShowsTasksContainingThisTag(
+                                  widget.hashtag);
                             },
+                            child: Text(widget.hashtag,
+                                style: TextStyle(color: Colors.blue))),
+                        trailing: Transform.scale(
+                          scale: 0.90,
+                          child: Transform.translate(
+                            offset: const Offset(9, 0),
+                            child: Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 56,
+                                  child: Checkbox(
+                                    value: widget.completed,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        widget.completed = value!;
+                                        todoApp.updateTask(widget);
+
+                                        if (value == true) {
+                                          TodoApp().incrementDailyTaskCount();
+                                        }
+                                        else {
+                                          TodoApp().decrementDailyTaskCount();
+                                        }
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 56,
+                                  child: IconButton(
+                                    icon: Icon(Icons.delete),
+                                    onPressed: () {
+                                      setState(() {
+                                        TodoApp.deleteTaskByFirebaseId(
+                                            widget.id);
+                                      });
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 56,
+                                  child: Switch(
+                                    value: widget.isToday,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        widget.isToday = value!;
+                                        todoApp.updateTask(widget);
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        SizedBox(
-                          width: 56,
-                          child: IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () {
-                              setState(() {
-                                TodoApp.deleteTaskByFirebaseId(widget.id);
-                              });
-                            },
-                          ),
-                        ),
-                        SizedBox(
-                          width: 56,
-                          child: Switch(
-                            value: widget.isToday,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                widget.isToday = value!;
-                                todoApp.updateTask(widget);
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        );
+
+
   }
+
+
+
+
+
 
   void showEditDialog() {
     FocusNode myFocusNode = FocusNode();
@@ -442,7 +465,9 @@ class _TaskCardState extends State<TaskCard> {
     }
   }
   void htmlOpenLink(String url) {
-    html.window.open(url, '_blank');
+    if (kIsWeb)
+
+      html.window.open(url, 'new tab');
   }
 
   void launchURL(String urlText) {

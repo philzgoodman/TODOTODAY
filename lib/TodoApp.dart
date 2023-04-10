@@ -341,4 +341,54 @@ class TodoApp with ChangeNotifier {
     });
     return count;
   }
+
+  void setDateTimeofTaskTo1SecondAfter(String target, String giver) {
+    var user = FirebaseAuth.instance.currentUser;
+    DateTime? newDate = DateTime.now();
+    DateTime? newDate2 = DateTime.now();
+
+
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+    _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('tasks')
+        .doc(target)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+
+        newDate = DateTime.tryParse(documentSnapshot['date'].toString());
+        newDate2 = newDate?.add(Duration(seconds: 1));
+
+
+      } else {
+        print('Document does not exist on the database');
+      }
+    });
+
+
+    _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('tasks')
+        .doc(giver)
+        .update({
+      'date': newDate2.toString(),
+    });
+    print("Updated date of giver to " + newDate2.toString());
+      }
 }
+
+
+
+
+
+
+
+
+
+
+
