@@ -380,10 +380,68 @@ class TodoApp with ChangeNotifier {
     });
     print("Updated date of giver to " + newDate2.toString());
       }
-}
+
+  void addDueDate(TaskCard widget, DateTime date) {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+    _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('tasks')
+        .doc(widget.id)
+        .update({
+      'due': date.toString(),
+    });
+    print("Updated due date to " + date.toString());
+  }
 
 
 
+  DateTime getDueDate(TaskCard widget) {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+    DateTime date = DateTime.now();
+    String dateString = "";
+    _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('tasks')
+        .doc(widget.id)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        dateString = documentSnapshot['due'];
+        date = DateTime.tryParse(dateString)!;
+        print("get due date");
+        print(date);
+        return date;
+      } else {
+        print('Document does not exist on the database');
+      }
+    });
+    return date;
+  }
+
+  getDueDateStream(widget) {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      throw StateError('Not logged in');
+    }
+    return _firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('tasks')
+        .doc(widget.id)
+        .snapshots()
+        .map((event) => event.data()!['due']);
+  }
+
+
+  }
 
 
 

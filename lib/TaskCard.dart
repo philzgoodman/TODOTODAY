@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:todotoday/TodoApp.dart';
@@ -11,8 +13,6 @@ import 'UI/TagView.dart';
 import 'UI/hashtags_page.dart';
 import 'global.dart';
 import 'package:universal_html/html.dart' as html;
-
-
 
 class TaskCard extends StatefulWidget {
   String description;
@@ -46,151 +46,148 @@ class _TaskCardState extends State<TaskCard> {
 
   @override
   Widget build(BuildContext context) {
-
-        return
-          Padding(
-          padding: const EdgeInsets.all(0.6),
-          child: GestureDetector(
-            onTap: () {
-              showEditDialog();
-            },
-            child: LongPressDraggable(
-              data: widget.id.toString(),
-              feedback: Icon(
-                  Icons.adjust, color: getRandomColor(widget.date, 50)),
-              child: Container(
-                child: Card(
-                  shadowColor: Colors.black,
-                  elevation: 1,
-                  color: lighten(getRandomColor(widget.date, 50)),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        visualDensity: VisualDensity(
-                            horizontal: -4, vertical: -4),
-                        horizontalTitleGap: -10,
-                        title: hasUrl
-                            ? Transform.translate(
-                          offset: const Offset(0, -2),
-                          child: Wrap(
-                            children: [
-                              Text(textPlaceholder1,
-                                  style: TextStyle(
-                                    fontFamily: 'JetBrainsMono',
-                                    color: Colors.white,
-                                    fontSize: 13,
-                                  )),
-                              InkWell(
-                                onTap: () {
-                                  launchURL(urlText);
-                                },
-                                child: Text(urlText,
+    return Padding(
+      padding: const EdgeInsets.all(0.6),
+      child: GestureDetector(
+        onTap: () {
+          showEditDialog();
+        },
+        child: LongPressDraggable(
+          data: widget.id.toString(),
+          feedback: Icon(Icons.adjust, color: getRandomColor(widget.date, 50)),
+          child: Container(
+            child: Card(
+              shadowColor: Colors.black,
+              elevation: 1,
+              color: lighten(getRandomColor(widget.date, 50)),
+              child: Column(
+                children: [
+                  ListTile(
+                    visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+                    horizontalTitleGap: -10,
+                    title: hasUrl
+                        ? Transform.translate(
+                            offset: const Offset(0, -2),
+                            child: Wrap(
+                              children: [
+                                Text(textPlaceholder1,
                                     style: TextStyle(
-                                        color: Colors.blue,
-                                        decoration: TextDecoration.underline,
-                                        fontSize: 13,
-                                        fontFamily: 'JetBrainsMono')),
-                              ),
-                              Text(textPlaceholder2,
-                                  style: TextStyle(
-                                    fontFamily: 'JetBrainsMono',
-                                    color: Colors.white,
-                                    fontSize: 13,
-                                  )),
-                            ],
+                                      fontFamily: 'JetBrainsMono',
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                    )),
+                                InkWell(
+                                  onTap: () {
+                                    launchURL(urlText);
+                                  },
+                                  child: Text(urlText,
+                                      style: TextStyle(
+                                          color: Colors.blue,
+                                          decoration: TextDecoration.underline,
+                                          fontSize: 13,
+                                          fontFamily: 'JetBrainsMono')),
+                                ),
+                                Text(textPlaceholder2,
+                                    style: TextStyle(
+                                      fontFamily: 'JetBrainsMono',
+                                      color: Colors.white,
+                                      fontSize: 13,
+                                    )),
+                              ],
+                            ),
+                          )
+                        : Transform.translate(
+                            offset: const Offset(0, -2),
+                            child: Text(widget.description,
+                                style: TextStyle(
+                                  fontFamily: 'JetBrainsMono',
+                                  color: Colors.white,
+                                  fontSize: 13,
+                                )),
                           ),
-                        )
-                            : Transform.translate(
-                          offset: const Offset(0, -2),
-                          child: Text(widget.description,
-                              style: TextStyle(
-                                fontFamily: 'JetBrainsMono',
-                                color: Colors.white,
-                                fontSize: 13,
-                              )),
-                        ),
-                        subtitle: GestureDetector(
+                    subtitle: Row(
+                      children: [
+                        GestureDetector(
                             onTap: () {
                               openAlertDialogThatShowsTasksContainingThisTag(
                                   widget.hashtag);
                             },
                             child: Text(widget.hashtag,
                                 style: TextStyle(color: Colors.blue))),
-                        trailing: Transform.scale(
-                          scale: 0.90,
-                          child: Transform.translate(
-                            offset: const Offset(9, 0),
-                            child: Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 56,
-                                  child: Checkbox(
-                                    value: widget.completed,
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        widget.completed = value!;
-                                        todoApp.updateTask(widget);
+                        SizedBox(width: 10),
+                        Padding(
+                          padding: const EdgeInsets.only(top:3.0),
+                          child: DueDateStream(widget),
+                        ),
+                      ],
+                    ),
+                    trailing: Transform.scale(
+                      scale: 0.90,
+                      child: Transform.translate(
+                        offset: const Offset(9, 0),
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 56,
+                              child: Checkbox(
+                                value: widget.completed,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    widget.completed = value!;
+                                    todoApp.updateTask(widget);
 
-                                        if (value == true) {
-                                          TodoApp().incrementDailyTaskCount();
-                                        }
-                                        else {
-                                          TodoApp().decrementDailyTaskCount();
-                                        }
-                                      });
-                                    },
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 56,
-                                  child: IconButton(
-                                    icon: Icon(Icons.delete),
-                                    onPressed: () {
-                                      setState(() {
-                                        TodoApp.deleteTaskByFirebaseId(
-                                            widget.id);
-                                      });
-                                    },
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 56,
-                                  child: Switch(
-                                    value: widget.isToday,
-                                    onChanged: (bool? value) {
-                                      setState(() {
-                                        widget.isToday = value!;
-                                        todoApp.updateTask(widget);
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
+                                    if (value == true) {
+                                      TodoApp().incrementDailyTaskCount();
+                                    } else {
+                                      TodoApp().decrementDailyTaskCount();
+                                    }
+                                  });
+                                },
+                              ),
                             ),
-                          ),
+                            SizedBox(
+                              width: 56,
+                              child: IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () {
+                                  setState(() {
+                                    TodoApp.deleteTaskByFirebaseId(widget.id);
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              width: 56,
+                              child: Switch(
+                                value: widget.isToday,
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    widget.isToday = value!;
+                                    todoApp.updateTask(widget);
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
-        );
-
-
+        ),
+      ),
+    );
   }
 
-
-
-
-
-
-  void showEditDialog() {
+  Future<void> showEditDialog() async {
     FocusNode myFocusNode = FocusNode();
     TextEditingController txt = TextEditingController(text: widget.description);
     TextEditingController txt2 = TextEditingController(text: widget.hashtag);
+    String dueDate = await todoApp.getDueDate(widget).toString().split(' ')[0];
 
     showDialog(
         context: context,
@@ -200,18 +197,11 @@ class _TaskCardState extends State<TaskCard> {
               AlertDialog(
                 backgroundColor: getRandomColor(widget.date, 50),
                 content: SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * .8,
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * .5,
+                  width: MediaQuery.of(context).size.width * .8,
+                  height: MediaQuery.of(context).size.height * .5,
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-
                       TextField(
                         maxLines: 10,
                         controller: txt,
@@ -250,14 +240,27 @@ class _TaskCardState extends State<TaskCard> {
                                 showToast(
                                     'Copied tasks to do today. Note: Hashtag of new tasks are set to #default.');
                               },
-                              child: Text('COPY LIST TO TODAY',
+                              child: Text('COPY TO TODAY',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 9,
                                   )),
                             ),
                           ),
-                          TextButton(
+                          Column(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    openCalendarDatePicker(context, widget);
+                                  });
+                                },
+                                icon: Icon(Icons.calendar_month),
+                              ),
+                              DueDateStream(widget),
+                            ],
+                          ),
+                          IconButton(
                             onPressed: () {
                               Navigator.push(
                                   context,
@@ -266,20 +269,16 @@ class _TaskCardState extends State<TaskCard> {
                                           DocumentEditingScreen(
                                               id: widget.id)));
                             },
-                            child: Text(
-                              'Edit Attached Doc',
-                              textAlign: TextAlign.right,
-                              style: TextStyle(fontSize: 10),
+                            icon: Icon(
+                              Icons.attach_file,
                             ),
                           ),
                         ],
                       ),
-                       ],
+                    ],
                   ),
                 ),
-
                 actions: [
-
                   IconButton(
                     icon: Icon(Icons.close),
                     onPressed: () {
@@ -338,7 +337,6 @@ class _TaskCardState extends State<TaskCard> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-
                           SizedBox(
                             width: 10,
                           ),
@@ -401,7 +399,6 @@ class _TaskCardState extends State<TaskCard> {
             ),
           ),
           actions: [
-
             Padding(
               padding: const EdgeInsets.only(bottom: 28.0, left: 30),
               child: Center(
@@ -416,7 +413,7 @@ class _TaskCardState extends State<TaskCard> {
                 ),
               ),
             ),
-           ],
+          ],
         );
       },
     ).then((val) {});
@@ -464,20 +461,35 @@ class _TaskCardState extends State<TaskCard> {
       hasUrl = false;
     }
   }
-  void htmlOpenLink(String url) {
-    if (kIsWeb)
 
-      html.window.open(url, 'new tab');
+  void htmlOpenLink(String url) {
+    if (kIsWeb) html.window.open(url, 'new tab');
   }
 
   void launchURL(String urlText) {
-
     if (kIsWeb) {
       htmlOpenLink(urlText);
-    }
-    else {
+    } else {
       launchUrlString(urlText);
     }
+  }
+
+  void openCalendarDatePicker(BuildContext context, TaskCard widget) {
+    var dueDate = todoApp.getDueDate(widget);
+
+    showDatePicker(
+      currentDate: dueDate,
+      context: context,
+      initialDate: dueDate,
+      firstDate: DateTime(dueDate.year - 2),
+      lastDate: DateTime(dueDate.year + 2),
+    ).then((date) {
+      if (date != null) {
+        setState(() {
+          todoApp.addDueDate(widget, date);
+        });
+      }
+    });
   }
 }
 
@@ -488,13 +500,38 @@ void typeBulletedListIntoTextField(TextEditingController txt) {
   } else {
     txt.text = txt.text + '\n•';
   }
-
-  moveCursorToEnd(txt);
 }
 
-void moveCursorToEnd(TextEditingController txt) {
-  txt.selection =
-      TextSelection.fromPosition(TextPosition(offset: txt.text.length));
+class DueDateStream extends StatelessWidget {
+  Widget widget;
+
+  DueDateStream(this.widget);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: todoApp.getDueDateStream(widget),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Text(
+            snapshot.data.toString().split(' ')[0],
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+            ),
+          );
+        } else {
+          return Text(
+            '',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+            ),
+          );
+        }
+      },
+    );
+  }
 }
 
 Color getRandomColor(String date, int darkAmt) {
