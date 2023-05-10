@@ -223,130 +223,11 @@ class TodoApp with ChangeNotifier {
     notifyListeners();
   }
 
-  void incrementDailyTaskCount() {
-    var user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      throw StateError('Not logged in');
-    }
-
-    _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('dailyTaskCount')
-        .doc('count')
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        _firestore
-            .collection('users')
-            .doc(user.uid)
-            .collection('dailyTaskCount')
-            .doc('count')
-            .update({
-          'count': FieldValue.increment(1),
-        });
-      } else {
-        print('Document does not exist on the database');
-        _firestore
-            .collection('users')
-            .doc(user.uid)
-            .collection('dailyTaskCount')
-            .doc('count')
-            .set({
-          'count': 0,
-        });
-      }
-    });
-
-   }
-
-
-
-  Stream<int> getDailyTaskCount() {
-    var user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      throw StateError('Not logged in');
-    }
-    return _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('dailyTaskCount')
-        .doc('count')
-        .snapshots()
-        .map((event) => event.data()!['count']);
-  }
-
-  void decrementDailyTaskCount() {
-    var user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      throw StateError('Not logged in');
-    }
-
-    _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('dailyTaskCount')
-        .doc('count')
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        _firestore
-            .collection('users')
-            .doc(user.uid)
-            .collection('dailyTaskCount')
-            .doc('count')
-            .update({
-          'count': FieldValue.increment(-1),
-        });
-      } else {
-        print('Document does not exist on the database');
-        _firestore
-            .collection('users')
-            .doc(user.uid)
-            .collection('dailyTaskCount')
-            .doc('count')
-            .set({
-          'count': 0,
-        });
-      }
-    });
-  }
-
-  int getDailyTaskInt() {
-    var user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      throw StateError('Not logged in');
-    }
-    int count = 0;
-    _firestore
-        .collection('users')
-        .doc(user.uid)
-        .collection('dailyTaskCount')
-        .doc('count')
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        count = documentSnapshot['count'];
-      } else {
-        print('Document does not exist on the database');
-        _firestore
-            .collection('users')
-            .doc(user.uid)
-            .collection('dailyTaskCount')
-            .doc('count')
-            .set({
-          'count': 0,
-        });
-      }
-    });
-    return count;
-  }
 
   void setDateTimeofTaskTo1SecondAfter(String target, String giver) {
     var user = FirebaseAuth.instance.currentUser;
     DateTime? newDate = DateTime.now();
     DateTime? newDate2 = DateTime.now();
-
 
     if (user == null) {
       throw StateError('Not logged in');
@@ -359,16 +240,12 @@ class TodoApp with ChangeNotifier {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-
         newDate = DateTime.tryParse(documentSnapshot['date'].toString());
         newDate2 = newDate?.add(Duration(seconds: 1));
-
-
       } else {
         print('Document does not exist on the database');
       }
     });
-
 
     _firestore
         .collection('users')
@@ -379,7 +256,7 @@ class TodoApp with ChangeNotifier {
       'date': newDate2.toString(),
     });
     print("Updated date of giver to " + newDate2.toString());
-      }
+  }
 
   void addDueDate(TaskCard widget, DateTime date) {
     var user = FirebaseAuth.instance.currentUser;
@@ -396,8 +273,6 @@ class TodoApp with ChangeNotifier {
     });
     print("Updated due date to " + date.toString());
   }
-
-
 
   DateTime getDueDate(TaskCard widget) {
     var user = FirebaseAuth.instance.currentUser;
@@ -439,14 +314,4 @@ class TodoApp with ChangeNotifier {
         .snapshots()
         .map((event) => event.data()!['due']);
   }
-
-
-  }
-
-
-
-
-
-
-
-
+}

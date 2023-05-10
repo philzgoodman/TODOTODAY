@@ -43,23 +43,25 @@ class TaskView extends StatelessWidget {
 
                         return DragTarget(
                           onWillAccept: (data) {
-
                             print("onWillAccept");
                             onWillAccept = true;
                             return true;
-                            },
+                          },
                           onLeave: (data) {
                             print("onLeave");
                             onWillAccept = false;
                           },
-                        onAccept: (data) {
-                          print("onAccept");
-                        TodoApp().setDateTimeofTaskTo1SecondAfter( task.id, data.toString());
-
-                        },
-                        builder: (BuildContext context, List<Object?> candidateData, List<dynamic> rejectedData) {return Opacity(
-                          opacity: onWillAccept ? 0.5 : 1.0,
-                          child: TaskCard(
+                          onAccept: (data) {
+                            print("onAccept");
+                            TodoApp().setDateTimeofTaskTo1SecondAfter(
+                                task.id, data.toString());
+                          },
+                          builder: (BuildContext context,
+                              List<Object?> candidateData,
+                              List<dynamic> rejectedData) {
+                            return Opacity(
+                              opacity: onWillAccept ? 0.5 : 1.0,
+                              child: TaskCard(
                                 task['description'],
                                 task['isToday'],
                                 task['completed'],
@@ -67,31 +69,22 @@ class TaskView extends StatelessWidget {
                                 task['hashtag'],
                                 task['date'].toString(),
                               ),
+                            );
+                          },
                         );
-                        } ,
-                        );
-
-
-
-
                       } else if (snapshot.data!.docs.length == 0) {
                         return Opacity(opacity: 0.33, child: DonePage());
-
-                      }
-                      else {
+                      } else {
                         return Column(
                           children: [
                             TaskCard(
-                                task['description'],
-                                task['isToday'],
-                                task['completed'],
-                                task.id,
-                                task['hashtag'].toString(),
-                                task['date'].toString(),
-
-                            )
-
-                            ,
+                              task['description'],
+                              task['isToday'],
+                              task['completed'],
+                              task.id,
+                              task['hashtag'].toString(),
+                              task['date'].toString(),
+                            ),
                             Opacity(opacity: 0.33, child: DonePage()),
                           ],
                         );

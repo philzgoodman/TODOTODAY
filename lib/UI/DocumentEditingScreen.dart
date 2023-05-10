@@ -23,39 +23,30 @@ class _DocumentEditingScreenState extends State<DocumentEditingScreen> {
 
   @override
   void initState() {
-
-      loadTextFromFirebaseStorage(widget.id);
+    loadTextFromFirebaseStorage(widget.id);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          elevation: 0,
-          actions: [
-            IconButton(
-                icon: Icon(Icons.check),
-                tooltip: "Save",
-                onPressed: () {
-                  putStringToFirebaseStorage(txt.text, widget.id);
-                }
-            ),
-          ]
-      ),
+      appBar: AppBar(elevation: 0, actions: [
+        IconButton(
+            icon: Icon(Icons.check),
+            tooltip: "Save",
+            onPressed: () {
+              putStringToFirebaseStorage(txt.text, widget.id);
+            }),
+      ]),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SizedBox(height: 16),
-             TextField(
-                  maxLines: 8,
-                  controller: txt,
-                  onChanged: (String value) {
-
-                  },
-
-
+            TextField(
+              maxLines: 8,
+              controller: txt,
+              onChanged: (String value) {},
             ),
           ],
         ),
@@ -64,8 +55,6 @@ class _DocumentEditingScreenState extends State<DocumentEditingScreen> {
   }
 
   void loadTextFromFirebaseStorage(String id) {
-
-
     try {
       final ref = FirebaseStorage.instance.ref().child('$id.md');
 

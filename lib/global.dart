@@ -28,9 +28,3 @@ Color all3 = invertColorBy10percent(today3);
 Color hash1 = invertColorBy10percent(all1);
 Color hash2 = invertColorBy10percent(all2);
 Color hash3 = invertColorBy10percent(all3);
-
-
-
-
-
-

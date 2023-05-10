@@ -19,30 +19,23 @@ import 'UI/Header.dart';
 import 'firebase_options.dart';
 import 'global.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-
   );
 
   final storageRef = FirebaseStorage.instance.ref();
-
 
   FirebaseUIAuth.configureProviders([
     EmailAuthProvider(),
   ]);
 
-
   runApp(Phoenix(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-
-
-
   @override
   Widget build(BuildContext context) {
     if (checkIfLoggedin()) {
@@ -83,15 +76,8 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
-
   @override
   Widget build(BuildContext context) {
-
-
-
-
-
     return DefaultTabController(
       initialIndex: 1,
       length: 3,
@@ -146,7 +132,6 @@ class _MainPageState extends State<MainPage> {
                       scale: .6,
                       child: Column(
                         children: [
-
                           FloatingActionButton(
                             heroTag: 'settings',
                             backgroundColor: Colors.grey,
@@ -158,70 +143,6 @@ class _MainPageState extends State<MainPage> {
                           ),
                           SizedBox(
                             height: 30,
-                          ),
-                          FloatingActionButton(
-                            heroTag: 'done',
-                            backgroundColor: Colors.lightBlue,
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      'Tasks Finished Today:',textAlign: TextAlign.center,
-                                      style: TextStyle(
-
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    backgroundColor: Colors.transparent,
-                                    insetPadding: EdgeInsets.zero,
-                                    contentPadding: EdgeInsets.zero,
-                                    content: SizedBox(
-                                        width: MediaQuery
-                                            .of(context)
-                                            .size
-                                            .width * .9,child: DonePage()),
-
-                                  actions: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(bottom:15.0),
-                                      child: Center(
-                                        child: TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text(
-                                            'Ⓧ Close',
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ),
-                                    ),],
-                                  );
-                                },
-                              );
-                            },
-                            tooltip: 'DONE',
-                            child: StreamBuilder<int>(
-                                stream: TodoApp().getDailyTaskCount(),
-
-                                builder: (context, snapshot) {
-                                  return
-
-
-                                      Text(
-                                      snapshot.data.toString(),
-                                      style: TextStyle(
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white,
-                                      ),
-
-                                  );
-                                }),
                           ),
 
                         ],
@@ -289,10 +210,8 @@ class _MainPageState extends State<MainPage> {
   }
 
   void logout() {
-   TodoApp().signOut();
-
-    }
-
+    TodoApp().signOut();
+  }
 
   void shuffleAppBackgroundColors() {
     setState(() {
@@ -309,8 +228,6 @@ class _MainPageState extends State<MainPage> {
       TodoApp.saveNewColorsToFirestore(today1, today2, today3);
     });
   }
-
-
 }
 
 Color lighten(Color c, [int percent = 30]) {

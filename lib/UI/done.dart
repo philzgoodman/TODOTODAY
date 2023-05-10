@@ -17,7 +17,7 @@ class DonePage extends StatelessWidget {
         .orderBy('date', descending: true);
 
     return Container(
-        height: MediaQuery.of(context).size.height,
+      height: MediaQuery.of(context).size.height,
       child: Stack(
         children: [
           Padding(
@@ -33,16 +33,14 @@ class DonePage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       DocumentSnapshot task = snapshot.data!.docs[index];
                       return TaskCard(
-                          task['description'],
-                          task['isToday'],
-                          task['completed'],
-                          task.id,
-                          task['hashtag'],
-                          task['date'].toString(),
-                          );
-
+                        task['description'],
+                        task['isToday'],
+                        task['completed'],
+                        task.id,
+                        task['hashtag'],
+                        task['date'].toString(),
+                      );
                     },
-
                   );
                 }
                 return Center(child: CircularProgressIndicator());
@@ -52,7 +50,5 @@ class DonePage extends StatelessWidget {
         ],
       ),
     );
-
-
   }
 }

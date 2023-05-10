@@ -116,7 +116,7 @@ class _TaskCardState extends State<TaskCard> {
                                 style: TextStyle(color: Colors.blue))),
                         SizedBox(width: 10),
                         Padding(
-                          padding: const EdgeInsets.only(top:3.0),
+                          padding: const EdgeInsets.only(top: 3.0),
                           child: DueDateStream(widget),
                         ),
                       ],
@@ -137,11 +137,6 @@ class _TaskCardState extends State<TaskCard> {
                                     widget.completed = value!;
                                     todoApp.updateTask(widget);
 
-                                    if (value == true) {
-                                      TodoApp().incrementDailyTaskCount();
-                                    } else {
-                                      TodoApp().decrementDailyTaskCount();
-                                    }
                                   });
                                 },
                               ),

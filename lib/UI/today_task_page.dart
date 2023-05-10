@@ -22,7 +22,6 @@ class TodayTaskPage extends StatelessWidget {
         .where('completed', isEqualTo: false)
         .orderBy('date', descending: false);
 
-
     return Stack(
       children: [
         Container(
