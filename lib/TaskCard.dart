@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:todotoday/TodoApp.dart';
@@ -45,133 +47,115 @@ class _TaskCardState extends State<TaskCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(0.6),
-      child: GestureDetector(
-        onTap: () {
-          showEditDialog();
-        },
-        child: LongPressDraggable(
-          data: widget.id.toString(),
-          feedback: Icon(Icons.adjust, color: getRandomColor(widget.date, 50)),
-          child: Container(
-            child: Card(
-              shadowColor: Colors.black,
-              elevation: 1,
-              color: lighten(getRandomColor(widget.date, 50)),
-              child: Column(
-                children: [
-                  ListTile(
-                    visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-                    horizontalTitleGap: -10,
-                    title: hasUrl
-                        ? Transform.translate(
-                            offset: const Offset(0, -2),
-                            child: Wrap(
-                              children: [
-                                Text(textPlaceholder1,
-                                    style: TextStyle(
-                                      fontFamily: 'JetBrainsMono',
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                    )),
-                                InkWell(
-                                  onTap: () {
-                                    launchURL(urlText);
-                                  },
-                                  child: Text(urlText,
-                                      style: TextStyle(
-                                          color: Colors.blue,
-                                          decoration: TextDecoration.underline,
-                                          fontSize: 13,
-                                          fontFamily: 'JetBrainsMono')),
-                                ),
-                                Text(textPlaceholder2,
-                                    style: TextStyle(
-                                      fontFamily: 'JetBrainsMono',
-                                      color: Colors.white,
-                                      fontSize: 13,
-                                    )),
-                              ],
-                            ),
-                          )
-                        : Transform.translate(
-                            offset: const Offset(0, -2),
-                            child: Text(widget.description,
-                                style: TextStyle(
-                                  fontFamily: 'JetBrainsMono',
-                                  color: Colors.white,
-                                  fontSize: 13,
-                                )),
-                          ),
-                    subtitle: Row(
-                      children: [
-                        GestureDetector(
-                            onTap: () {
-                              openAlertDialogThatShowsTasksContainingThisTag(
-                                  widget.hashtag);
-                            },
-                            child: Text(widget.hashtag,
-                                style: TextStyle(color: Colors.blue))),
-                        SizedBox(width: 10),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 3.0),
-                          child: DueDateStream(widget),
-                        ),
-                      ],
-                    ),
-                    trailing: Transform.scale(
-                      scale: 0.90,
-                      child: Transform.translate(
-                        offset: const Offset(9, 0),
-                        child: Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: 56,
-                              child: Checkbox(
-                                value: widget.completed,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    widget.completed = value!;
-                                    todoApp.updateTask(widget);
+    return GestureDetector(
+      onTap: () {
+        showEditDialog();
+      },
+      child: Card(
 
-                                  });
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              width: 56,
-                              child: IconButton(
-                                icon: Icon(Icons.delete),
-                                onPressed: () {
-                                  setState(() {
-                                    TodoApp.deleteTaskByFirebaseId(widget.id);
-                                  });
-                                },
-                              ),
-                            ),
-                            SizedBox(
-                              width: 56,
-                              child: Switch(
-                                value: widget.isToday,
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    widget.isToday = value!;
-                                    todoApp.updateTask(widget);
-                                  });
-                                },
-                              ),
-                            ),
-                          ],
+        shadowColor: Colors.black,
+        elevation: 1,
+        color: lighten(getRandomColor(widget.date, 46)),
+        child:  Column(
+          children: [
+            ListTile(
+              horizontalTitleGap: 0,
+                dense: true,
+              visualDensity: VisualDensity(horizontal: 0, vertical: -3.5),
+              title: hasUrl
+                  ? Wrap(
+                    children: [
+                      Text(textPlaceholder1,
+                          style: TextStyle(
+                            fontFamily: 'JetBrainsMono',
+                            color: Colors.white,
+                            fontSize: 12,
+                          )),
+                      InkWell(
+                        onTap: () {
+                          launchURL(urlText);
+                        },
+                        child: Text(urlText,
+                            style: TextStyle(
+                                color: Colors.blue,
+                                decoration: TextDecoration.underline,
+                                fontSize: 12,
+                                fontFamily: 'JetBrainsMono')),
+                      ),
+                      Text(textPlaceholder2,
+                          style: TextStyle(
+                            fontFamily: 'JetBrainsMono',
+                            color: Colors.white,
+                            fontSize: 12,
+                          )),
+                    ],
+                  )
+                  :Text(widget.description,
+                          style: TextStyle(
+
+                            fontFamily: 'JetBrainsMono',
+                            color: Colors.white,
+                            fontSize: 12,
+                          )),
+              subtitle: GestureDetector(
+                  onTap: () {
+                    openAlertDialogThatShowsTasksContainingThisTag(
+                        widget.hashtag);
+                  },
+                  child: Text(widget.hashtag,
+                      style: TextStyle(color: Colors.lightBlue, fontSize: 11))),
+              trailing: Transform.scale(
+                scale: 0.92,
+                child: Transform.translate(
+                  offset: const Offset(9, -3),
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 56,
+                        child: Checkbox(
+                          activeColor: Color(0xFF4B9DAB),
+
+                          value: widget.completed,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              widget.completed = value!;
+                              todoApp.updateTask(widget);
+                            });
+                          },
                         ),
                       ),
-                    ),
+                      SizedBox(
+                        width: 56,
+                        child: IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () {
+                            setState(() {
+                              TodoApp.deleteTaskByFirebaseId(widget.id);
+                            });
+                          },
+                        ),
+                      ),
+                      Switch(
+                        activeColor: Color(0xFFFCC771),
+                        activeTrackColor: Color(0xFFC5AD8D),
+                        inactiveThumbColor: Colors.grey,
+                        inactiveTrackColor: Colors.blueGrey,
+
+                        value: widget.isToday,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            widget.isToday = value!;
+                            todoApp.updateTask(widget);
+                          });
+                        },
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -181,7 +165,6 @@ class _TaskCardState extends State<TaskCard> {
     FocusNode myFocusNode = FocusNode();
     TextEditingController txt = TextEditingController(text: widget.description);
     TextEditingController txt2 = TextEditingController(text: widget.hashtag);
-    String dueDate = await todoApp.getDueDate(widget).toString().split(' ')[0];
 
     showDialog(
         context: context,
@@ -191,8 +174,14 @@ class _TaskCardState extends State<TaskCard> {
               AlertDialog(
                 backgroundColor: getRandomColor(widget.date, 50),
                 content: SizedBox(
-                  width: MediaQuery.of(context).size.width * .8,
-                  height: MediaQuery.of(context).size.height * .5,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * .8,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * .5,
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -241,19 +230,7 @@ class _TaskCardState extends State<TaskCard> {
                                   )),
                             ),
                           ),
-                          Column(
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    openCalendarDatePicker(context, widget);
-                                  });
-                                },
-                                icon: Icon(Icons.calendar_month),
-                              ),
-                              DueDateStream(widget),
-                            ],
-                          ),
+
                           IconButton(
                             onPressed: () {
                               Navigator.push(
@@ -295,6 +272,15 @@ class _TaskCardState extends State<TaskCard> {
   }
 
   void openAlertDialogThatShowsTasksContainingThisTag(String hashtag) {
+    final user = FirebaseAuth.instance.currentUser;
+    final db = FirebaseFirestore.instance;
+    Query query = db
+        .collection('users')
+        .doc(user?.uid)
+        .collection('tasks')
+        .where('hashtag', isEqualTo: hashtag);
+
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -304,9 +290,15 @@ class _TaskCardState extends State<TaskCard> {
           insetPadding: EdgeInsets.zero,
           contentPadding: EdgeInsets.zero,
           content: SizedBox(
-            width: MediaQuery.of(context).size.width * .9,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width * .9,
             child: Container(
-              height: MediaQuery.of(context).size.height * 1,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 1,
               child: Stack(
                 children: [
                   Column(
@@ -314,7 +306,10 @@ class _TaskCardState extends State<TaskCard> {
                       Align(
                         alignment: Alignment.topCenter,
                         child: SizedBox(
-                          height: MediaQuery.of(context).size.height * .06,
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .height * .06,
                           child: Center(
                             child: Text(
                               hashtag.toString(),
@@ -377,13 +372,21 @@ class _TaskCardState extends State<TaskCard> {
                   Padding(
                     padding: const EdgeInsets.only(top: 138.0),
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width * .9,
-                      height: MediaQuery.of(context).size.height * .95,
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * .9,
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height * .95,
                       child: TagView(
-                        tag: hashtag,
+                          db: db,
+                          user: user,
+                          query: query, tag: hashtag),
                       ),
                     ),
-                  ),
+
                   Positioned(
                     bottom: 0,
                     child: MessageTagBox(hashtag, 0),
@@ -467,79 +470,31 @@ class _TaskCardState extends State<TaskCard> {
       launchUrlString(urlText);
     }
   }
+}
 
-  void openCalendarDatePicker(BuildContext context, TaskCard widget) {
-    var dueDate = todoApp.getDueDate(widget);
-
-    showDatePicker(
-      currentDate: dueDate,
-      context: context,
-      initialDate: dueDate,
-      firstDate: DateTime(dueDate.year - 2),
-      lastDate: DateTime(dueDate.year + 2),
-    ).then((date) {
-      if (date != null) {
-        setState(() {
-          todoApp.addDueDate(widget, date);
-        });
-      }
-    });
+  void typeBulletedListIntoTextField(TextEditingController txt) {
+    var _isBulletedList = false;
+    if (_isBulletedList) {
+      txt.text = txt.text + '•';
+    } else {
+      txt.text = txt.text + '\n•';
+    }
   }
-}
 
-void typeBulletedListIntoTextField(TextEditingController txt) {
-  var _isBulletedList = false;
-  if (_isBulletedList) {
-    txt.text = txt.text + '•';
-  } else {
-    txt.text = txt.text + '\n•';
+  Color getRandomColor(String date, int darkAmt) {
+    return darken(
+        Colors.accents[date.hashCode % Colors.accents.length], darkAmt);
   }
-}
 
-class DueDateStream extends StatelessWidget {
-  Widget widget;
-
-  DueDateStream(this.widget);
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: todoApp.getDueDateStream(widget),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Text(
-            snapshot.data.toString().split(' ')[0],
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 10,
-            ),
-          );
-        } else {
-          return Text(
-            '',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 10,
-            ),
-          );
-        }
-      },
-    );
+  Color darken(Color c, [int percent = 8]) {
+    assert(1 <= percent && percent <= 100);
+    var f = 1 - percent / 100;
+    return Color.fromARGB(c.alpha, (c.red * f).round(), (c.green * f).round(),
+        (c.blue * f).round());
   }
-}
 
-Color getRandomColor(String date, int darkAmt) {
-  return darken(Colors.accents[date.hashCode % Colors.accents.length], darkAmt);
-}
+  Color invertColorBy10percent(Color today1) {
+    return Color.fromARGB(
+        today1.alpha, today1.red + 25, today1.green + 25, today1.blue + 25);
+  }
 
-Color darken(Color c, [int percent = 8]) {
-  assert(1 <= percent && percent <= 100);
-  var f = 1 - percent / 100;
-  return Color.fromARGB(c.alpha, (c.red * f).round(), (c.green * f).round(),
-      (c.blue * f).round());
-}
-
-Color invertColorBy10percent(Color today1) {
-  return Color.fromARGB(
-      today1.alpha, today1.red + 25, today1.green + 25, today1.blue + 25);
-}

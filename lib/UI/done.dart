@@ -17,7 +17,7 @@ class DonePage extends StatelessWidget {
         .orderBy('date', descending: true);
 
     return Container(
-      height: MediaQuery.of(context).size.height,
+      height: MediaQuery.of(context).size.height * 1.2,
       child: Stack(
         children: [
           Padding(
@@ -32,6 +32,7 @@ class DonePage extends StatelessWidget {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot task = snapshot.data!.docs[index];
+
                       return TaskCard(
                         task['description'],
                         task['isToday'],

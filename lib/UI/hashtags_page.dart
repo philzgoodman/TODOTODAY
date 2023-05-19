@@ -51,36 +51,44 @@ class HashtagsPage extends StatelessWidget {
             child: Stack(
               clipBehavior: Clip.none,
               children: [
-                Column(
+                ListView(
                   children: [
                     GridView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
                       physics: ScrollPhysics(),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         childAspectRatio: 1.8,
                       ),
-                      shrinkWrap: true,
                       itemCount: uniqueSubtitles.length,
                       itemBuilder: (context, index) {
-                        return Center(
-                          child: InkWell(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    elevation: 0,
-                                    backgroundColor: getRandomColor(
-                                        uniqueSubtitles[index], 70),
-                                    insetPadding: EdgeInsets.zero,
-                                    contentPadding: EdgeInsets.zero,
-                                    content: SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          .9,
-                                      child: Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                1,
+                        return Padding(
+                          padding: const EdgeInsets.all(1.0),
+                          child: Center(
+                            child: InkWell(
+                              onTap: () {
+
+                                Query tagQuery = db
+                                    .collection('users')
+                                    .doc(user?.uid)
+                                    .collection('tasks')
+                                    .where('completed', isEqualTo: false)
+                                    .where('hashtag', isEqualTo:  uniqueSubtitles[index])
+                                .orderBy('date', descending: false);
+
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      elevation: 0,
+                                      backgroundColor: getRandomColor(
+                                          uniqueSubtitles[index], 70),
+                                      insetPadding: EdgeInsets.zero,
+                                      contentPadding: EdgeInsets.zero,
+                                      content: SizedBox(
+                                        width: MediaQuery.of(context).size.width *
+                                            .9,
                                         child: Stack(
                                           children: [
                                             Column(
@@ -206,8 +214,12 @@ class HashtagsPage extends StatelessWidget {
                                                         .height *
                                                     .95,
                                                 child: TagView(
-                                                  tag: uniqueSubtitles[index],
-                                                ),
+                                                  db: db,
+                                                  user: user,
+                                                  query: tagQuery, tag: uniqueSubtitles[
+                                                index]
+
+                                                  ,                                                ),
                                               ),
                                             ),
                                             Positioned(
@@ -219,79 +231,79 @@ class HashtagsPage extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-                                    ),
-                                    actions: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            bottom: 28.0, left: 30),
-                                        child: Center(
-                                          child: TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Text(
-                                              'Ⓧ Close',
-                                              textAlign: TextAlign.center,
+                                      actions: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 28.0, left: 30),
+                                          child: Center(
+                                            child: TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Text(
+                                                'Ⓧ Close',
+                                                textAlign: TextAlign.center,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ).then((val) {
-                                finished();
-                              });
-                            },
-                            child: Card(
-                              color: getRandomColor(uniqueSubtitles[index], 40),
-                              elevation: 3,
-                              shadowColor: Colors.black,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.center,
-                                    end: Alignment.bottomRight,
-                                    colors: [
-                                      Color(0xff0000007A),
-                                      Color(0xff00000034),
-                                    ],
+                                      ],
+                                    );
+                                  },
+                                ).then((val) {
+                                  finished();
+                                });
+                              },
+                              child: Card(
+                                color: getRandomColor(uniqueSubtitles[index], 40),
+                                elevation: 3,
+                                shadowColor: Colors.black,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.center,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        Color(0xff0000007A),
+                                        Color(0xff00000034),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 8.0),
-                                        child: Text(
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 1,
-                                          textAlign: TextAlign.center,
-                                          uniqueSubtitles[index],
-                                          style: TextStyle(
-                                            color: Colors.lightBlueAccent,
-                                            fontSize: 14,
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 8.0),
+                                          child: Text(
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            textAlign: TextAlign.center,
+                                            uniqueSubtitles[index],
+                                            style: TextStyle(
+                                              color: Colors.lightBlueAccent,
+                                              fontSize: 13,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Text(
-                                        textAlign: TextAlign.center,
-                                        subtitles
-                                            .where((element) =>
-                                                element ==
-                                                uniqueSubtitles[index])
-                                            .length
-                                            .toString(),
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18,
+                                        Text(
+                                          textAlign: TextAlign.center,
+                                          subtitles
+                                              .where((element) =>
+                                                  element ==
+                                                  uniqueSubtitles[index])
+                                              .length
+                                              .toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -299,9 +311,11 @@ class HashtagsPage extends StatelessWidget {
                           ),
                         );
                       },
-                    ),
+                     ),
+                    SizedBox(height: 150,),
                   ],
                 ),
+
                 MessageBox(),
               ],
             ),

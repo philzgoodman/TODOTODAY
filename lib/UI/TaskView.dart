@@ -30,50 +30,31 @@ class TaskView extends StatelessWidget {
           padding: const EdgeInsets.only(top: 28.0),
           child: StreamBuilder<QuerySnapshot>(
             stream: query.snapshots(),
-            // db.collection('users').doc(user?.uid).collection('tasks').snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                if (snapshot.data!.docs.length == 0) {
+                  return SingleChildScrollView(
+                    child: Opacity(opacity: 0.43, child: DonePage()),
+                  );
+                }
+
                 return ListView.builder(
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot task = snapshot.data!.docs[index];
-                      if ((index != snapshot.data!.docs.length - 1) &&
-                          (snapshot.data!.docs[index]['hashtag'] != null)) {
-                        bool onWillAccept = false;
-
-                        return DragTarget(
-                          onWillAccept: (data) {
-                            print("onWillAccept");
-                            onWillAccept = true;
-                            return true;
-                          },
-                          onLeave: (data) {
-                            print("onLeave");
-                            onWillAccept = false;
-                          },
-                          onAccept: (data) {
-                            print("onAccept");
-                            TodoApp().setDateTimeofTaskTo1SecondAfter(
-                                task.id, data.toString());
-                          },
-                          builder: (BuildContext context,
-                              List<Object?> candidateData,
-                              List<dynamic> rejectedData) {
-                            return Opacity(
-                              opacity: onWillAccept ? 0.5 : 1.0,
-                              child: TaskCard(
-                                task['description'],
-                                task['isToday'],
-                                task['completed'],
-                                task.id,
-                                task['hashtag'],
-                                task['date'].toString(),
-                              ),
-                            );
-                          },
+                      if ((index != snapshot.data!.docs.length - 1)) {
+                        return Column(
+                          children: [
+                            TaskCard(
+                              task['description'],
+                              task['isToday'],
+                              task['completed'],
+                              task.id,
+                              task['hashtag'].toString(),
+                              task['date'].toString(),
+                            ),
+                          ],
                         );
-                      } else if (snapshot.data!.docs.length == 0) {
-                        return Opacity(opacity: 0.33, child: DonePage());
                       } else {
                         return Column(
                           children: [
@@ -85,7 +66,7 @@ class TaskView extends StatelessWidget {
                               task['hashtag'].toString(),
                               task['date'].toString(),
                             ),
-                            Opacity(opacity: 0.33, child: DonePage()),
+                            Opacity(opacity: 0.43, child: DonePage()),
                           ],
                         );
                       }

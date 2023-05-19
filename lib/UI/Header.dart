@@ -10,10 +10,10 @@ class Header extends StatelessWidget {
     return Transform.scale(
       scale: 1.02,
       child: Card(
-        margin: const EdgeInsets.all(0),
+        margin: EdgeInsets.zero,
         shadowColor: Colors.black,
+        color: Color(0xFF131313FF),
         elevation: 1,
-        color: Colors.black,
         child: ListTile(
           title: Text("DESCRIPTION",
               style: TextStyle(
@@ -23,7 +23,6 @@ class Header extends StatelessWidget {
           trailing: Transform.scale(
             scale: 0.95,
             child: Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 SizedBox(
                   width: 56,

@@ -43,7 +43,7 @@ class _AllTasksPageState extends State<AllTasksPage> {
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.only(top: 10.0),
+              padding: const EdgeInsets.only(top: 13.0),
               child: TaskView(
                 db: db,
                 user: user,
