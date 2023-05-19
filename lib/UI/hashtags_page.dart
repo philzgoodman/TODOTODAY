@@ -68,7 +68,7 @@ class HashtagsPage extends StatelessWidget {
                           child: Center(
                             child: InkWell(
                               onTap: () {
-
+gitig
                                 Query tagQuery = db
                                     .collection('users')
                                     .doc(user?.uid)
