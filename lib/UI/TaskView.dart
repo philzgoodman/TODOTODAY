@@ -24,6 +24,7 @@ class TaskView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+
       clipBehavior: Clip.none,
       children: [
         Padding(

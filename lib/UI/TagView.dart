@@ -8,6 +8,7 @@ import '../TaskCard.dart';
 
 import '../TodoApp.dart';
 import '../main.dart';
+import 'done.dart';
 import 'doneTag.dart';
 
 class TagView extends StatelessWidget {
@@ -23,8 +24,7 @@ class TagView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
+    return  Stack(
       children: [
         StreamBuilder<QuerySnapshot>(
           stream: query.snapshots(),
@@ -43,8 +43,7 @@ class TagView extends StatelessWidget {
               }
 
               return ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
+
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     tagLength = snapshot.data!.docs.length;
@@ -59,7 +58,7 @@ class TagView extends StatelessWidget {
                         task['date'].toString(),
                       );
                     } else {
-                      return Column(
+                      return   Column(
                         children: [
                           TaskCard(
                             task['description'],
@@ -69,14 +68,7 @@ class TagView extends StatelessWidget {
                             task['hashtag'].toString(),
                             task['date'].toString(),
                           ),
-                          SizedBox(
-                            height: 300,
-                            child: Opacity(
-                                opacity: 0.1,
-                                child: DoneTagPage(
-                                  tag: tag.toString(),
-                                )),
-                          ),
+                          Opacity(opacity: 0.43, child: DoneTagPage(tag: tag.toString(),)),
                         ],
                       );
                     }

@@ -114,15 +114,11 @@ class _MainPageState extends State<MainPage> {
               ),
               body: Stack(
                 children: [
-                  Stack(
+                  TabBarView(
                     children: [
-                      TabBarView(
-                        children: [
-                          AllTasksPage(key: UniqueKey()),
-                          TodayTaskPage(key: UniqueKey()),
-                          HashtagsPage(key: UniqueKey()),
-                        ],
-                      ),
+                      AllTasksPage(key: UniqueKey()),
+                      TodayTaskPage(key: UniqueKey()),
+                      HashtagsPage(key: UniqueKey()),
                     ],
                   ),
                   Positioned(

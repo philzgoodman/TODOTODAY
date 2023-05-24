@@ -51,111 +51,115 @@ class _TaskCardState extends State<TaskCard> {
       onTap: () {
         showEditDialog();
       },
-      child: Card(
+      child: Container(
+        constraints: BoxConstraints(
+          maxWidth: 900,
+        ),child: Card(
 
-        shadowColor: Colors.black,
-        elevation: 1,
-        color: lighten(getRandomColor(widget.date, 46)),
-        child:  Column(
-          children: [
-            ListTile(
-              horizontalTitleGap: 0,
-                dense: true,
-              visualDensity: VisualDensity(horizontal: 0, vertical: -3.5),
-              title: hasUrl
-                  ? Wrap(
-                    children: [
-                      Text(textPlaceholder1,
-                          style: TextStyle(
-                            fontFamily: 'JetBrainsMono',
-                            color: Colors.white,
-                            fontSize: 12,
-                          )),
-                      InkWell(
-                        onTap: () {
-                          launchURL(urlText);
-                        },
-                        child: Text(urlText,
+          shadowColor: Colors.black,
+          elevation: 1,
+          color: lighten(getRandomColor(widget.date, 46)),
+          child:  Column(
+            children: [
+              ListTile(
+                horizontalTitleGap: 0,
+                  dense: true,
+                visualDensity: VisualDensity(horizontal: 0, vertical: -3.5),
+                title: hasUrl
+                    ? Wrap(
+                      children: [
+                        Text(textPlaceholder1,
                             style: TextStyle(
-                                color: Colors.blue,
-                                decoration: TextDecoration.underline,
-                                fontSize: 12,
-                                fontFamily: 'JetBrainsMono')),
-                      ),
-                      Text(textPlaceholder2,
-                          style: TextStyle(
-                            fontFamily: 'JetBrainsMono',
-                            color: Colors.white,
-                            fontSize: 12,
-                          )),
-                    ],
-                  )
-                  :Text(widget.description,
-                          style: TextStyle(
+                              fontFamily: 'JetBrainsMono',
+                              color: Colors.white,
+                              fontSize: 12,
+                            )),
+                        InkWell(
+                          onTap: () {
+                            launchURL(urlText);
+                          },
+                          child: Text(urlText,
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                  fontSize: 12,
+                                  fontFamily: 'JetBrainsMono')),
+                        ),
+                        Text(textPlaceholder2,
+                            style: TextStyle(
+                              fontFamily: 'JetBrainsMono',
+                              color: Colors.white,
+                              fontSize: 12,
+                            )),
+                      ],
+                    )
+                    :Text(widget.description,
+                            style: TextStyle(
 
-                            fontFamily: 'JetBrainsMono',
-                            color: Colors.white,
-                            fontSize: 12,
-                          )),
-              subtitle: GestureDetector(
-                  onTap: () {
-                    openAlertDialogThatShowsTasksContainingThisTag(
-                        widget.hashtag);
-                  },
-                  child: Text(widget.hashtag,
-                      style: TextStyle(color: Colors.lightBlue, fontSize: 11))),
-              trailing: Transform.scale(
-                scale: 0.92,
-                child: Transform.translate(
-                  offset: const Offset(9, -3),
-                  child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 56,
-                        child: Checkbox(
-                          activeColor: Color(0xFF4B9DAB),
+                              fontFamily: 'JetBrainsMono',
+                              color: Colors.white,
+                              fontSize: 12,
+                            )),
+                subtitle: GestureDetector(
+                    onTap: () {
+                      openAlertDialogThatShowsTasksContainingThisTag(
+                          widget.hashtag);
+                    },
+                    child: Text(widget.hashtag,
+                        style: TextStyle(color: Colors.lightBlue, fontSize: 11))),
+                trailing: Transform.scale(
+                  scale: 0.92,
+                  child: Transform.translate(
+                    offset: const Offset(9, -3),
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 56,
+                          child: Checkbox(
+                            activeColor: Color(0xFF4B9DAB),
 
-                          value: widget.completed,
+                            value: widget.completed,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.completed = value!;
+                                todoApp.updateTask(widget);
+                              });
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 56,
+                          child: IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              setState(() {
+                                TodoApp.deleteTaskByFirebaseId(widget.id);
+                              });
+                            },
+                          ),
+                        ),
+                        Switch(
+                          activeColor: Color(0xFFFCC771),
+                          activeTrackColor: Color(0xFFC5AD8D),
+                          inactiveThumbColor: Colors.grey,
+                          inactiveTrackColor: Colors.blueGrey,
+
+                          value: widget.isToday,
                           onChanged: (bool? value) {
                             setState(() {
-                              widget.completed = value!;
+                              widget.isToday = value!;
                               todoApp.updateTask(widget);
                             });
                           },
                         ),
-                      ),
-                      SizedBox(
-                        width: 56,
-                        child: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            setState(() {
-                              TodoApp.deleteTaskByFirebaseId(widget.id);
-                            });
-                          },
-                        ),
-                      ),
-                      Switch(
-                        activeColor: Color(0xFFFCC771),
-                        activeTrackColor: Color(0xFFC5AD8D),
-                        inactiveThumbColor: Colors.grey,
-                        inactiveTrackColor: Colors.blueGrey,
-
-                        value: widget.isToday,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            widget.isToday = value!;
-                            todoApp.updateTask(widget);
-                          });
-                        },
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
