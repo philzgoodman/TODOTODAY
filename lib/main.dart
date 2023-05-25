@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     if (checkIfLoggedin()) {
       return MaterialApp(
-        title: 'TodoToday',
+        title: 'DoToday',
         theme: ThemeData(
           brightness: Brightness.dark,
           colorScheme: const ColorScheme.highContrastDark().copyWith(
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
       );
     } else {
       return MaterialApp(
-        title: 'TodoToday',
+        title: 'DoToday',
         theme: ThemeData(
           brightness: Brightness.dark,
           colorScheme: const ColorScheme.highContrastDark().copyWith(

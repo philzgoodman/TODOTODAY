@@ -93014,9 +93014,9 @@ q=n.gbK(n)
 n=A.f3(s,s.gc7().bH("users"))
 return A.dH(B.a9,A.a([A.cW(p,new A.bj(B.mQ,new A.EU(n.cq(0,q==null?p:q.a.c.h(0,"uid")).bH("tasks").j2(0,"isToday",!0).j2(0,"completed",!1).CI("date",!1),p),p),p,p,new A.d7(p,p,p,p,p,new A.lW(B.c4,B.eW,B.cr,A.a([$.a39(),$.a3a(),$.a3b()],t.t_),p,p),p,B.ap),p,p,p,p),new A.qv(p),new A.bj(B.fl,A.aC4(),p)],t.p),B.u,B.a7)}}
 A.hi.prototype={
-F(a){var s="TodoToday",r="JetBrainsMono",q=null
-if(A.b0t())return A.aHt(new A.BX(q),A.aCL(B.W,B.lT.Vr(B.fY,B.tU,B.tW),r,q),s)
-else return A.aHt(new A.vn(q),A.aCL(B.W,B.lT.Vr(B.fY,B.tU,B.tW),r,q),s)}}
+F(a){var s="JetBrainsMono",r=null
+if(A.b0t())return A.aHt(new A.BX(r),A.aCL(B.W,B.lT.Vr(B.fY,B.tU,B.tW),s,r),"DoToday")
+else return A.aHt(new A.vn(r),A.aCL(B.W,B.lT.Vr(B.fY,B.tU,B.tW),s,r),"DoToday")}}
 A.BX.prototype={
 a8(){return new A.Xx(B.i)}}
 A.Xx.prototype={
