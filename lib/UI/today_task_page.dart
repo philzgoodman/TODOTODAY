@@ -25,6 +25,7 @@ class TodayTaskPage extends StatelessWidget {
     return Stack(
       children: [
         Container(
+            width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -36,12 +37,14 @@ class TodayTaskPage extends StatelessWidget {
                 ],
               ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 13.0),
-              child: TaskView(
-                db: dbToday,
-                user: user,
-                query: query,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 13.0),
+                child: TaskView(
+                  db: dbToday,
+                  user: user,
+                  query: query,
+                ),
               ),
             )),
         Header(),

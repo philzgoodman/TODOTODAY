@@ -202,5 +202,4 @@ class TodoApp with ChangeNotifier {
     await FirebaseAuth.instance.signOut();
     runApp(Phoenix(child: MyApp()));
   }
-
 }

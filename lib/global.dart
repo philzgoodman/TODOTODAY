@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'TaskCard.dart';
 import 'TodoApp.dart';
-import 'main.dart';
 
 TodoApp todoApp = TodoApp();
 bool loggedIn = false;

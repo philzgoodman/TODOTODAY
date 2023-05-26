@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../global.dart';
-
 class Header extends StatelessWidget {
   const Header({Key? key}) : super(key: key);
 
@@ -10,10 +8,10 @@ class Header extends StatelessWidget {
     return Align(
       alignment: Alignment.topCenter,
       child: Container(
-
         constraints: BoxConstraints(
           maxWidth: 900,
-        ),child: Card(
+        ),
+        child: Card(
           margin: EdgeInsets.zero,
           shadowColor: Colors.black,
           color: Color(0xFF131313FF),

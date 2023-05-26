@@ -22,7 +22,7 @@ class DoneTagPage extends StatelessWidget {
 
     return Container(
       height: MediaQuery.of(context).size.height * 1.2,
-      child:Stack(
+      child: Stack(
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 28.0),

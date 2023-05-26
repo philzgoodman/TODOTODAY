@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:todotoday/TaskCard.dart';
 import 'package:todotoday/global.dart';
 
-import 'UI/hashtags_page.dart';
-import 'main.dart';
-
 class MessageTagBox extends StatefulWidget with ChangeNotifier {
   String tag = '';
   int index = 0;

@@ -1,12 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:todotoday/UI/done.dart';
-
 import '../TaskCard.dart';
-import '../TodoApp.dart';
-import '../main.dart';
 
 class TaskView extends StatelessWidget {
   Query query;
@@ -24,7 +20,6 @@ class TaskView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-
       clipBehavior: Clip.none,
       children: [
         Padding(

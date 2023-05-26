@@ -31,6 +31,7 @@ class _AllTasksPageState extends State<AllTasksPage> {
     return Stack(
       children: [
         Container(
+            width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -42,12 +43,14 @@ class _AllTasksPageState extends State<AllTasksPage> {
                 ],
               ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 13.0),
-              child: TaskView(
-                db: db,
-                user: user,
-                query: query,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 13.0),
+                child: TaskView(
+                  db: db,
+                  user: user,
+                  query: query,
+                ),
               ),
             )),
         Header(),

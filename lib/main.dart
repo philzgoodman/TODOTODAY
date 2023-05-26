@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -20,7 +19,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
 
   FirebaseUIAuth.configureProviders([
     EmailAuthProvider(),
@@ -134,7 +132,6 @@ class _MainPageState extends State<MainPage> {
                           SizedBox(
                             height: 30,
                           ),
-
                         ],
                       ),
                     ),

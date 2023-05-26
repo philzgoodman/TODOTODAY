@@ -18,11 +18,9 @@ class DonePage extends StatelessWidget {
 
     return Container(
       height: MediaQuery.of(context).size.height * 1.2,
-
       constraints: BoxConstraints(
-        maxWidth:900,
+        maxWidth: 900,
       ),
-
       child: Stack(
         children: [
           Padding(

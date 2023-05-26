@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todotoday/MessageTagBox.dart';
 import 'package:todotoday/UI/TagView.dart';
-import 'package:todotoday/main.dart';
 import '../MessageBox.dart';
 import '../TaskCard.dart';
 import '../global.dart';
@@ -57,17 +56,17 @@ class HashtagsPage extends StatelessWidget {
                       child: Container(
                         constraints: BoxConstraints(
                           maxWidth: 900,
-                        ),child:GridView.builder(
+                        ),
+                        child: GridView.builder(
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           physics: ScrollPhysics(),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 2,
-                              mainAxisSpacing: 2,
-                              childAspectRatio: 2
-                            ),
-
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 2,
+                                  mainAxisSpacing: 2,
+                                  childAspectRatio: 2),
                           itemCount: uniqueSubtitles.length,
                           itemBuilder: (context, index) {
                             return Padding(
@@ -80,9 +79,10 @@ class HashtagsPage extends StatelessWidget {
                                         .doc(user?.uid)
                                         .collection('tasks')
                                         .where('completed', isEqualTo: false)
-                                        .where('hashtag', isEqualTo:  uniqueSubtitles[index])
+                                        .where('hashtag',
+                                            isEqualTo: uniqueSubtitles[index])
                                         .limit(30)
-                                    .orderBy('date', descending: false);
+                                        .orderBy('date', descending: false);
 
                                     showDialog(
                                       context: context,
@@ -113,7 +113,8 @@ class HashtagsPage extends StatelessWidget {
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(
-                                                              color: Colors.blue,
+                                                              color:
+                                                                  Colors.blue,
                                                               fontSize: 12,
                                                               fontWeight:
                                                                   FontWeight
@@ -124,9 +125,11 @@ class HashtagsPage extends StatelessWidget {
                                                   ),
                                                   Row(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment.center,
+                                                        MainAxisAlignment
+                                                            .center,
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.center,
+                                                        CrossAxisAlignment
+                                                            .center,
                                                     children: [
                                                       Transform.scale(
                                                         scale: .7,
@@ -144,8 +147,8 @@ class HashtagsPage extends StatelessWidget {
                                                           child: Text(
                                                               'COPY LIST TO TODAY',
                                                               style: TextStyle(
-                                                                color:
-                                                                    Colors.white,
+                                                                color: Colors
+                                                                    .white,
                                                                 fontSize: 9,
                                                               )),
                                                         ),
@@ -169,8 +172,8 @@ class HashtagsPage extends StatelessWidget {
                                                           child: Text(
                                                               'DELETE TAG GROUP',
                                                               style: TextStyle(
-                                                                color:
-                                                                    Colors.white,
+                                                                color: Colors
+                                                                    .white,
                                                                 fontSize: 9,
                                                               )),
                                                         ),
@@ -194,8 +197,8 @@ class HashtagsPage extends StatelessWidget {
                                                           child: Text(
                                                               'DELETE DONE TASKS',
                                                               style: TextStyle(
-                                                                color:
-                                                                    Colors.white,
+                                                                color: Colors
+                                                                    .white,
                                                                 fontSize: 9,
                                                               )),
                                                         ),
@@ -208,25 +211,29 @@ class HashtagsPage extends StatelessWidget {
                                               Container(
                                                 constraints: BoxConstraints(
                                                   maxWidth: 900,
-                                                ),child:  Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      top: 138.0),
+                                                ),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 138.0),
                                                   child: SizedBox(
-                                                    width: MediaQuery.of(context)
-                                                            .size
-                                                            .width *
-                                                        .9,
-                                                    height: MediaQuery.of(context)
-                                                            .size
-                                                            .height *
-                                                        .95,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            .9,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            .95,
                                                     child: TagView(
                                                       db: db,
                                                       user: user,
-                                                      query: tagQuery, tag: uniqueSubtitles[
-                                                    index]
-
-                                                      ,                                                ),
+                                                      query: tagQuery,
+                                                      tag: uniqueSubtitles[
+                                                          index],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
@@ -261,7 +268,8 @@ class HashtagsPage extends StatelessWidget {
                                     });
                                   },
                                   child: Card(
-                                    color: getRandomColor(uniqueSubtitles[index], 40),
+                                    color: getRandomColor(
+                                        uniqueSubtitles[index], 40),
                                     elevation: 3,
                                     shadowColor: Colors.black,
                                     child: Container(
@@ -277,13 +285,14 @@ class HashtagsPage extends StatelessWidget {
                                       ),
                                       child: Center(
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
                                             Padding(
-                                              padding:
-                                                  const EdgeInsets.only(bottom: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  bottom: 8.0),
                                               child: Text(
                                                 overflow: TextOverflow.ellipsis,
                                                 maxLines: 1,
@@ -317,13 +326,14 @@ class HashtagsPage extends StatelessWidget {
                               ),
                             );
                           },
-                         ),
+                        ),
                       ),
                     ),
-                    SizedBox(height: 150,),
+                    SizedBox(
+                      height: 150,
+                    ),
                   ],
                 ),
-
                 MessageBox(),
               ],
             ),
@@ -336,9 +346,7 @@ class HashtagsPage extends StatelessWidget {
     );
   }
 
-  void finished() {
-    runApp(MyApp());
-  }
+  void finished() {}
 }
 
 void showToast(String s) {
@@ -360,8 +368,6 @@ void duplicateTaskTodoToday(String tag) {
       .doc(user?.uid)
       .collection('tasks')
       .where('hashtag', isEqualTo: tag);
-
-
 
   query.get(GetOptions(source: Source.cache)).then((value) {
     for (int i = 0; i < value.docs.length; i++) {

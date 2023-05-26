@@ -2,29 +2,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:todotoday/global.dart';
 import '../TaskCard.dart';
-
-import '../TodoApp.dart';
-import '../main.dart';
-import 'done.dart';
 import 'doneTag.dart';
 
 class TagView extends StatelessWidget {
   Query query;
   String tag;
 
-  TagView({super.key, required this.tag, required this.db, this.user, required this.query});
+  TagView(
+      {super.key,
+      required this.tag,
+      required this.db,
+      this.user,
+      required this.query});
 
   final FirebaseFirestore db;
   final User? user;
 
-
-
   @override
   Widget build(BuildContext context) {
-    return  Stack(
+    return Stack(
       children: [
         StreamBuilder<QuerySnapshot>(
           stream: query.snapshots(),
@@ -43,7 +41,6 @@ class TagView extends StatelessWidget {
               }
 
               return ListView.builder(
-
                   itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     tagLength = snapshot.data!.docs.length;
@@ -58,7 +55,7 @@ class TagView extends StatelessWidget {
                         task['date'].toString(),
                       );
                     } else {
-                      return   Column(
+                      return Column(
                         children: [
                           TaskCard(
                             task['description'],
@@ -68,7 +65,11 @@ class TagView extends StatelessWidget {
                             task['hashtag'].toString(),
                             task['date'].toString(),
                           ),
-                          Opacity(opacity: 0.43, child: DoneTagPage(tag: tag.toString(),)),
+                          Opacity(
+                              opacity: 0.43,
+                              child: DoneTagPage(
+                                tag: tag.toString(),
+                              )),
                         ],
                       );
                     }
@@ -81,5 +82,3 @@ class TagView extends StatelessWidget {
     );
   }
 }
-
-
