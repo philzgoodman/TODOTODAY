@@ -119,7 +119,7 @@ class TodoApp with ChangeNotifier {
         .doc(user.uid)
         .collection('tasks')
         .where('id', isEqualTo: id)
-        .get()
+        .get(GetOptions(source: Source.cache))
         .then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
         doc.reference.delete();
@@ -182,7 +182,7 @@ class TodoApp with ChangeNotifier {
         .doc(user.uid)
         .collection('colors')
         .doc('today')
-        .get()
+        .get(GetOptions(source: Source.cache))
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
         c1 = Color(documentSnapshot['today1']);

@@ -173,97 +173,97 @@ class _TaskCardState extends State<TaskCard> {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return Stack(
-            children: [
-              AlertDialog(
-                backgroundColor: getRandomColor(widget.date, 50),
-                content: SizedBox(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * .8,
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * .5,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      TextField(
-                        maxLines: 10,
-                        controller: txt,
-                        onChanged: (String value) {},
-                      ),
-                      TextField(
-                        style: TextStyle(color: Colors.blue),
-                        maxLines: 1,
-                        controller: txt2,
-                        onChanged: (String value) {
-                          widget.hashtag = value.toString();
-                        },
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                typeBulletedListIntoTextField(txt);
-                              });
-                            },
-                            icon: Icon(Icons.format_list_numbered),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Transform.scale(
-                            scale: .7,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                              ),
-                              onPressed: () {
-                                TodoApp().copyTaskTodoToday(widget.description);
-                                showToast(
-                                    'Copied tasks to do today. Note: Hashtag of new tasks are set to #default.');
-                              },
-                              child: Text('COPY TO TODAY',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 9,
-                                  )),
+          return AlertDialog(
+            backgroundColor: getRandomColor(widget.date, 50),
+            content: Container(
+              constraints: BoxConstraints(
+                maxWidth: 900,
+              ),child: SizedBox(
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * .8,
+                height: MediaQuery
+                    .of(context)
+                    .size
+                    .height * .5,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    TextField(
+                      maxLines: 10,
+                      controller: txt,
+                      onChanged: (String value) {},
+                    ),
+                    TextField(
+                      style: TextStyle(color: Colors.blue),
+                      maxLines: 1,
+                      controller: txt2,
+                      onChanged: (String value) {
+                        widget.hashtag = value.toString();
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              typeBulletedListIntoTextField(txt);
+                            });
+                          },
+                          icon: Icon(Icons.format_list_numbered),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Transform.scale(
+                          scale: .7,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              backgroundColor: Colors.blue,
                             ),
+                            onPressed: () {
+                              TodoApp().copyTaskTodoToday(widget.description);
+                              showToast(
+                                  'Copied tasks to do today. Note: Hashtag of new tasks are set to #default.');
+                            },
+                            child: Text('COPY TO TODAY',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 9,
+                                )),
                           ),
+                        ),
 
-                          IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          DocumentEditingScreen(
-                                              id: widget.id)));
-                            },
-                            icon: Icon(
-                              Icons.attach_file,
-                            ),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        DocumentEditingScreen(
+                                            id: widget.id)));
+                          },
+                          icon: Icon(
+                            Icons.attach_file,
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                actions: [
-                  IconButton(
-                    icon: Icon(Icons.close),
-                    onPressed: () {
-                      setState(() {
-                        trimWhiteSpaceAtEndofString(txt);
-                        Navigator.of(context).pop();
-                      });
-                    },
-                  ),
-                ],
+              ),
+            ),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  setState(() {
+                    trimWhiteSpaceAtEndofString(txt);
+                    Navigator.of(context).pop();
+                  });
+                },
               ),
             ],
           );
@@ -282,7 +282,9 @@ class _TaskCardState extends State<TaskCard> {
         .collection('users')
         .doc(user?.uid)
         .collection('tasks')
-        .where('hashtag', isEqualTo: hashtag);
+        .where('hashtag', isEqualTo: hashtag)
+        .limit(30);
+
 
 
     showDialog(
@@ -290,118 +292,154 @@ class _TaskCardState extends State<TaskCard> {
       builder: (BuildContext context) {
         return AlertDialog(
           elevation: 0,
-          backgroundColor: getRandomColor(hashtag, 70),
+          backgroundColor: getRandomColor(
+              hashtag, 70),
           insetPadding: EdgeInsets.zero,
           contentPadding: EdgeInsets.zero,
-          content: SizedBox(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width * .9,
-            child: Container(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 1,
-              child: Stack(
+          content: Stack(
+            children: [
+              Column(
                 children: [
-                  Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: SizedBox(
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height * .06,
-                          child: Center(
-                            child: Text(
-                              hashtag.toString(),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
+                  Align(
+                    alignment:
+                    Alignment.topCenter,
+                    child: SizedBox(
+                      height:
+                      MediaQuery.of(context)
+                          .size
+                          .height *
+                          .06,
+                      child: Center(
+                        child: Text(
+                          hashtag
+                              .toString(),
+                          textAlign:
+                          TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 12,
+                              fontWeight:
+                              FontWeight
+                                  .bold),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: 10,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.center,
+                    crossAxisAlignment:
+                    CrossAxisAlignment.center,
+                    children: [
+                      Transform.scale(
+                        scale: .7,
+                        child: TextButton(
+                          style: TextButton
+                              .styleFrom(
+                            backgroundColor:
+                            Colors.blue,
                           ),
-                          Transform.scale(
-                            scale: .7,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: Colors.teal,
-                              ),
-                              onPressed: () {
-                                deleteTagGroup(hashtag);
-                              },
-                              child: Text('DELETE TAG GROUP',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 9,
-                                  )),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Transform.scale(
-                            scale: .7,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                backgroundColor: Colors.purple,
-                              ),
-                              onPressed: () {
-                                deleteCompletedTasks(hashtag);
-                              },
-                              child: Text('DELETE DONE TASKS',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 9,
-                                  )),
-                            ),
-                          ),
-                        ],
+                          onPressed: () {
+                            duplicateTaskTodoToday(
+                                hashtag);
+                          },
+                          child: Text(
+                              'COPY LIST TO TODAY',
+                              style: TextStyle(
+                                color:
+                                Colors.white,
+                                fontSize: 9,
+                              )),
+                        ),
                       ),
-                      Header(),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Transform.scale(
+                        scale: .7,
+                        child: TextButton(
+                          style: TextButton
+                              .styleFrom(
+                            backgroundColor:
+                            Colors.teal,
+                          ),
+                          onPressed: () {
+                            deleteTagGroup(
+                                hashtag);
+                          },
+                          child: Text(
+                              'DELETE TAG GROUP',
+                              style: TextStyle(
+                                color:
+                                Colors.white,
+                                fontSize: 9,
+                              )),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Transform.scale(
+                        scale: .7,
+                        child: TextButton(
+                          style: TextButton
+                              .styleFrom(
+                            backgroundColor:
+                            Colors.purple,
+                          ),
+                          onPressed: () {
+                            deleteCompletedTasks(
+                                hashtag);
+                          },
+                          child: Text(
+                              'DELETE DONE TASKS',
+                              style: TextStyle(
+                                color:
+                                Colors.white,
+                                fontSize: 9,
+                              )),
+                        ),
+                      ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 138.0),
-                    child: SizedBox(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width * .9,
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height * .95,
-                      child: TagView(
-                          db: db,
-                          user: user,
-                          query: query, tag: hashtag),
-                      ),
-                    ),
-
-                  Positioned(
-                    bottom: 0,
-                    child: MessageTagBox(hashtag, 0),
-                  ),
+                  Header(),
                 ],
               ),
-            ),
+              Container(
+                constraints: BoxConstraints(
+                  maxWidth: 900,
+                ),child:  Padding(
+                padding: const EdgeInsets.only(
+                    top: 138.0),
+                child: SizedBox(
+                  width: MediaQuery.of(context)
+                      .size
+                      .width *
+                      .9,
+                  height: MediaQuery.of(context)
+                      .size
+                      .height *
+                      .95,
+                  child: TagView(
+                    db: db,
+                    user: user,
+                    query: query, tag: hashtag
+
+                    ,                                                ),
+                ),
+              ),
+              ),
+              Center(
+                child: MessageTagBox(
+                  hashtag,0
+                ),
+              ),
+            ],
           ),
           actions: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 28.0, left: 30),
+              padding: const EdgeInsets.only(
+                  bottom: 28.0, left: 30),
               child: Center(
                 child: TextButton(
                   onPressed: () {
@@ -417,10 +455,14 @@ class _TaskCardState extends State<TaskCard> {
           ],
         );
       },
-    ).then((val) {});
+    ).then((val) {
+      finished();
+    });
     ;
   }
-
+  void finished() {
+    runApp(MyApp());
+  }
   void trimWhiteSpaceAtEndofString(TextEditingController txt) {
     var str = txt.text;
     var newStr = '';

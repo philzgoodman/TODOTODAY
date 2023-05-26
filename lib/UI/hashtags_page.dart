@@ -53,266 +53,273 @@ class HashtagsPage extends StatelessWidget {
               children: [
                 ListView(
                   children: [
-                    GridView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      physics: ScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 2,
-                          mainAxisSpacing: 2,
-                          childAspectRatio: 2
-                        ),
+                    Center(
+                      child: Container(
+                        constraints: BoxConstraints(
+                          maxWidth: 900,
+                        ),child:GridView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          physics: ScrollPhysics(),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              crossAxisSpacing: 2,
+                              mainAxisSpacing: 2,
+                              childAspectRatio: 2
+                            ),
 
-                      itemCount: uniqueSubtitles.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Center(
-                            child: InkWell(
-                              onTap: () {
-                                Query tagQuery = db
-                                    .collection('users')
-                                    .doc(user?.uid)
-                                    .collection('tasks')
-                                    .where('completed', isEqualTo: false)
-                                    .where('hashtag', isEqualTo:  uniqueSubtitles[index])
-                                .orderBy('date', descending: false);
+                          itemCount: uniqueSubtitles.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Center(
+                                child: InkWell(
+                                  onTap: () {
+                                    Query tagQuery = db
+                                        .collection('users')
+                                        .doc(user?.uid)
+                                        .collection('tasks')
+                                        .where('completed', isEqualTo: false)
+                                        .where('hashtag', isEqualTo:  uniqueSubtitles[index])
+                                        .limit(30)
+                                    .orderBy('date', descending: false);
 
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      elevation: 0,
-                                      backgroundColor: getRandomColor(
-                                          uniqueSubtitles[index], 70),
-                                      insetPadding: EdgeInsets.zero,
-                                      contentPadding: EdgeInsets.zero,
-                                      content: Stack(
-                                        children: [
-                                          Column(
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          elevation: 0,
+                                          backgroundColor: getRandomColor(
+                                              uniqueSubtitles[index], 70),
+                                          insetPadding: EdgeInsets.zero,
+                                          contentPadding: EdgeInsets.zero,
+                                          content: Stack(
                                             children: [
-                                              Align(
-                                                alignment:
-                                                    Alignment.topCenter,
-                                                child: SizedBox(
-                                                  height:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .height *
-                                                          .06,
-                                                  child: Center(
-                                                    child: Text(
-                                                      uniqueSubtitles[index]
-                                                          .toString(),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          color: Colors.blue,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight
-                                                                  .bold),
+                                              Column(
+                                                children: [
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topCenter,
+                                                    child: SizedBox(
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              .06,
+                                                      child: Center(
+                                                        child: Text(
+                                                          uniqueSubtitles[index]
+                                                              .toString(),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color: Colors.blue,
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ),
                                                     ),
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment.center,
+                                                    children: [
+                                                      Transform.scale(
+                                                        scale: .7,
+                                                        child: TextButton(
+                                                          style: TextButton
+                                                              .styleFrom(
+                                                            backgroundColor:
+                                                                Colors.blue,
+                                                          ),
+                                                          onPressed: () {
+                                                            duplicateTaskTodoToday(
+                                                                uniqueSubtitles[
+                                                                    index]);
+                                                          },
+                                                          child: Text(
+                                                              'COPY LIST TO TODAY',
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.white,
+                                                                fontSize: 9,
+                                                              )),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Transform.scale(
+                                                        scale: .7,
+                                                        child: TextButton(
+                                                          style: TextButton
+                                                              .styleFrom(
+                                                            backgroundColor:
+                                                                Colors.teal,
+                                                          ),
+                                                          onPressed: () {
+                                                            deleteTagGroup(
+                                                                uniqueSubtitles[
+                                                                    index]);
+                                                          },
+                                                          child: Text(
+                                                              'DELETE TAG GROUP',
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.white,
+                                                                fontSize: 9,
+                                                              )),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      Transform.scale(
+                                                        scale: .7,
+                                                        child: TextButton(
+                                                          style: TextButton
+                                                              .styleFrom(
+                                                            backgroundColor:
+                                                                Colors.purple,
+                                                          ),
+                                                          onPressed: () {
+                                                            deleteCompletedTasks(
+                                                                uniqueSubtitles[
+                                                                    index]);
+                                                          },
+                                                          child: Text(
+                                                              'DELETE DONE TASKS',
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.white,
+                                                                fontSize: 9,
+                                                              )),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Header(),
+                                                ],
+                                              ),
+                                              Container(
+                                                constraints: BoxConstraints(
+                                                  maxWidth: 900,
+                                                ),child:  Padding(
+                                                  padding: const EdgeInsets.only(
+                                                      top: 138.0),
+                                                  child: SizedBox(
+                                                    width: MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        .9,
+                                                    height: MediaQuery.of(context)
+                                                            .size
+                                                            .height *
+                                                        .95,
+                                                    child: TagView(
+                                                      db: db,
+                                                      user: user,
+                                                      query: tagQuery, tag: uniqueSubtitles[
+                                                    index]
+
+                                                      ,                                                ),
                                                   ),
                                                 ),
                                               ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Transform.scale(
-                                                    scale: .7,
-                                                    child: TextButton(
-                                                      style: TextButton
-                                                          .styleFrom(
-                                                        backgroundColor:
-                                                            Colors.blue,
-                                                      ),
-                                                      onPressed: () {
-                                                        duplicateTaskTodoToday(
-                                                            uniqueSubtitles[
-                                                                index]);
-                                                      },
-                                                      child: Text(
-                                                          'COPY LIST TO TODAY',
-                                                          style: TextStyle(
-                                                            color:
-                                                                Colors.white,
-                                                            fontSize: 9,
-                                                          )),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Transform.scale(
-                                                    scale: .7,
-                                                    child: TextButton(
-                                                      style: TextButton
-                                                          .styleFrom(
-                                                        backgroundColor:
-                                                            Colors.teal,
-                                                      ),
-                                                      onPressed: () {
-                                                        deleteTagGroup(
-                                                            uniqueSubtitles[
-                                                                index]);
-                                                      },
-                                                      child: Text(
-                                                          'DELETE TAG GROUP',
-                                                          style: TextStyle(
-                                                            color:
-                                                                Colors.white,
-                                                            fontSize: 9,
-                                                          )),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  Transform.scale(
-                                                    scale: .7,
-                                                    child: TextButton(
-                                                      style: TextButton
-                                                          .styleFrom(
-                                                        backgroundColor:
-                                                            Colors.purple,
-                                                      ),
-                                                      onPressed: () {
-                                                        deleteCompletedTasks(
-                                                            uniqueSubtitles[
-                                                                index]);
-                                                      },
-                                                      child: Text(
-                                                          'DELETE DONE TASKS',
-                                                          style: TextStyle(
-                                                            color:
-                                                                Colors.white,
-                                                            fontSize: 9,
-                                                          )),
-                                                    ),
-                                                  ),
-                                                ],
+                                              Center(
+                                                child: MessageTagBox(
+                                                    uniqueSubtitles[index],
+                                                    index),
                                               ),
-                                              Header(),
                                             ],
                                           ),
-                                          Container(
-                                            constraints: BoxConstraints(
-                                              maxWidth: 900,
-                                            ),child:  Padding(
+                                          actions: [
+                                            Padding(
                                               padding: const EdgeInsets.only(
-                                                  top: 138.0),
-                                              child: SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    .9,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    .95,
-                                                child: TagView(
-                                                  db: db,
-                                                  user: user,
-                                                  query: tagQuery, tag: uniqueSubtitles[
-                                                index]
-
-                                                  ,                                                ),
+                                                  bottom: 28.0, left: 30),
+                                              child: Center(
+                                                child: TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text(
+                                                    'Ⓧ Close',
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          Center(
-                                            child: MessageTagBox(
-                                                uniqueSubtitles[index],
-                                                index),
-                                          ),
-                                        ],
-                                      ),
-                                      actions: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 28.0, left: 30),
-                                          child: Center(
-                                            child: TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text(
-                                                'Ⓧ Close',
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    );
+                                          ],
+                                        );
+                                      },
+                                    ).then((val) {
+                                      finished();
+                                    });
                                   },
-                                ).then((val) {
-                                  finished();
-                                });
-                              },
-                              child: Card(
-                                color: getRandomColor(uniqueSubtitles[index], 40),
-                                elevation: 3,
-                                shadowColor: Colors.black,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.center,
-                                      end: Alignment.bottomRight,
-                                      colors: [
-                                        Color(0xff0000007A),
-                                        Color(0xff00000034),
-                                      ],
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 8.0),
-                                          child: Text(
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 1,
-                                            textAlign: TextAlign.center,
-                                            uniqueSubtitles[index],
-                                            style: TextStyle(
-                                              color: Colors.lightBlueAccent,
-                                              fontSize: 13,
+                                  child: Card(
+                                    color: getRandomColor(uniqueSubtitles[index], 40),
+                                    elevation: 3,
+                                    shadowColor: Colors.black,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.center,
+                                          end: Alignment.bottomRight,
+                                          colors: [
+                                            Color(0xff0000007A),
+                                            Color(0xff00000034),
+                                          ],
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.only(bottom: 8.0),
+                                              child: Text(
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                                textAlign: TextAlign.center,
+                                                uniqueSubtitles[index],
+                                                style: TextStyle(
+                                                  color: Colors.lightBlueAccent,
+                                                  fontSize: 13,
+                                                ),
+                                              ),
                                             ),
-                                          ),
+                                            Text(
+                                              textAlign: TextAlign.center,
+                                              subtitles
+                                                  .where((element) =>
+                                                      element ==
+                                                      uniqueSubtitles[index])
+                                                  .length
+                                                  .toString(),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        Text(
-                                          textAlign: TextAlign.center,
-                                          subtitles
-                                              .where((element) =>
-                                                  element ==
-                                                  uniqueSubtitles[index])
-                                              .length
-                                              .toString(),
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                        );
-                      },
-                     ),
+                            );
+                          },
+                         ),
+                      ),
+                    ),
                     SizedBox(height: 150,),
                   ],
                 ),
@@ -354,7 +361,9 @@ void duplicateTaskTodoToday(String tag) {
       .collection('tasks')
       .where('hashtag', isEqualTo: tag);
 
-  query.get().then((value) {
+
+
+  query.get(GetOptions(source: Source.cache)).then((value) {
     for (int i = 0; i < value.docs.length; i++) {
       DocumentSnapshot task = value.docs[i];
       db.collection('users').doc(user?.uid).collection('tasks').add({
@@ -380,7 +389,7 @@ void deleteTagGroup(String uniqueSubtitle) {
       .collection('tasks')
       .where('hashtag', isEqualTo: uniqueSubtitle);
 
-  query.get().then((value) {
+  query.get(GetOptions(source: Source.cache)).then((value) {
     for (int i = 0; i < value.docs.length; i++) {
       DocumentSnapshot task = value.docs[i];
       db

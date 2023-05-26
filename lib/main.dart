@@ -1,21 +1,16 @@
 import 'dart:async';
 import 'dart:math';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:todotoday/TodoApp.dart';
-import 'package:todotoday/UI/done.dart';
 import 'package:todotoday/UI/today_task_page.dart';
 import 'package:todotoday/UI/all_tasks_page.dart';
 import 'package:todotoday/UI/hashtags_page.dart';
 import 'LoginPage.dart';
-import 'MessageBox.dart';
 import 'TaskCard.dart';
-import 'UI/Header.dart';
 import 'firebase_options.dart';
 import 'global.dart';
 
@@ -26,7 +21,6 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  final storageRef = FirebaseStorage.instance.ref();
 
   FirebaseUIAuth.configureProviders([
     EmailAuthProvider(),
