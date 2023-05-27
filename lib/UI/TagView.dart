@@ -7,8 +7,8 @@ import '../TaskCard.dart';
 import 'doneTag.dart';
 
 class TagView extends StatelessWidget {
-  Query query;
-  String tag;
+  final Query query;
+  final String tag;
 
   TagView(
       {super.key,
@@ -26,7 +26,6 @@ class TagView extends StatelessWidget {
       children: [
         StreamBuilder<QuerySnapshot>(
           stream: query.snapshots(),
-          // db.collection('users').doc(user?.uid).collection('tasks').snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data!.docs.length == 0) {

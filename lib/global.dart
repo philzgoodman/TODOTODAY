@@ -11,6 +11,10 @@ List<String> subTitleCount = [];
 
 List<String> notes = [];
 
+
+String uid = '';
+
+
 int tagLength = 0;
 
 int calculatorResult = 0;

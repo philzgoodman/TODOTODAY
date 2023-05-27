@@ -4,17 +4,19 @@ import 'package:flutter/material.dart';
 import '../TaskCard.dart';
 
 class DonePage extends StatelessWidget {
+
+   Stream<QuerySnapshot<Object?>> stream =  FirebaseFirestore.instance
+       .collection('users')
+       .doc(FirebaseAuth.instance.currentUser?.uid)
+       .collection('tasks')
+       .where('completed', isEqualTo: true)
+       .limit(12)
+       .orderBy('date', descending: true)
+       .snapshots();
+
   @override
   Widget build(BuildContext context) {
-    final dbDone = FirebaseFirestore.instance;
-    final user = FirebaseAuth.instance.currentUser;
-    Query query = dbDone
-        .collection('users')
-        .doc(user?.uid)
-        .collection('tasks')
-        .where('completed', isEqualTo: true)
-        .limit(12)
-        .orderBy('date', descending: true);
+
 
     return Container(
       height: MediaQuery.of(context).size.height * 1.2,
@@ -26,7 +28,7 @@ class DonePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 28.0),
             child: StreamBuilder<QuerySnapshot>(
-              stream: query.snapshots(),
+              stream: stream,
               // db.collection('users').doc(user?.uid).collection('tasks').snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {

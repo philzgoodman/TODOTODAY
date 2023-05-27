@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todotoday/global.dart';
 
-class MessageBox extends StatefulWidget with ChangeNotifier {
+class MessageBox extends StatefulWidget  {
   MessageBox({super.key});
 
   @override

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todotoday/TaskCard.dart';
 import 'package:todotoday/global.dart';
 
-class MessageTagBox extends StatefulWidget with ChangeNotifier {
+class MessageTagBox extends StatefulWidget  {
   String tag = '';
   int index = 0;
 
@@ -33,7 +33,7 @@ class _MessageBoxState extends State<MessageTagBox> {
                 shadowColor: Colors.black,
                 elevation: 15,
                 child: TextField(
-                    toolbarOptions: const ToolbarOptions(
+                    toolbarOptions:  ToolbarOptions(
                       copy: true,
                       cut: true,
                       paste: true,

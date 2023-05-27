@@ -9,13 +9,9 @@ class TaskView extends StatelessWidget {
 
   TaskView({
     Key? key,
-    required this.db,
-    required this.user,
     required this.query,
   }) : super(key: key);
 
-  final FirebaseFirestore db;
-  final User? user;
 
   @override
   Widget build(BuildContext context) {

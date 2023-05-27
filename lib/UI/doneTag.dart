@@ -8,18 +8,15 @@ class DoneTagPage extends StatelessWidget {
 
   DoneTagPage({super.key, required this.tag});
 
+  Query query = FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser?.uid)
+      .collection('tasks')
+      .where('completed', isEqualTo: true);
+
   @override
   Widget build(BuildContext context) {
-    final dbDoneTag = FirebaseFirestore.instance;
-    final user = FirebaseAuth.instance.currentUser;
-    Query query = dbDoneTag
-        .collection('users')
-        .doc(user?.uid)
-        .collection('tasks')
-        .where('completed', isEqualTo: true);
-
     Query query2 = query.where('hashtag', isEqualTo: tag);
-
     return Container(
       height: MediaQuery.of(context).size.height * 1.2,
       child: Stack(
