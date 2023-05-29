@@ -1,6 +1,5 @@
 # TodoToday
 
-<div align="center"><img src = "https://github.com/philzgoodman/TODOTODAY/blob/main/todotoday.gif"></div>
 
  
 SUMMARY
