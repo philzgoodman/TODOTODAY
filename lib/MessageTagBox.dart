@@ -21,43 +21,41 @@ class _MessageBoxState extends State<MessageTagBox> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Transform.translate(
-          offset: Offset(5, 0),
-          child: Container(
-            alignment: Alignment.bottomCenter,
-            child: SizedBox(
-              width: 360,
-              child: Material(
-                borderRadius: BorderRadius.circular(5),
-                color: getRandomColor(widget.tag, 40),
-                shadowColor: Colors.black,
-                elevation: 15,
-                child: TextField(
-                    toolbarOptions:  ToolbarOptions(
-                      copy: true,
-                      cut: true,
-                      paste: true,
-                      selectAll: true,
+        Container(
+
+          alignment: Alignment.bottomCenter,
+          child: SizedBox(
+            width: 360,
+            child: Material(
+              borderRadius: BorderRadius.circular(5),
+              color: getRandomColor(widget.tag, 40),
+              shadowColor: Colors.black,
+              elevation: 15,
+              child: TextField(
+                  toolbarOptions:  ToolbarOptions(
+                    copy: true,
+                    cut: true,
+                    paste: true,
+                    selectAll: true,
+                  ),
+                  cursorColor: Colors.deepOrangeAccent,
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
+                  focusNode: myFocusNode,
+                  keyboardAppearance: Brightness.dark,
+                  onSubmitted: (value) {
+                    addNewTask(context);
+                  },
+                  textInputAction: TextInputAction.search,
+                  controller: txt,
+                  decoration: InputDecoration(
+                    hintText: 'Add to this list',
+                    suffixIcon: IconButton(
+                      icon: Icon(Icons.send),
+                      onPressed: () {
+                        addNewTask(context);
+                      },
                     ),
-                    cursorColor: Colors.deepOrangeAccent,
-                    style: const TextStyle(color: Colors.white, fontSize: 14),
-                    focusNode: myFocusNode,
-                    keyboardAppearance: Brightness.dark,
-                    onSubmitted: (value) {
-                      addNewTask(context);
-                    },
-                    textInputAction: TextInputAction.search,
-                    controller: txt,
-                    decoration: InputDecoration(
-                      hintText: 'Add to this list',
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.send),
-                        onPressed: () {
-                          addNewTask(context);
-                        },
-                      ),
-                    )),
-              ),
+                  )),
             ),
           ),
         ),

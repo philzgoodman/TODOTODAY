@@ -101,7 +101,7 @@ class _TaskCardState extends State<TaskCard> {
                 subtitle: GestureDetector(
                     onTap: () {
                       openAlertDialogThatShowsTasksContainingThisTag(
-                          widget.hashtag);
+                          widget.hashtag, context);
                     },
                     child: Text(widget.hashtag,
                         style:
@@ -173,256 +173,89 @@ class _TaskCardState extends State<TaskCard> {
           return AlertDialog(
             backgroundColor: getRandomColor(widget.date, 50),
             content: Container(
+              height: MediaQuery.of(context).size.height * .35,
+              width: MediaQuery.of(context).size.width * .9,
               constraints: BoxConstraints(
-                maxWidth: 900,
+                maxWidth: 500,
+                maxHeight: MediaQuery.of(context).size.height * .6,
+
               ),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width * .8,
-                height: MediaQuery.of(context).size.height * .5,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    TextField(
-                      maxLines: 10,
-                      controller: txt,
-                      onChanged: (String value) {},
-                    ),
-                    TextField(
-                      style: TextStyle(color: Colors.blue),
-                      maxLines: 1,
-                      controller: txt2,
-                      onChanged: (String value) {
-                        widget.hashtag = value.toString();
+              child: Stack(
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        style: TextStyle(fontSize: 12.5),
+                        maxLines: 10,
+                        controller: txt,
+                        onChanged: (String value) {},
+                      ),
+                      TextField(
+                        style: TextStyle(color: Colors.blue,),
+                        maxLines: 1,
+                        controller: txt2,
+                        onChanged: (String value) {
+                          widget.hashtag = value.toString();
+                        },
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                typeBulletedListIntoTextField(txt);
+                              });
+                            },
+                            icon: Icon(Icons.format_list_numbered),
+                          ),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Transform.scale(
+                            scale: .7,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                              ),
+                              onPressed: () {
+                                TodoApp().copyTaskTodoToday(widget.description);
+                                showToast(
+                                    'Copied tasks to do today. Note: Hashtag of new tasks are set to #default.');
+                              },
+                              child: Text('COPY TO TODAY',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 9,
+                                  )),
+                            ),
+                          ),
+
+                        ],
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: () {
+                        setState(() {
+                          trimWhiteSpaceAtEndofString(txt);
+                          Navigator.of(context).pop();
+                        });
                       },
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              typeBulletedListIntoTextField(txt);
-                            });
-                          },
-                          icon: Icon(Icons.format_list_numbered),
-                        ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Transform.scale(
-                          scale: .7,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                            ),
-                            onPressed: () {
-                              TodoApp().copyTaskTodoToday(widget.description);
-                              showToast(
-                                  'Copied tasks to do today. Note: Hashtag of new tasks are set to #default.');
-                            },
-                            child: Text('COPY TO TODAY',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 9,
-                                )),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        DocumentEditingScreen(id: widget.id)));
-                          },
-                          icon: Icon(
-                            Icons.attach_file,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () {
-                  setState(() {
-                    trimWhiteSpaceAtEndofString(txt);
-                    Navigator.of(context).pop();
-                  });
-                },
-              ),
-            ],
           );
         }).then((val) {
       widget.description = txt.text;
       todoApp.updateTask(widget);
-    });
-    ;
-  }
-
-  void openAlertDialogThatShowsTasksContainingThisTag(String hashtag) {
-    final user = FirebaseAuth.instance.currentUser;
-    final db = FirebaseFirestore.instance;
-    Query query = db
-        .collection('users')
-        .doc(user?.uid)
-        .collection('tasks')
-        .where('hashtag', isEqualTo: hashtag)
-        .limit(30);
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: AlertDialog(
-            elevation: 0,
-            backgroundColor: getRandomColor(hashtag, 70),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10.0))),
-            contentPadding: EdgeInsets.zero,
-            content: Padding(
-              padding: const EdgeInsets.only(bottom: 30.0),
-              child: Container(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * .7,
-                ),
-                child: Stack(
-                  children: [
-                    Column(
-                      children: [
-                        Align(
-                          alignment: Alignment.topCenter,
-                          child: SizedBox(
-                            height: MediaQuery.of(context).size.height * .06,
-                            child: Center(
-                              child: Text(
-                                hashtag.toString(),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.blue,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Transform.scale(
-                              scale: .7,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                ),
-                                onPressed: () {
-                                  duplicateTaskTodoToday(hashtag);
-                                },
-                                child: Text('COPY LIST TO TODAY',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 9,
-                                    )),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Transform.scale(
-                              scale: .7,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.teal,
-                                ),
-                                onPressed: () {
-                                  deleteTagGroup(hashtag);
-                                },
-                                child: Text('DELETE TAG GROUP',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 9,
-                                    )),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Transform.scale(
-                              scale: .7,
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  backgroundColor: Colors.purple,
-                                ),
-                                onPressed: () {
-                                  deleteCompletedTasks(hashtag);
-                                },
-                                child: Text('DELETE DONE TASKS',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 9,
-                                    )),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Header(),
-                      ],
-                    ),
-                    Container(
-                      constraints: BoxConstraints(
-                        maxWidth: 900,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 128.0),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * .9,
-                          child: TagView(
-                            db: db,
-                            user: user,
-                            query: query,
-                            tag: hashtag,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Transform.translate(
-                        offset:
-                            Offset(0, MediaQuery.of(context).size.height * .07),
-                        child: MessageTagBox(hashtag, 0),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              Transform.translate(
-                offset: Offset(0, MediaQuery.of(context).size.height * .04),
-                child: Center(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text(
-                      'Ⓧ Close',
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    ).then((val) {
-      finished();
     });
     ;
   }
@@ -507,4 +340,151 @@ Color darken(Color c, [int percent = 8]) {
 Color invertColorBy10percent(Color today1) {
   return Color.fromARGB(
       today1.alpha, today1.red + 25, today1.green + 25, today1.blue + 25);
+}
+
+void openAlertDialogThatShowsTasksContainingThisTag(String hashtag, context) {
+  final user = FirebaseAuth.instance.currentUser;
+  final db = FirebaseFirestore.instance;
+  Query query = db
+      .collection('users')
+      .doc(user?.uid)
+      .collection('tasks')
+      .where('hashtag', isEqualTo: hashtag)
+      .where('completed', isEqualTo: false)
+      .orderBy('date', descending: false)
+      .limit(30);
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        elevation: 0,
+        backgroundColor: getRandomColor(hashtag, 70),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(4.0))),
+        contentPadding: EdgeInsets.zero,
+        content: Container(
+          width: MediaQuery.of(context).size.width * .95,
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * .78,
+            maxWidth: 600,
+          ),
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * .06,
+                      child: Center(
+                        child: Text(
+                          hashtag.toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Transform.scale(
+                        scale: .7,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                          ),
+                          onPressed: () {
+                            duplicateTaskTodoToday(hashtag);
+                          },
+                          child: Text('COPY TO TODAY',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 9,
+                              )),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Transform.scale(
+                        scale: .7,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.teal,
+                          ),
+                          onPressed: () {
+                            deleteTagGroup(hashtag);
+                          },
+                          child: Text('DELETE TAG GROUP',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 9,
+                              )),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Transform.scale(
+                        scale: .7,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.purple,
+                          ),
+                          onPressed: () {
+                            deleteCompletedTasks(hashtag);
+                          },
+                          child: Text('DELETE DONE TASKS',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 9,
+                              )),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Header(),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 110.0),
+                child: TagView(
+                  db: db,
+                  user: user,
+                  query: query,
+                  tag: hashtag,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: Center(
+                  child: MessageTagBox(hashtag, 0),
+                ),
+              ),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'Ⓧ Close',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+  ;
 }

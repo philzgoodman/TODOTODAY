@@ -151,11 +151,14 @@ class _MainPageState extends State<MainPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           actions: [
-            IconButton(
-              icon: Icon(Icons.close),
+            TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.pop(context);
               },
+              child: Text(
+                'Ⓧ Close',
+                textAlign: TextAlign.center,
+              ),
             ),
           ],
           backgroundColor: Colors.transparent,

@@ -18,7 +18,7 @@ class DoneTagPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Query query2 = query.where('hashtag', isEqualTo: tag);
     return Container(
-      height: MediaQuery.of(context).size.height * 1.2,
+      height: MediaQuery.of(context).size.height * .8,
       child: Stack(
         children: [
           Padding(
