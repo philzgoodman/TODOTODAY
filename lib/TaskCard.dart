@@ -453,7 +453,7 @@ void openAlertDialogThatShowsTasksContainingThisTag(String hashtag, context) {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 110.0),
+                padding: const EdgeInsets.only(top: 122.0),
                 child: TagView(
                   db: db,
                   user: user,
