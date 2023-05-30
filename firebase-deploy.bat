@@ -1,0 +1,1 @@
+CALL firebase deploy
