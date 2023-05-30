@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:todotoday/TodoApp.dart';
 import 'package:todotoday/UI/today_task_page.dart';
@@ -131,6 +132,13 @@ class _MainPageState extends State<MainPage> {
                           ),
                           SizedBox(
                             height: 30,
+                          ),
+                          FloatingActionButton( heroTag: 'keyboard',
+                            backgroundColor: Colors.grey,
+                            onPressed: () {
+                              SystemChannels.textInput.invokeMethod('TextInput.hide');                            },
+                            tooltip: 'Settings',
+                            child: const Icon(Icons.keyboard_arrow_down),
                           ),
                         ],
                       ),

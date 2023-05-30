@@ -3,9 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../TaskCard.dart';
 
-class DonePage extends StatelessWidget {
+class DonePage extends StatefulWidget {
+   const DonePage({Key? key}) : super(key: key);
 
-   Stream<QuerySnapshot<Object?>> stream =  FirebaseFirestore.instance
+  @override
+  State<DonePage> createState() => _DonePageState();
+}
+
+class _DonePageState extends State<DonePage> {
+      Stream<QuerySnapshot<Object?>> stream =  FirebaseFirestore.instance
        .collection('users')
        .doc(FirebaseAuth.instance.currentUser?.uid)
        .collection('tasks')

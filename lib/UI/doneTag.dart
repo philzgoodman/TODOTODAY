@@ -3,11 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../TaskCard.dart';
 
-class DoneTagPage extends StatelessWidget {
-  String tag;
+class DoneTagPage extends StatefulWidget {
+  final String tag;
 
-  DoneTagPage({super.key, required this.tag});
+  const DoneTagPage({super.key, required this.tag});
 
+  @override
+  State<DoneTagPage> createState() => _DoneTagPageState();
+}
+
+class _DoneTagPageState extends State<DoneTagPage> {
   Query query = FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser?.uid)
@@ -16,7 +21,7 @@ class DoneTagPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Query query2 = query.where('hashtag', isEqualTo: tag);
+    Query query2 = query.where('hashtag', isEqualTo: widget.tag);
     return Container(
       height: MediaQuery.of(context).size.height * .8,
       child: Stack(

@@ -10,7 +10,7 @@ class TagView extends StatelessWidget {
   final Query query;
   final String tag;
 
-  TagView(
+  const TagView(
       {super.key,
       required this.tag,
       required this.db,

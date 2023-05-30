@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:todotoday/global.dart';
 
 class MessageBox extends StatefulWidget  {
@@ -12,14 +13,20 @@ class _MessageBoxState extends State<MessageBox> {
   FocusNode myFocusNode = FocusNode();
 
   TextEditingController txt = TextEditingController();
-
+  bool isMessageBoxVisible = false;
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
+    return Container(
+      alignment: Alignment.bottomCenter,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Visibility(
+              visible: isMessageBoxVisible,
+              child: IconButton(onPressed: () {myFocusNode.unfocus();
+                setState(() {isMessageBoxVisible = false;});
+                }, icon: Icon(Icons.keyboard_arrow_down),)),
+          Padding(
             padding: const EdgeInsets.fromLTRB(12, 0, 12, 10),
             child: SizedBox(
               width: 360,
@@ -40,10 +47,26 @@ class _MessageBoxState extends State<MessageBox> {
                       cursorColor: Colors.deepOrangeAccent,
                       style: const TextStyle(color: Colors.white, fontSize: 14),
                       focusNode: myFocusNode,
+                      selectionControls: MaterialTextSelectionControls(),
+
+                      onTap: () {
+                        setState(() {
+                          isMessageBoxVisible = true;
+                          myFocusNode.requestFocus();
+                        });
+                      },
+
                       keyboardAppearance: Brightness.dark,
                       onSubmitted: (value) {
                         addNewTask(context);
                       },
+
+                      onTapOutside: (value) {
+                        setState(() {
+                          isMessageBoxVisible = false;
+                        });
+                      },
+
                       textInputAction: TextInputAction.search,
                       controller: txt,
                       decoration: InputDecoration(
@@ -59,8 +82,9 @@ class _MessageBoxState extends State<MessageBox> {
               ),
             ),
           ),
-        ),
-      ],
+
+        ],
+      ),
     );
   }
 
@@ -71,5 +95,15 @@ class _MessageBoxState extends State<MessageBox> {
       todoApp.createTask(txt.text, false);
     }
     txt.clear();
+    FocusScope.of(context).unfocus();
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+
+    if (isMessageBoxVisible) {
+      setState(() {
+        isMessageBoxVisible = false;
+      });
+    }
+
   }
+
 }

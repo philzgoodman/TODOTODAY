@@ -15,7 +15,11 @@ class AllTasksPage extends StatelessWidget {
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser?.uid)
       .collection('tasks')
-      .where('completed', isEqualTo: false);
+      .where('isToday', isEqualTo: false)
+      .where('completed', isEqualTo: false)
+      .orderBy('date', descending: false);
+
+
 
     @override
     Widget build(BuildContext context) {

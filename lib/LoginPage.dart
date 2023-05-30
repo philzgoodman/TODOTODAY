@@ -32,7 +32,6 @@ class _LoginPageState extends State<LoginPage> {
                 AuthStateChangeAction<SignedIn>((context, state) {
                   final userEmail = FirebaseAuth.instance.currentUser?.email;
                   print(userEmail);
-                  todoApp.initializeTasks();
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => MyApp()),
@@ -63,26 +62,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void logIn() {
-    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
-      FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: emailController.text, password: passwordController.text)
-          .then((value) {
-        if (value.user != null) {
-          todoApp.initializeTasks();
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => MyApp()),
-          );
-          loggedIn = true;
-          setState(() {
-            runApp(MyApp());
-          });
-        }
-      });
-    }
-  }
 }
 
 bool checkIfLoggedin() {

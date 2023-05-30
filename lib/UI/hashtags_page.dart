@@ -2,12 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:todotoday/MessageTagBox.dart';
-import 'package:todotoday/UI/TagView.dart';
 import '../MessageBox.dart';
 import '../TaskCard.dart';
 import '../global.dart';
-import 'Header.dart';
 
 class HashtagsPage extends StatelessWidget {
   HashtagsPage({super.key});
@@ -74,22 +71,12 @@ class HashtagsPage extends StatelessWidget {
                               child: Center(
                                 child: InkWell(
                                   onTap: () {
-                                    Query tagQuery = FirebaseFirestore.instance
-                                        .collection('users')
-                                        .doc(FirebaseAuth
-                                            .instance.currentUser?.uid)
-                                        .collection('tasks')
-                                        .where('completed', isEqualTo: false)
-                                        .where('hashtag',
-                                            isEqualTo: uniqueSubtitles[index])
-                                        .limit(30)
-                                        .orderBy('date', descending: false);
                                     openAlertDialogThatShowsTasksContainingThisTag(
                                         uniqueSubtitles[index], context);
                                   },
                                   child: Card(
                                     color: getRandomColor(
-                                        uniqueSubtitles[index], 40),
+                                        uniqueSubtitles[index], 38),
                                     elevation: 3,
                                     shadowColor: Colors.black,
                                     child: Container(
