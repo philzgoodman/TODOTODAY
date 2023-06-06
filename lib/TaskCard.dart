@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:todotoday/TodoApp.dart';
 import 'package:todotoday/main.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 import 'MessageTagBox.dart';
 import 'UI/Header.dart';
 import 'UI/TagView.dart';
