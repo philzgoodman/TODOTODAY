@@ -3,27 +3,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../TaskCard.dart';
 
-class DonePage extends StatefulWidget {
-   const DonePage({Key? key}) : super(key: key);
+class DonePage extends StatelessWidget {
+  DonePage({Key? key}) : super(key: key);
 
-  @override
-  State<DonePage> createState() => _DonePageState();
-}
-
-class _DonePageState extends State<DonePage> {
-      Stream<QuerySnapshot<Object?>> stream =  FirebaseFirestore.instance
-       .collection('users')
-       .doc(FirebaseAuth.instance.currentUser?.uid)
-       .collection('tasks')
-       .where('completed', isEqualTo: true)
-       .limit(12)
-       .orderBy('date', descending: true)
-       .snapshots();
+  final Stream<QuerySnapshot<Object?>> stream = FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser?.uid)
+      .collection('tasks')
+      .where('completed', isEqualTo: true)
+      .limit(12)
+      .orderBy('date', descending: true)
+      .snapshots();
 
   @override
   Widget build(BuildContext context) {
-
-
     return Container(
       height: MediaQuery.of(context).size.height * 1.2,
       constraints: BoxConstraints(
@@ -43,7 +36,6 @@ class _DonePageState extends State<DonePage> {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       DocumentSnapshot task = snapshot.data!.docs[index];
-
                       return TaskCard(
                         task['description'],
                         task['isToday'],
@@ -55,7 +47,7 @@ class _DonePageState extends State<DonePage> {
                     },
                   );
                 }
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               },
             ),
           ),

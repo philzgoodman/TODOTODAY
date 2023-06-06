@@ -6,12 +6,10 @@ import '../global.dart';
 import 'Header.dart';
 import 'TaskView.dart';
 
-
 class AllTasksPage extends StatelessWidget {
-
   AllTasksPage({super.key});
 
-  Query query = FirebaseFirestore.instance
+  final Query query = FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser?.uid)
       .collection('tasks')
@@ -21,49 +19,46 @@ class AllTasksPage extends StatelessWidget {
 
 
 
-    @override
-    Widget build(BuildContext context) {
-      return Stack(
-        children: [
-          Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    make20percentLessSaturated(all1),
-                    make20percentLessSaturated(all2),
-                    make20percentLessSaturated(all3),
-                  ],
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  make20percentLessSaturated(all1),
+                  make20percentLessSaturated(all2),
+                  make20percentLessSaturated(all3),
+                ],
+              ),
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 13.0),
+                child: TaskView(
+                  query: query,
                 ),
               ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 13.0),
-                  child: TaskView(
-                    query: query,
-                  ),
-                ),
-              )),
-          Header(),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: MessageBox(),
-          ),
-        ],
-      );
-    }
-
-    make20percentLessSaturated(Color all1) {
-      return Color.fromARGB(
-        all1.alpha,
-        all1.red - 20,
-        all1.green - 20,
-        all1.blue - 20,
-      );
-    }
+            )),
+        const Header(),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: MessageBox(),
+        ),
+      ],
+    );
   }
 
-
-
+  make20percentLessSaturated(Color all1) {
+    return Color.fromARGB(
+      all1.alpha,
+      all1.red - 20,
+      all1.green - 20,
+      all1.blue - 20,
+    );
+  }
+}

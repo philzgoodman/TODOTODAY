@@ -8,7 +8,7 @@ import 'TaskCard.dart';
 import 'global.dart';
 import 'main.dart';
 
-class TodoApp with ChangeNotifier {
+class TodoApp {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final List<Task> tasks = [];
@@ -36,7 +36,6 @@ class TodoApp with ChangeNotifier {
     });
 
     print("Stored to Firestore");
-    notifyListeners();
   }
 
   Future<void> createTaskWithHashtag(String description, String hashtag) async {
@@ -53,7 +52,6 @@ class TodoApp with ChangeNotifier {
     });
 
     print("Stored to Firestore");
-    notifyListeners();
   }
 
   void updateTask(TaskCard task) {
@@ -106,7 +104,6 @@ class TodoApp with ChangeNotifier {
     });
 
     print("Stored to Firestore");
-    notifyListeners();
   }
 
   void deleteTask(String id) {
@@ -199,7 +196,10 @@ class TodoApp with ChangeNotifier {
   }
 
   Future<void> signOut() async {
-    await FirebaseAuth.instance.signOut();
-    runApp(Phoenix(child: MyApp()));
+    await FirebaseAuth.instance.signOut().then((value) {
+      runApp(Phoenix(child: MyApp()));
+    });
+
   }
 }
+

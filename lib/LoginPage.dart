@@ -61,7 +61,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
 }
 
 bool checkIfLoggedin() {

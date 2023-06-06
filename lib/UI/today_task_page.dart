@@ -9,17 +9,16 @@ import 'TaskView.dart';
 class TodayTaskPage extends StatelessWidget {
   TodayTaskPage({super.key});
 
-  Query query = FirebaseFirestore.instance
+  final Query query = FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser?.uid)
       .collection('tasks')
       .where('isToday', isEqualTo: true)
       .where('completed', isEqualTo: false)
       .orderBy('date', descending: false);
+
   @override
   Widget build(BuildContext context) {
-
-
     return Stack(
       children: [
         Container(

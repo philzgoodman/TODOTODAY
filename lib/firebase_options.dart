@@ -70,8 +70,10 @@ class DefaultFirebaseOptions {
     projectId: 'todotoday-e611e',
     databaseURL: 'https://todotoday-e611e-default-rtdb.firebaseio.com',
     storageBucket: 'todotoday-e611e.appspot.com',
-    androidClientId: '813286173539-2biqh3ud42tj14sumc4utiu7tomi316p.apps.googleusercontent.com',
-    iosClientId: '813286173539-eqdrltkl8hc6f1p91f6dn64iudj54tvj.apps.googleusercontent.com',
+    androidClientId:
+        '813286173539-2biqh3ud42tj14sumc4utiu7tomi316p.apps.googleusercontent.com',
+    iosClientId:
+        '813286173539-eqdrltkl8hc6f1p91f6dn64iudj54tvj.apps.googleusercontent.com',
     iosBundleId: 'com.example.todotoday',
   );
 
@@ -82,8 +84,10 @@ class DefaultFirebaseOptions {
     projectId: 'todotoday-e611e',
     databaseURL: 'https://todotoday-e611e-default-rtdb.firebaseio.com',
     storageBucket: 'todotoday-e611e.appspot.com',
-    androidClientId: '813286173539-2biqh3ud42tj14sumc4utiu7tomi316p.apps.googleusercontent.com',
-    iosClientId: '813286173539-eqdrltkl8hc6f1p91f6dn64iudj54tvj.apps.googleusercontent.com',
+    androidClientId:
+        '813286173539-2biqh3ud42tj14sumc4utiu7tomi316p.apps.googleusercontent.com',
+    iosClientId:
+        '813286173539-eqdrltkl8hc6f1p91f6dn64iudj54tvj.apps.googleusercontent.com',
     iosBundleId: 'com.example.todotoday',
   );
 }

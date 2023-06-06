@@ -1,17 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todotoday/UI/done.dart';
 import '../TaskCard.dart';
 
 class TaskView extends StatelessWidget {
-  Query query;
+  final Query query;
 
   TaskView({
     Key? key,
     required this.query,
   }) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {

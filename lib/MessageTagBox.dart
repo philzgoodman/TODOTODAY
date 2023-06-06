@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:todotoday/TaskCard.dart';
 import 'package:todotoday/global.dart';
 
-class MessageTagBox extends StatefulWidget  {
+class MessageTagBox extends StatefulWidget {
   String tag = '';
   int index = 0;
 
@@ -22,26 +22,32 @@ class _MessageBoxState extends State<MessageTagBox> {
   @override
   Widget build(BuildContext context) {
     return Container(
-    alignment: Alignment.bottomCenter,
-    child: Column(
+      alignment: Alignment.bottomCenter,
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-        Visibility(
-        visible: isMessageBoxVisible,
-        child: IconButton(onPressed: () {myFocusNode.unfocus();
-        setState(() {isMessageBoxVisible = false;});
-        }, icon: Icon(Icons.keyboard_arrow_down),)),
-    SizedBox(
+          Visibility(
+              visible: isMessageBoxVisible,
+              child: IconButton(
+                onPressed: () {
+                  myFocusNode.unfocus();
+                  setState(() {
+                    isMessageBoxVisible = false;
+                  });
+                },
+                icon: Icon(Icons.keyboard_arrow_down),
+              )),
+          SizedBox(
             width: 360,
             child: Material(
               borderRadius: BorderRadius.circular(5),
               color: getRandomColor(widget.tag, 50),
               shadowColor: Colors.black,
               elevation: 20,
-              child:Padding(
+              child: Padding(
                 padding: const EdgeInsets.all(7.0),
                 child: TextField(
-                    toolbarOptions:  ToolbarOptions(
+                    toolbarOptions: ToolbarOptions(
                       copy: true,
                       cut: true,
                       paste: true,
@@ -65,8 +71,6 @@ class _MessageBoxState extends State<MessageTagBox> {
                     keyboardAppearance: Brightness.dark,
                     onSubmitted: (value) {
                       addNewTask(context);
-                      Navigator.pop(context);
-
                     },
                     textInputAction: TextInputAction.search,
                     controller: txt,
@@ -84,8 +88,8 @@ class _MessageBoxState extends State<MessageTagBox> {
             ),
           ),
         ],
-        ),
-      );
+      ),
+    );
   }
 
   void addNewTask(BuildContext context) {
@@ -99,6 +103,5 @@ class _MessageBoxState extends State<MessageTagBox> {
         isMessageBoxVisible = false;
       });
     }
-
   }
 }

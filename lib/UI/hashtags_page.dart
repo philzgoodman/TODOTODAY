@@ -6,12 +6,20 @@ import '../MessageBox.dart';
 import '../TaskCard.dart';
 import '../global.dart';
 
-class HashtagsPage extends StatelessWidget {
+
+class HashtagsPage extends StatefulWidget {
   HashtagsPage({super.key});
 
+  @override
+  State<HashtagsPage> createState() => _HashtagsPageState();
+}
+
+class _HashtagsPageState extends State<HashtagsPage> {
   List<String> subtitles = [];
+
   List<String> uniqueSubtitles = [];
-  Query query = FirebaseFirestore.instance
+
+  final Query query = FirebaseFirestore.instance
       .collection('users')
       .doc(FirebaseAuth.instance.currentUser?.uid)
       .collection('tasks');

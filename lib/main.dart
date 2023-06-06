@@ -85,20 +85,20 @@ class _MainPageState extends State<MainPage> {
               appBar: AppBar(
                 shadowColor: Colors.black87,
                 elevation: 6,
-                bottom: TabBar(
+                bottom: const TabBar(
                   labelStyle: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w600,
                   ),
                   enableFeedback: true,
                   tabs: [
-                    Tab(
+                    const Tab(
                         icon: Icon(Icons.all_inbox, color: Colors.redAccent),
                         text: 'BACKLOG'),
-                    Tab(
+                    const Tab(
                         icon: Icon(Icons.sunny, color: Color(0xFFFFBD64)),
                         text: 'TODO TODAY'),
-                    Tab(
+                    const Tab(
                         icon: Icon(Icons.tag, color: Colors.blue),
                         text: 'TAGS'),
                   ],
@@ -130,16 +130,10 @@ class _MainPageState extends State<MainPage> {
                             tooltip: 'Settings',
                             child: const Icon(Icons.settings),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 30,
                           ),
-                          FloatingActionButton( heroTag: 'keyboard',
-                            backgroundColor: Colors.grey,
-                            onPressed: () {
-                              SystemChannels.textInput.invokeMethod('TextInput.hide');                            },
-                            tooltip: 'Settings',
-                            child: const Icon(Icons.keyboard_arrow_down),
-                          ),
+
                         ],
                       ),
                     ),
@@ -163,7 +157,7 @@ class _MainPageState extends State<MainPage> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text(
+              child: const Text(
                 'Ⓧ Close',
                 textAlign: TextAlign.center,
               ),
@@ -185,8 +179,8 @@ class _MainPageState extends State<MainPage> {
                   title: Text('Logout', style: TextStyle(color: Colors.white)),
                   onTap: () {
                     logout();
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
+
+
                   },
                 ),
                 ListTile(

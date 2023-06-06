@@ -5,13 +5,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:todotoday/TodoApp.dart';
 import 'package:todotoday/main.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'MessageTagBox.dart';
 import 'UI/Header.dart';
 import 'UI/TagView.dart';
 import 'UI/hashtags_page.dart';
 import 'global.dart';
-import 'package:universal_html/html.dart' as html;
+
+
 
 class TaskCard extends StatefulWidget {
   String description;
@@ -114,24 +116,21 @@ class _TaskCardState extends State<TaskCard> {
                       children: [
                         SizedBox(
                           width: 56,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top:.2),
-                            child: Checkbox(
-                              activeColor: Color(0xFF4B9DAB),
-                              value: widget.completed,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  widget.completed = value!;
-                                  todoApp.updateTask(widget);
-                                });
-                              },
-                            ),
+                          child: Checkbox(
+                            activeColor: Color(0xFF4B9DAB),
+                            value: widget.completed,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                widget.completed = value!;
+                                todoApp.updateTask(widget);
+                              });
+                            },
                           ),
                         ),
                         SizedBox(
                           width: 56,
                           child: IconButton(
-                            icon: Icon(Icons.delete),
+                            icon: const Icon(Icons.delete),
                             onPressed: () {
                               setState(() {
                                 TodoApp.deleteTaskByFirebaseId(widget.id);
@@ -315,16 +314,20 @@ class _TaskCardState extends State<TaskCard> {
   }
 
   void htmlOpenLink(String url) {
-    if (kIsWeb) html.window.open(url, 'new tab');
+
+
+
+
+
+
+  }
+  Future<void> launchURL(String url, {bool isNewTab = true}) async {
+    await launchUrl(
+      Uri.parse(url),
+      webOnlyWindowName: isNewTab ? '_blank' : '_self',
+    );
   }
 
-  void launchURL(String urlText) {
-    if (kIsWeb) {
-      htmlOpenLink(urlText);
-    } else {
-      launchUrlString(urlText);
-    }
-  }
 }
 
 void typeBulletedListIntoTextField(TextEditingController txt) {

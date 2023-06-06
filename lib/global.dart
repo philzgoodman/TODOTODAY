@@ -5,15 +5,13 @@ import 'dart:ui';
 import 'TaskCard.dart';
 import 'TodoApp.dart';
 
-TodoApp todoApp = TodoApp();
+final TodoApp todoApp = TodoApp();
 bool loggedIn = false;
 List<String> subTitleCount = [];
 
 List<String> notes = [];
 
-
 String uid = '';
-
 
 int tagLength = 0;
 
